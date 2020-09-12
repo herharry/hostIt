@@ -1,0 +1,164 @@
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.custom {
+    background-color: #1f1f1f;
+    line-height: 1.5;
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #fff;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+.shimmer {
+    font-family: "Lato";
+    font-weight: 300;
+    font-size: 3em;
+    padding: 0 140px 0 0;
+    display: inline;
+}
+
+.shimmer {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.1);
+    background: -webkit-gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff));
+    background: -moz-gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff));
+    background: gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff));
+    -webkit-background-size: 125px 100%;
+    -moz-background-size: 125px 100%;
+    background-size: 125px 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    -webkit-animation-name: shimmer;
+    -moz-animation-name: shimmer;
+    animation-name: shimmer;
+    -webkit-animation-duration: 2s;
+    -moz-animation-duration: 2s;
+    animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-color: #222;
+}
+
+@-moz-keyframes shimmer {
+    0% {
+        background-position: top left;
+    }
+
+    100% {
+        background-position: top right;
+    }
+}
+
+@-webkit-keyframes shimmer {
+    0% {
+        background-position: top left;
+    }
+    100% {
+        background-position: top right;
+    }
+}
+
+@-o-keyframes shimmer {
+    0% {
+        background-position: top left;
+    }
+    100% {
+        background-position: top right;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: top left;
+    }
+
+    100% {
+        background-position: top right;
+    }
+}
+
+
+/* games section */
+.games-heading {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.game-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.game-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.game-scroll .game-scroll-box {
+    display: inline-block;
+    float: none;
+    padding: 15px;
+    border: 1px solid red;
+}
+
+/* games section end */
+
+/* download section */
+.content-heading {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #FFFFF0;
+}
+
+.download-desc {
+    font-size: 0.9rem;
+    color: #a3a3a3;
+    text-align: center;
+    margin: 0 30px 30px;
+}
+
+.download-redirect {
+    max-width: 130px;
+}
+
+.download-img {
+    max-width: 250px;
+}
+
+/* download section end  */
+.header {
+    height: 100vh;
+    background: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.738) 19%, rgba(0, 0, 0, 0.541) 34%, rgba(0, 0, 0, 0.382) 47%, rgba(0, 0, 0, 0.278) 56.5%, rgba(0, 0, 0, 0.194) 65%, rgba(0, 0, 0, 0.126) 73%, rgba(0, 0, 0, 0.075) 80.2%, rgba(0, 0, 0, 0.042) 86.1%, rgba(0, 0, 0, 0.021) 91%, rgba(0, 0, 0, 0.008) 95.2%, rgba(0, 0, 0, 0.002) 98.2%, transparent 100%);
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75));
+    background-color: white;
+}
+
+
+/* Footer */
+.footer {
+    margin: 25px 50px;
+    width: 100%;
+    height: auto;
+}
