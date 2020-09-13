@@ -6,7 +6,6 @@ function fetchBanners()
         .catch(err => err);
 }
 
-
 //todo action to create cards
 function loadBannerInCarousel(banners) {
     for (let i = 0; i < banners.length; i++) {
