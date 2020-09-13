@@ -9,10 +9,8 @@
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-    <script src="js/GameLoader.js"></script>
+
+    <script src="js/BannerLoader.js"></script>
 
 </head>
 
@@ -21,7 +19,9 @@
     <section class="header container-fluid d-flex flex-column ">
         <h2 class="shimmer " id="userName"> hellrrlld</h2>
         <p>Enter the world of gamerz</p>
-        <button onclick="login()">login</button>
+        <form method= "GET" action="/register">
+            <input type="submit" value="Login" />
+        </form>
     </form>  
     </section>
 
@@ -85,46 +85,5 @@
     <!-- <div class="card_image"> <img src="https://i.redd.it/b3esnz5ra34y.jpg" /> </div> -->
 
 </body>
-<script>
-    function login(){
-        var firebaseConfig = {
-            apiKey: "AIzaSyBl_PAX0VGLEvIiFWdjWAEazUM7MJEV-1Y",
-            authDomain: "hostitgaming-36a6b.firebaseapp.com",
-            databaseURL: "https://hostitgaming-36a6b.firebaseio.com",
-            projectId: "hostitgaming-36a6b",
-            storageBucket: "hostitgaming-36a6b.appspot.com",
-            messagingSenderId: "916041965514",
-            appId: "1:916041965514:web:88009790aa188d22947933",
-            measurementId: "G-LQMV0QYN8B"
-        };
 
-        firebase.initializeApp(firebaseConfig);
-
-        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
-                let user;
-                const googleAuth = new firebase.auth.GoogleAuthProvider();
-                firebase.auth().signInWithPopup(googleAuth).then(function(result) {
-                    user = result.user;
-                    return result.user.getIdToken().then((idToken) => {
-                        return fetch("/sessionLogin", {
-                            method: "POST",
-                            headers: {
-                                Accept: "application/json",
-                                "Content-Type": "application/json",
-                                "CSRF-Token": Cookies.get("XSRF-TOKEN"),
-                            },
-                            body: JSON.stringify({ idToken }),
-                        });
-                    });
-                })
-                    .then(() => {
-                        return firebase.auth().signOut();
-                    })
-                    .then(() => {
-                        console.log("logged in")
-                        document.getElementById("userName").innerHTML = user.displayName;
-                    });
-                return false;
-    }
-</script>
 </html>

@@ -39,14 +39,18 @@ app.use(cookieParser());
 app.use(csrfMiddleware);
 app.use(express.static(__dirname + '/public'));
 
-// app.all("*", (req, res, next) => {
-//     res.cookie("XSRF-TOKEN", req.csrfToken());
-//     next();
-// });
+app.all("*", (req, res, next) => {
+    res.cookie("XSRF-TOKEN", req.csrfToken());
+    next();
+});
 
 
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname+'/views/index.html'));
+});
+
+app.get("/register", function (req, res) {
+    res.sendFile(path.join(__dirname+'/views/register.html'));
 });
 
 app.post("/sessionLogin", (req, res) => {
