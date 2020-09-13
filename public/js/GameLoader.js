@@ -15,11 +15,12 @@ function loadGameInCard(games)
         card.addEventListener("click", function() {fetchTournamentGames(games[i].gameID)},true);
         let img = document.createElement("img");
         img.src = games[i].gameImage;
-        img.style.width = "100%";
-        img.style.height = "15vw";
-        img.style.objectFit = "cover";
+        
+        let card_im = document.createAttribute("class");
+        card_im.value = "card-img-top"
+        img.setAttributeNode(card_im)
         let att = document.createAttribute("class");
-        att.value = "col-3 mr-4 py-5 bg-dark card";
+        att.value = "col-3 p-0 mr-4 bg-dark card";
         card.setAttributeNode(att);
         card.appendChild(img);
         parent.appendChild(card);

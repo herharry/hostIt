@@ -1,0 +1,13 @@
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.custom {
+    background-color: #323232;
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #fff;
+    font-family: 'Squada One', cursive;
+}
