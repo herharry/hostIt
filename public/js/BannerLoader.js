@@ -1,11 +1,11 @@
 fetch("/banners")
     .then(res => res.json())
-    .then(res => this.doAction(this.formatResponse(res)))
+    .then(res => this.doGetBanner(this.formatResponse(res)))
     .catch(err => err);
 
 
 //todo action to create cards
-function doAction(banners)
+function doGetBanner(banners)
 {
     for(let i=0;i<banners.length;i++)
     {
