@@ -98,9 +98,6 @@ app.get("/sessionLogout", (req, res) => {
 
 // ############# GET ALL TOURNAMENT AND LIVE TOURNAMENT DETAILS
 app.get('/tournament', (req, res) => {
-    checkIfValidUser(req,function (callback)
-    {
-        if (callback == true) {
             (async () => {
                 let response = [];
                 let gameFetchQuery = req.param('gameId', false)
@@ -119,18 +116,10 @@ app.get('/tournament', (req, res) => {
                 }
                 return res.status(200).send(response);
             })();
-        }
-        else {
-            res.status(401).send("UNAUTHORIZED REQUEST!");
-        }
-    });
 });
 
 // ############# GET ALL GAMES
 app.get('/games', (req, res) => {
-    checkIfValidUser(req,function (callback)
-    {
-        if (callback == true) {
             (async () => {
                 let response = [];
                 try {
@@ -147,11 +136,24 @@ app.get('/games', (req, res) => {
                 }
                 return res.status(200).json(response);
             })();
-        }
-        else {
-            res.status(401).send("UNAUTHORIZED REQUEST DA DEI!");
-        }
-    });
+});
+
+// ############# GET ALL BANNERS
+app.get('/banners', (req, res) => {
+            (async () => {
+                let response = [];
+                try {
+                    let games = db.collection('Banners');
+                    const snapshot = await games.get();
+                    snapshot.forEach(doc => {
+                        response.push(doc.data())
+                    });
+                } catch
+                    (error) {
+                    return res.status(500).send(error);
+                }
+                return res.status(200).json(response);
+            })();
 });
 
 
