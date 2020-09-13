@@ -101,9 +101,11 @@ app.get("/sessionLogout", (req, res) => {
 app.get('/tournament', (req, res) => {
             (async () => {
                 let response = [];
-                let gameFetchQuery = req.param('gameId', false)
+                console.log("inside")
+                let gameFetchQuery = req.param('gameID', false)
                 try {
                     let tournaments = db.collection('Tournaments')
+                    tournaments = tournaments.where('isFinished', '==', false);
                     if (gameFetchQuery!=false) {
                         tournaments = tournaments.where('gameID', '==', gameFetchQuery);
                     }
