@@ -173,6 +173,15 @@ function checkIfValidUser(req,callback) {
         });
 }
 
+<<<<<<< Updated upstream
 app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}`);
 });
+=======
+
+app.get('/dashboard', function (req, res) {
+    res.sendFile(path.join(__dirname+'/views/dashboard.html'));
+})
+
+app.listen(3000,()=>{console.log("servre running")});
+>>>>>>> Stashed changes
