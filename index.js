@@ -61,6 +61,11 @@ app.get('/dashboard', function (req, res) {
     res.sendFile(path.join(__dirname+'/views/dashboard.html'));
 })
 
+app.get('/profile', function (req, res) {
+    res.sendFile(path.join(__dirname+'/views/profile.html'));
+})
+
+
 app.post("/sessionLogin", (req, res) => {
     const idToken = req.body.idToken.toString();
     //5 day window

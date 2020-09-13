@@ -10,7 +10,7 @@
     background-color: #323232;
     line-height: 1.3;
     display: block;
-    font-size: 1rem;
+    font-size: 1.3rem;
     font-weight: 400;
     color: #fff;
     font-family: 'Squada One', cursive;
@@ -22,12 +22,15 @@ html {
 }
 
 .header h3 {
-    font-size: 2.2rem;
+    font-size: 2.7rem;
+    letter-spacing: 4px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     line-height: 1;
 }
 
 .header h1 {
-    font-size: 4rem;
+    font-size: 5rem;
+    letter-spacing: -3px;
     color: rgb(24, 130, 252);
 }
 
@@ -95,7 +98,7 @@ html {
 
 /* games section */
 .games-heading {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: bold;
     text-align: center;
 }
@@ -160,7 +163,7 @@ hr {
 
 
 /* Footer */
-.social-circle-btn .btn {
+.social-circle-btn .btnn {
     height: 2.6rem;
     width: 2.6rem;
     margin: .6rem;
@@ -174,7 +177,7 @@ hr {
 }
 
 
-.btn:hover {
+.btnn:hover {
     transition: all 1s ease;
     cursor: pointer;
 }
@@ -195,6 +198,7 @@ hr {
 .whatsapp:hover {
     background: #00bb4a;
 }
-.youtube:hover{
+
+.youtube:hover {
     background: #ff0000;
-  }
+}
