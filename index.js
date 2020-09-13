@@ -53,6 +53,14 @@ app.get("/register", function (req, res) {
     res.sendFile(path.join(__dirname+'/views/register.html'));
 });
 
+app.get('/dashboard', function (req, res) {
+    res.sendFile(path.join(__dirname+'/views/dashboard.html'));
+})
+
+app.get('/getalong', function (req, res) {
+    res.sendFile(path.join(__dirname+'/views/getalong.html'));
+})
+
 app.post("/sessionLogin", (req, res) => {
     const idToken = req.body.idToken.toString();
     //5 day window
@@ -173,15 +181,6 @@ function checkIfValidUser(req,callback) {
         });
 }
 
-<<<<<<< Updated upstream
 app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}`);
 });
-=======
-
-app.get('/dashboard', function (req, res) {
-    res.sendFile(path.join(__dirname+'/views/dashboard.html'));
-})
-
-app.listen(3000,()=>{console.log("servre running")});
->>>>>>> Stashed changes
