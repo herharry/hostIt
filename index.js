@@ -53,16 +53,12 @@ app.get('/dashboard', function (req, res) {
     res.sendFile(path.join(__dirname+'/views/dashboard.html'));
 })
 
-app.get('/getalong', function (req, res) {
-    res.sendFile(path.join(__dirname+'/views/getalong.html'));
+app.get('/register', function (req, res) {
+    res.sendFile(path.join(__dirname+'/views/register.html'));
 })
 
 app.get('/dashboard', function (req, res) {
     res.sendFile(path.join(__dirname+'/views/dashboard.html'));
-})
-
-app.get('/getalong', function (req, res) {
-    res.sendFile(path.join(__dirname+'/views/getalong.html'));
 })
 
 app.post("/sessionLogin", (req, res) => {
