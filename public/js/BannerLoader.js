@@ -1,6 +1,6 @@
 fetch("/banners")
     .then(res => res.json())
-    .then(data => this.doAction(this.formatResponse(data)))
+    .then(res => this.doGetBanner(this.formatResponse(res)))
     .catch(err => err);
 
 let aci = "apple";
