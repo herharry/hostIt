@@ -44,17 +44,6 @@ app.use(express.static(__dirname + '/public'));
 //     next();
 // });
 
-app.get("/profile", function (req, res) {
-    checkIfValidUser(req,function (callback)
-    {
-        console.log("inside profile",callback)
-        if (callback == true) {
-            res.render("profile.html");
-        } else {
-            res.status(401).send("UNAUTHORIZED REQUEST!");
-        }
-    });
-});
 
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname+'/views/index.html'));
