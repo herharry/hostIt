@@ -1,7 +1,10 @@
-fetch("/games")
-    .then(res => res.json())
-    .then(res => this.loadGameInCard(this.formatResponse(res)))
-    .catch(err => err);
+function fetchGame()
+{
+    fetch("/games")
+        .then(res => res.json())
+        .then(res => this.loadGameInCard(this.formatResponse(res)))
+        .catch(err => err);
+}
 
 
 //todo action to create cards

@@ -1,15 +1,14 @@
-console.log("apple")
+function fetchBanners()
+{
+    fetch("/banners")
+        .then(res => res.json())
+        .then(res => this.loadBannerInCarousel(this.formatResponse(res)))
+        .catch(err => err);
+}
 
 
-fetch("/banners")
-    .then(res => res.json())
-    .then(res => this.doGetBanner(this.formatResponse(res)))
-    .catch(err => err);
-
-let aci = "apple";
 //todo action to create cards
-function doGetBanner(banners) {
-    // const cauroselParent = document.getElementById("carousel-in");
+function loadBannerInCarousel(banners) {
     for (let i = 0; i < banners.length; i++) {
 
         let itemss = document.createElement("div");
