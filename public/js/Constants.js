@@ -9,3 +9,23 @@ const firebaseConfig = {
     measurementId: "G-LQMV0QYN8B"
 };
 firebase.initializeApp(firebaseConfig);
+
+
+function sessionLogin(result){
+    console.log("inside")
+    return result.user.getIdToken().then((idToken) => {
+        return fetch("/sessionLogin", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+            },
+            body: JSON.stringify({idToken}),
+        });
+    }).then(() => {
+        let user = result.user;
+        sessionStorage.setItem("userInfo", JSON.stringify(user))
+        window.location.assign("/profile");
+    });
+}
