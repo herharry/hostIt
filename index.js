@@ -30,7 +30,7 @@ const csrfMiddleware = csrf({cookie: true});
 const db = admin.firestore();
 const PORT = process.env.PORT || 3000;
 const app = express();
-
+let user = null;
 app.use(express.static('static'));
 
 
@@ -87,11 +87,11 @@ app.get('/profile', function (req, res) {
         }
         else
         {
+            console.log("unauth")
             res.redirect("/register");
         }
     });
 })
-
 
 app.post("/sessionLogin", (req, res) => {
     const idToken = req.body.idToken.toString();
@@ -104,7 +104,6 @@ app.post("/sessionLogin", (req, res) => {
             (sessionCookie) => {
                 const options = {maxAge: expiresIn, httpOnly: true};
                 res.cookie("session", sessionCookie, options);
-                console.log("cookie set")
                 res.end(JSON.stringify({status: "success"}));
             },
             (error) => {
@@ -201,12 +200,10 @@ app.get('/banners', (req, res) => {
 
 function checkIfValidUser(req,callback) {
     const sessionCookie = req.cookies.session || "";
-    console.log(sessionCookie)
     admin
         .auth()
         .verifySessionCookie(sessionCookie, true /** checkRevoked */)
         .then(() => {
-            console.log("session verified")
             return callback(true);
         })
         .catch((error) => {
