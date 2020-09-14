@@ -7,9 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
     <link rel="stylesheet" type="text/css" href="css/profile.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <<<<<<< HEAD=======<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js">
+        </script>
+        <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+        <script src="./js/Constants.js"></script>
+        <script src="./js/ProfileLoader.js"></script>
+        >>>>>>> d658682aae868036f0ae816fed5adff9a7c953eb
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
+            rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
 
 </head>
 
@@ -52,16 +60,18 @@
                 <div class="w-100 profile my-4 rounded-lg sticky-top">
                     <div class="img_section">
                         <div class="w-100 profile-bg"></div>
-
-                        <img src="https://cdn1.dotesports.com/wp-content/uploads/2020/03/09063109/codm1-1.jpg"
+                        <<<<<<< HEAD <img
+                            src="https://cdn1.dotesports.com/wp-content/uploads/2020/03/09063109/codm1-1.jpg"=======<img
+                            id="profileImage" src="">>>>>>> d658682aae868036f0ae816fed5adff9a7c953eb
                             class="mx-auto d-block profile-img img-responsive " alt="Profile thumbnail">
-                    </div>  
+                    </div>
 
                     <div class="profileDetails p-3">
                         <p class="pl-3 text-uppercase" id="profileName">Name</p>
                         <p class="pl-3" id="mobile-number">mobile number</p>
                         <button type="button"
-                            class="btn btn-sm btn-primary d-flex justify-content-center d-md-table mx-auto">Edit profile</button>
+                            class="btn btn-sm btn-primary d-flex justify-content-center d-md-table mx-auto">Edit
+                            profile</button>
                     </div>
                 </div>
             </div>
@@ -99,7 +109,8 @@
                                     <label class="p-2" for="validationCustom02">Mobile</label></div>
                                 <div class="col-8">
                                     <div class="input-group mb-5">
-                                        <input type="text" class="form-control text-white bg-dark" onkeypress="return isNumberKey(event)" placeholder="Mobile number"
+                                        <input type="text" class="form-control text-white bg-dark"
+                                            onkeypress="return isNumberKey(event)" placeholder="Mobile number"
                                             aria-label="" aria-describedby="button-addon2" required>
                                         <div class="input-group-append">
                                             <button class="btn btn-md btn-default m-0 px-3 py-2 z-depth-0 waves-effect"
@@ -114,7 +125,7 @@
                                     <label class=" p-2" for="validationCustom02">Account No</label></div>
                                 <div class="col-8">
                                     <input type="text" class="form-control text-white bg-dark" id="validationCustom02"
-                                        placeholder="account number" value=""  >
+                                        placeholder="account number" value="">
                                 </div>
                             </div>
                             <div class="row">
@@ -122,7 +133,7 @@
                                     <label class=" p-2" for="validationCustom02">IFSC</label></div>
                                 <div class="col-8">
                                     <input type="text" class="form-control bg-dark" id="validationCustom02"
-                                        placeholder="qwer01234" value="" >
+                                        placeholder="qwer01234" value="">
                                 </div>
                             </div>
                             <div class="row">
@@ -130,7 +141,7 @@
                                     <label class=" p-2" for="validationCustom02">UPI ID</label></div>
                                 <div class="col-8">
                                     <input type="text" class="form-control bg-dark" id="validationCustom02"
-                                        placeholder="someone@upi" value="" >
+                                        placeholder="someone@upi" value="">
                                 </div>
                             </div>
                         </div>
@@ -236,16 +247,19 @@
             }, false);
         })();
 
-        function isNumberKey(evt)
-			{
-				var charCode = (evt.which) ? evt.which : evt.keyCode;
-				if (charCode != 46 && charCode > 31 
-				&& (charCode < 48 || charCode > 57))
-				return false;
-				return true;
-			}  
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode != 46 && charCode > 31 &&
+                (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
     </script>
 
 </body>
+
+<script>
+    loadProfileDetails()
+</script>
 
 </html>

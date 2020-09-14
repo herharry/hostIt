@@ -5,6 +5,7 @@ function loginWithEmail(){
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
     firebase.auth().signInWithEmailAndPassword(email,password).then(function(result) {
         let user = result.user;
+        console.log(user)
         isEmailVerified(result)
         return false;
     });
@@ -13,6 +14,7 @@ function loginWithEmail(){
 function signupWithEmail()
 {
     console.log("singup")
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
     let uname = document.getElementById("sign-up-username").value;
     let email = document.getElementById("sign-up-email").value;
     let password = document.getElementById("sign-up-pass").value;
@@ -20,48 +22,33 @@ function signupWithEmail()
     firebase.auth().createUserWithEmailAndPassword(email, password).then(function (result){
        console.log(result.user)
         let user = result.user;
-        user.sendEmailVerification().then(function() {
-            console.log("email verified")
-            isEmailVerified(result)
-        }).catch(function(error) {
-            alert("verify email to continue")
-            // An error happened.
-        });
+       return user.updateProfile({
+           displayName: uname.toString()
+       }).then(function (){
+           console.log("uname updated")
+           return user.sendEmailVerification().then(function() {
+               console.log("email verified")
+               isEmailVerified(result)
+           }).catch(function(error) {
+               //todo yet to handle errors and exceptions
+               // An error happened.
+           });
+       })
     }).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(error)
+        //todo yet to handle errors and exceptions
     });
 }
-
-function sessionLogin(result){
-    return result.user.getIdToken().then((idToken) => {
-        return fetch("/sessionLogin", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                "CSRF-Token": Cookies.get("XSRF-TOKEN"),
-            },
-            body: JSON.stringify({idToken}),
-        });
-    })
-        .then(() => {
-            return firebase.auth().signOut();
-        })
-        .then(() => {
-            console.log("logged in")
-            window.location.assign("/profile");
-        });
-}
-
 function isEmailVerified(result)
 {
-    setInterval(function() {
+    if (!firebase.auth().currentUser.emailVerified) {
+        alert("verify your email for further processing")
+    }
+
+   var timer = setInterval(function() {
         firebase.auth().currentUser.reload();
         if (firebase.auth().currentUser.emailVerified) {
-            console.log("Email Verified!");
+            console.log("Email Verified!",firebase.auth().currentUser.emailVerified);
+            clearInterval(timer);
             sessionLogin(result)
         }
     }, 1000);
