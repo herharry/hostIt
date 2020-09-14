@@ -46,14 +46,11 @@ function sessionLogin(result){
             },
             body: JSON.stringify({idToken}),
         });
-    })
-        .then(() => {
-            return firebase.auth().signOut();
-        })
-        .then(() => {
-            console.log("logged in")
+    }).then(() => {
+        let user = result.user;
+            sessionStorage.setItem("userInfo", JSON.stringify(user))
             window.location.assign("/profile");
-        });
+     });
 }
 
 function isEmailVerified(result)
