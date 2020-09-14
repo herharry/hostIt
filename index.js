@@ -49,9 +49,6 @@ app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname+'/views/index.html'));
 });
 
-app.get('/dashboard', function (req, res) {
-    res.sendFile(path.join(__dirname+'/views/dashboard.html'));
-})
 
 app.get('/register', function (req, res) {
     checkIfValidUser(req,function (callback)
@@ -68,11 +65,31 @@ app.get('/register', function (req, res) {
 })
 
 app.get('/dashboard', function (req, res) {
-    res.sendFile(path.join(__dirname+'/views/dashboard.html'));
+    checkIfValidUser(req,function (callback)
+    {
+        if (callback == true)
+        {
+            res.sendFile(path.join(__dirname+'/views/dashboard.html'));
+        }
+        else
+        {
+            res.redirect("/register");
+        }
+    });
 })
 
 app.get('/profile', function (req, res) {
-    res.sendFile(path.join(__dirname+'/views/profile.html'));
+    checkIfValidUser(req,function (callback)
+    {
+        if (callback == true)
+        {
+            res.sendFile(path.join(__dirname+'/views/profile.html'));
+        }
+        else
+        {
+            res.redirect("/register");
+        }
+    });
 })
 
 
