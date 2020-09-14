@@ -7,11 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
     <link rel="stylesheet" type="text/css" href="css/profile.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
 
 </head>
 
@@ -34,7 +32,7 @@
                         <a class="nav-link middle" href="#">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link middle" href="#">Services</a>
+                        <a class="nav-link middle" href="#">videos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link middle" href="#footer">Contact</a>
@@ -44,34 +42,115 @@
         </div>
     </nav>
 
+    <!-- Main content -->
+    <div class="container main-content">
+        <div class="row m-1">
+            <div class="col-md-4">
 
-    <div class="container">
-        <div class="row my-3">
-            <div class="col-md-4 p-4">
                 <!-- profile section  -->
-                <div class="w-100 profile border rounded-lg sticky-top">
+
+                <div class="w-100 profile my-4 rounded-lg sticky-top">
                     <div class="img_section">
                         <div class="w-100 profile-bg"></div>
+
                         <img src="https://cdn1.dotesports.com/wp-content/uploads/2020/03/09063109/codm1-1.jpg"
                             class="mx-auto d-block profile-img img-responsive " alt="Profile thumbnail">
-                    </div>
+                    </div>  
 
                     <div class="profileDetails p-3">
                         <p class="pl-3 text-uppercase" id="profileName">Name</p>
-                        <p class="pl-3">mobile number</p>
-                        <button type="button" class="btn btn-outline-primary mx-auto d-block w-100">Primary</button>
+                        <p class="pl-3" id="mobile-number">mobile number</p>
+                        <button type="button"
+                            class="btn btn-sm btn-primary d-flex justify-content-center d-md-table mx-auto">Edit profile</button>
                     </div>
                 </div>
-
             </div>
-            <div class="col-md-8 pl-3">
+            <div class="col-md-8 py-md-4">
 
+                <div class="edit-profile rounded-lg p-4">
+                    <h4>Edit Profile</h4>
 
-                <div class="tabs">
+                    <form class="needs-validation my-5" novalidate>
+                        <div class="container-fluid">
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label class=" p-2" for="validationCustom01">NAME</label></div>
+                                <div class="col-8">
+
+                                    <input type="text" class="form-control text-white bg-dark" id="validationCustom01"
+                                        placeholder="Name" value="" required>
+                                    <div class="invalid-feedback">
+                                        <small> Field empty</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4 mb-3">
+                                    <label class=" p-2" for="validationCustom02">E-mail</label></div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control text-white bg-dark" id="validationCustom02"
+                                        placeholder="First name" value="Mark" required readonly>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label class="p-2" for="validationCustom02">Mobile</label></div>
+                                <div class="col-8">
+                                    <div class="input-group mb-5">
+                                        <input type="text" class="form-control text-white bg-dark" onkeypress="return isNumberKey(event)" placeholder="Mobile number"
+                                            aria-label="" aria-describedby="button-addon2" required>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-md btn-default m-0 px-3 py-2 z-depth-0 waves-effect"
+                                                type="button" id="button-addon2">verify</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h2 class="h5 grey-text text-center p-3">Bank details</h2>
+                            <div class="row">
+                                <div class="col-4 mb-3">
+                                    <label class=" p-2" for="validationCustom02">Account No</label></div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control text-white bg-dark" id="validationCustom02"
+                                        placeholder="account number" value=""  >
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 mb-3">
+                                    <label class=" p-2" for="validationCustom02">IFSC</label></div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control bg-dark" id="validationCustom02"
+                                        placeholder="qwer01234" value="" >
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 mb-3">
+                                    <label class=" p-2" for="validationCustom02">UPI ID</label></div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control bg-dark" id="validationCustom02"
+                                        placeholder="someone@upi" value="" >
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-md" type="submit">Submit form</button>
+                    </form>
+                </div>
+
+                <!-- My tournaments tabs -->
+                <div class="tabs p-4 rounded-lg">
                     <div class="tab-2">
                         <label for="tab2-1">One</label>
                         <input id="tab2-1" name="tabs-two" type="radio" checked="checked">
+
                         <div>
+                            <div class="text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
                             <h4>Remove and populate applied tournamnet</h4>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas consequat id velit quis
                                 vestibulum. Nam id
@@ -105,10 +184,9 @@
 
             </div>
         </div>
-
     </div>
 
-    <section class="footer">
+    <section class="footer " id="footer">
         <div class="container">
             <div class="social-circle-btn p-2 m-2 d-flex justify-content-center">
                 <div class="btnn instagram">
@@ -138,6 +216,36 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
     </script>
+
+    <script>
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        function isNumberKey(evt)
+			{
+				var charCode = (evt.which) ? evt.which : evt.keyCode;
+				if (charCode != 46 && charCode > 31 
+				&& (charCode < 48 || charCode > 57))
+				return false;
+				return true;
+			}  
+    </script>
+
 </body>
 
 </html>
