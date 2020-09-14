@@ -17,6 +17,7 @@ function login(){
     let user;
     const googleAuth = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(googleAuth).then(function(result) {
+        console.log(result.credential.accessToken)
         user = result.user;
         return result.user.getIdToken().then((idToken) => {
             return fetch("/sessionLogin", {
@@ -35,7 +36,7 @@ function login(){
         })
         .then(() => {
             console.log("logged in")
-            window.location.assign("/");
+            window.location.assign("/dashboard");
 
         });
     return false;

@@ -54,17 +54,31 @@ app.get('/dashboard', function (req, res) {
 })
 
 app.get('/register', function (req, res) {
-    res.sendFile(path.join(__dirname+'/views/register.html'));
+    checkIfValidUser(req,function (callback)
+    {
+        if (callback == true)
+        {
+            res.redirect("/dashboard");
+        }
+        else
+        {
+            res.sendFile(path.join(__dirname+'/views/register.html'));
+        }
+    });
 })
 
 app.get('/dashboard', function (req, res) {
     res.sendFile(path.join(__dirname+'/views/dashboard.html'));
 })
 
+app.get('/profile', function (req, res) {
+    res.sendFile(path.join(__dirname+'/views/profile.html'));
+})
+
+
 app.post("/sessionLogin", (req, res) => {
     const idToken = req.body.idToken.toString();
     //5 day window
-    console.log(idToken)
     const expiresIn = 60 * 60 * 24 * 5 * 1000;
     admin
         .auth()
