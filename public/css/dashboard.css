@@ -1,2 +1,46 @@
 @import url("headerfooter.css");
 
+.card {
+    max-width: 440px;
+    font-size: medium;
+}
+
+.progress-gradient {
+    background: #36D1DC;
+    background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);
+    background: linear-gradient(to right, #5B86E5, #36D1DC);
+}
+
+.carousel {
+    background: #2f4357;
+}
+
+.carousel-item {
+    text-align: center;
+    max-height: 280px;
+}
+
+
+.nav-tabs .nav-link.active {
+    color: #f1f1f1;
+    background-color: var(--inner-bg-color);
+    border-color: transparent !important;
+}
+.nav-tabs .nav-link {
+    color: gray;
+    background-color: var(--main-bg-color);
+    border:1px solid #4d4d4d;
+}
+
+.tab-content>.active {
+    display: block;
+    min-height: 165px;
+}
+.nav-float-left {
+    float: left;
+    display: block;
+    margin-right: 20px;
+    border-bottom: 0;
+    border-right: 1px solid transparent;
+    padding-right: 15px;
+}

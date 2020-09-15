@@ -22,18 +22,21 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav p-2 ml-auto">
                     <li class="nav-item ">
                         <a class="nav-link middle" href="/dashboard">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link middle" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link middle" href="#">videos</a>
+                        <a class="nav-link middle" href="/tournaments">tournament</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link middle" href="#footer">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" href="/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" href="/sessionLogout">logout</a>
                     </li>
                 </ul>
             </div>
@@ -43,7 +46,7 @@
     <!-- Main content -->
     <div class="container-lg main-content">
         <div class="row m-1">
-            <div class="col-md-4 p-0">
+            <div class="col-md-4">
                 <div class="sticky pt-2">
 
                     <!-- profile section  -->
@@ -80,7 +83,7 @@
                 </div>
 
             </div>
-            <div class="col-md-8 py-md-4 p-0">
+            <div class="col-md-8 py-md-4">
 
                 <div class="edit-profile rounded-lg p-4 d-none" id="editProfileCard">
                     <h4>Edit Profile</h4>
@@ -120,9 +123,10 @@
                                             id="editMobileNumber" aria-label="Mobile Number"
                                             aria-describedby="button-addon2" required>
                                         <div class="input-group-append">
-                                            <button class="btn  btn-success m-0 px-3 py-1 waves-effect" maxlength="10"
-                                                data-target="#modalRegisterForm" data-toggle="modal" type="button"
-                                                id="button-addon2">verify</button>
+                                            <button class="btn btn-md btn-default m-0 px-3 py-2 z-depth-0 waves-effect"
+                                                maxlength="10" data-target="#modalRegisterForm" data-toggle="modal"
+                                                type="button" id="button-addon2"
+                                                onclick="verifyPhoneNumber()">verify</button>
                                         </div>
                                     </div>
                                 </div>

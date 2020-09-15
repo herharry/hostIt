@@ -3,28 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Host-it</title>
+    <title>Host-it esports tournament</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
     <link rel="stylesheet" type="text/css" href="css/dashboard.css">
 
-    <style>
-        .carousel {
-            background: #2f4357;
-        }
 
-        .carousel-item {
-            text-align: center;
-            max-height: 240px;
-            /* Prevent carousel from being distorted if for some reason image doesn't load */
-        }
-    </style>
-    <script src="js/BannerLoader.js"></script>
-    <script src="js/TournamentLoader.js"></script>
 
 </head>
 
 <body class="custom">
+    
     <nav class="navbar navbar-expand-lg navbar-dark py-0 static-top">
         <div class="container-fluid iii">
             <a class="navbar-brand" href="#">
@@ -40,18 +29,23 @@
                         <a class="nav-link middle" href="/dashboard">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link middle" href="/profile">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link middle" href="#">videos</a>
+                        <a class="nav-link middle" href="/tournaments">tournament</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link middle" href="#footer">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" href="/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" href="/sessionLogout">logout</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+
+
 
 
     <div class="">
@@ -72,13 +66,62 @@
         </div>
     </div>
 
+    <div class="container my-1 ">
+        <!-- tournaments section  -->
 
 
-    <div class="container my-5">
-        <div class="row" id="tournamentCards">
+        <div class="row mt-5 px-0">
+            <div class="filter col-md-5 rounded-lg">
+                <div class="row">
+                    <div class="col-5">
 
+                    </div>
+                    <div class="col-7">
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="tournamentSection col-md-7 px-0">
+                <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tournament-tab" data-toggle="tab" href="#tournament" role="tab"
+                            aria-controls="home" aria-selected="true">Tournaments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                            aria-controls="profile" aria-selected="false">Live tournament</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                            aria-controls="contact" aria-selected="false">Contact</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="tournament" role="tabpanel"
+                        aria-labelledby="tournament-tab">
+
+                        <div class="container py-4">
+                            <div class="d-flex flex-column" id="tournamentCards">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <h2 id="hes"></h2>
+                    </div>
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="progress">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
+
+
 
 
     <!-- Footer section  -->
@@ -106,7 +149,17 @@
         </div>
         <p class="bg-primary mb-0 py-1 w-100 text-center"> Made with <i class="fas fa-heart"></i></p>
     </section>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
+    </script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
+    <script src="js/BannerLoader.js"></script>
+    <script src="js/TournamentLoader.js"></script>
     <script>
         fetchBanners();
         fetchTournaments();
