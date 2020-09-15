@@ -77,8 +77,6 @@ updateProfile = () => {
 }
 
 
-
-
 (function () {
     'use strict';
     window.addEventListener('load', function () {
@@ -103,4 +101,30 @@ function isNumberKey(evt) {
         (charCode < 48 || charCode > 57))
         return false;
     return true;
+}
+
+function verifyPhoneNumber() {
+    let phone = document.getElementById("editMobileNumber").value;
+    phone = "+91" + phone;
+
+    var applicationVerifier = new firebase.auth.RecaptchaVerifier('button-addon2', {
+        'size': 'invisible'
+    });
+    var provider = new firebase.auth.PhoneAuthProvider();
+    provider.verifyPhoneNumber(phone, applicationVerifier)
+        .then(function (verificationId) {
+            let coder = prompter('code')
+            return firebase.auth.PhoneAuthProvider.credential(verificationId, coder.toString());
+        }).then(function(phoneCredential) {
+           console.log(phoneCredential);
+    });
+}
+
+async function prompter(text) {
+
+    let promise = new Promise((resolve, reject) => {
+        setTimeout(() => resolve(window.prompt(text)), 1000)
+    });
+
+    return await promise; // wait until the promise resolves (*)
 }

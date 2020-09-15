@@ -93,6 +93,11 @@ app.get('/profile', function (req, res) {
     });
 })
 
+
+app.get("/tournaments", function (req, res) {
+    res.sendFile(path.join(__dirname+'/views/tournament.html'));
+});
+
 app.post("/sessionLogin", (req, res) => {
     const idToken = req.body.idToken.toString();
     //5 day window
