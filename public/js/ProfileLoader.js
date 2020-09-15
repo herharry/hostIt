@@ -103,23 +103,42 @@ function isNumberKey(evt) {
     return true;
 }
 
+function getElementValue(id)
+{
+    return document.getElementById(id).value;
+}
+function checkDetails()
+{
+    //todo validate the incoming data.. including phone number, if it isi verified, etc
+}
 function createUserInCollection()
 {
+    checkDetails();
     var user = {};
-    user.userName = "";
-    user.userEmailID="";
+    user.uid = JSON.parse(sessionStorage.getItem("userInfo")).uid;
+    user.userName = getElementValue("editProfileName");
+    user.userEmailID=getElementValue("editEmail");;
     user.walletAmount=0;
-    user.token = "";
     user.role = 0;
-    user.profileImageURL = "";
-    user.mobileNo = "";
-    user.vpa = "";
+    user.profileImageURL = document.getElementById("profileImage").getAttribute("src");
+    user.mobileNo = getElementValue("editMobileNumber");
+    user.vpa = getElementValue("editUpiID");
     var bankDetail = {};
-    bankDetail.accountNo = "";
-    bankDetail.ifsc = "";
+    bankDetail.accountNo = getElementValue("editAccountNo");
+    bankDetail.ifsc = getElementValue("editIfsc");
     bankDetail.accountName = "";
     user.bankDetail = bankDetail;
     user.tournamentIDs = [];
+
+    fetch("/createUser", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+        },
+        body: JSON.stringify({user}),
+    }).then()
 }
 
 function verifyPhoneNumber() {
