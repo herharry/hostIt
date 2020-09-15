@@ -7,19 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
     <link rel="stylesheet" type="text/css" href="css/profile.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-    <script src="./js/Constants.js"></script>
-<script src="./js/ProfileLoader.js"></script>
 
 
 </head>
 
 <body class="custom">
-    <nav class="navbar navbar-expand-lg navbar-dark static-top">
+    <nav class="navbar navbar-expand-lg navbar-dark py-0 static-top">
         <div class="container-fluid iii">
             <a class="navbar-brand" href="#">
                 <img src="http://placehold.it/150x50?text=Logo" alt="">
@@ -37,7 +30,7 @@
                         <a class="nav-link middle" href="#">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link middle" href="#">Services</a>
+                        <a class="nav-link middle" href="#">videos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link middle" href="#footer">Contact</a>
@@ -47,60 +40,169 @@
         </div>
     </nav>
 
+    <!-- Main content -->
+    <div class="container-lg main-content">
+        <div class="row m-1">
+            <div class="col-md-4 ">
+                <div class="sticky pt-2">
 
-    <div class="container">
-        <div class="row my-3">
-            <div class="col-md-4 p-4">
-                <!-- profile section  -->
-                <div class="w-100 profile border rounded-lg sticky-top">
-                    <div class="img_section">
-                        <div class="w-100 profile-bg"></div>
-                        <img id= "profileImage" src=""
-                            class="mx-auto d-block profile-img img-responsive " alt="Profile thumbnail">
+                    <!-- profile section  -->
+
+                    <div class="w-100 profile my-3 rounded-lg ">
+                        <div class="img_section">
+                            <div class="w-100 profile-bg"></div>
+
+                            <img src="..." class="mx-auto d-block profile-img img-responsive" id="profileImage"
+                                alt="Profile thumbnail">
+                        </div>
+
+                        <div class="profileDetails p-3">
+                            <p class="pl-3 text-uppercase" id="profileName">Name</p>
+                            <p class="pl-3" id="profileEmail"></p>
+                            <p class="pl-3" id="mobileNumber"></p>
+                            <button type="button"
+                                class="btn btn-sm btn-primary d-flex justify-content-center d-md-table mx-auto"
+                                onclick="showEdit()" id="edittt">Edit profile</button>
+                        </div>
                     </div>
 
-                    <div class="profileDetails p-3">
-                        <p class="pl-3 text-uppercase" id="profileName">Name</p>
-                        <p class="pl-3">mobile number</p>
-                        <button type="button" class="btn btn-outline-primary mx-auto d-block w-100">Primary</button>
+                    <!-- wallet section -->
+                    <div class="mb-3">
+                        <div class="wallet container" id="wallet">
+                            <h4 class="h5 p-2 border-bottom font-weight-bolder">Wallet</h4>
+                            <div class="py-3 justify-content-center d-flex">
+                                <i class="fas fa-money-check-alt mx-3 fa-2x"></i>
+                                <h2 id="winnings"> 20</h2>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
             </div>
-            <div class="col-md-8 pl-3">
+            <div class="col-md-8 py-md-4">
+
+                <div class="edit-profile rounded-lg p-4 d-none" id="editProfileCard">
+                    <h4>Edit Profile</h4>
+
+                    <form class="needs-validation" novalidate>
+                        <div class="container-fluid my-5">
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label class=" p-2" for="editProfileName">NAME</label></div>
+                                <div class="col-8">
+
+                                    <input type="text" class="form-control text-white bg-dark" id="editProfileName"
+                                        placeholder="Name" value="" required>
+                                    <div class="invalid-feedback">
+                                        <small> Field empty</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4 mb-3">
+                                    <label class=" p-2" for="editEmail">E-mail</label></div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control text-white bg-dark" id="editEmail"
+                                        placeholder="E-mail" value="" required readonly>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label class="p-2" for="editMobileNumber">Mobile</label></div>
+                                <div class="col-8">
+                                    <div class="input-group mb-5">
+                                        <input type="text" class="form-control text-white bg-dark"
+                                            onkeypress="return isNumberKey(event)" placeholder="Mobile number"
+                                            id="editMobileNumber" aria-label="" aria-describedby="button-addon2"
+                                            required>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-md btn-default m-0 px-3 py-2 z-depth-0 waves-effect"
+                                                type="button" id="button-addon2">verify</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h2 class="h5 grey-text text-center p-3">Bank details</h2>
+                            <div class="row">
+                                <div class="col-4 mb-3">
+                                    <label class=" p-2" for="editAccountNo">Account No</label></div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control text-white bg-dark" id="editAccountNo"
+                                        placeholder="account number" value="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 mb-3">
+                                    <label class=" p-2" for="editIfsc">IFSC</label></div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control bg-dark" id="editIfsc"
+                                        placeholder="qwer01234" value="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 mb-3">
+                                    <label class=" p-2" for="editUpiID">UPI ID</label></div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control bg-dark" id="editUpiID"
+                                        placeholder="someone@upi" value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-md" type="submit">Submit form</button>
+                    </form>
+                    <button class="btn btn-primary btn-md" onclick="removeEdit()">cancel</button>
+
+                </div>
 
 
-                <div class="tabs">
+
+                <!-- My tournaments tabs -->
+                <div class="tabs px-4 pt-2 rounded-lg" id="myTournament">
                     <div class="tab-2">
-                        <label for="tab2-1">One</label>
+                        <label for="tab2-1">Tournament</label>
                         <input id="tab2-1" name="tabs-two" type="radio" checked="checked">
+
                         <div>
+                            <div class="my-5 text-center" id="loader">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+
                             <h4>Remove and populate applied tournamnet</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas consequat id velit quis
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas consequat id velit
+                                quis
                                 vestibulum. Nam id
-                                orci eu urna mollis porttitor. Nunc nisi ante, gravida at velit eu, aliquet sodales dui.
+                                orci eu urna mollis porttitor. Nunc nisi ante, gravida at velit eu, aliquet sodales
+                                dui.
                                 Sed laoreet condimentum
                                 nisi a egestas.</p>
                             <p>Donec interdum ante ut enim consequat, quis varius nulla dapibus. Vivamus mollis
                                 fermentum augue a varius.
-                                Vestibulum in sapien at lectus gravida lobortis vulputate sed metus. Duis scelerisque
+                                Vestibulum in sapien at lectus gravida lobortis vulputate sed metus. Duis
+                                scelerisque
                                 justo et maximus
                                 efficitur. Donec eu eleifend quam. Curabitur aliquet commodo sapien eget vestibulum.
                                 Vestibulum ante ipsum
-                                primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum vel aliquet
+                                primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum vel
+                                aliquet
                                 nunc, finibus posuere
                                 lorem. Suspendisse consectetur volutpat est ut ornare.</p>
                         </div>
                     </div>
                     <div class="tab-2">
-                        <label for="tab2-2">Two</label>
+                        <label for="tab2-2">Upcomming</label>
                         <input id="tab2-2" name="tabs-two" type="radio">
                         <div>
                             <h4>Tab Two</h4>
                             <p>Quisque sit amet turpis leo. Maecenas sed dolor mi. Pellentesque varius elit in neque
                                 ornare commodo ac non tellus. Mauris id iaculis quam. Donec eu felis quam. Morbi
                                 tristique lorem eget iaculis consectetur. Class aptent taciti sociosqu ad litora
-                                torquent per conubia nostra, per inceptos himenaeos. Aenean at tellus eget risus tempus
+                                torquent per conubia nostra, per inceptos himenaeos. Aenean at tellus eget risus
+                                tempus
                                 ultrices. Nam condimentum nisi enim, scelerisque faucibus lectus sodales at.</p>
                         </div>
                     </div>
@@ -108,10 +210,9 @@
 
             </div>
         </div>
-
     </div>
 
-    <section class="footer">
+    <section class="footer mt-5" id="footer">
         <div class="container">
             <div class="social-circle-btn p-2 m-2 d-flex justify-content-center">
                 <div class="btnn instagram">
@@ -135,14 +236,22 @@
         <p class="bg-primary mb-0 py-1 w-100 text-center"> Made with <i class="fas fa-heart"></i></p>
     </section>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="./js/Constants.js"></script>
+    <script src="./js/ProfileLoader.js"></script>
+
+
+
 </body>
 
-<script>loadProfileDetails()</script>
+<script>
+    loadProfileDetails()
+</script>
 
 </html>
