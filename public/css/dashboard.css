@@ -2,6 +2,7 @@
 
 .card {
     max-width: 440px;
+
     font-size: medium;
 }
 
@@ -11,14 +12,6 @@
     background: linear-gradient(to right, #5B86E5, #36D1DC);
 }
 
-.carousel {
-    background: #2f4357;
-}
-
-.carousel-item {
-    text-align: center;
-    max-height: 280px;
-}
 
 
 .nav-tabs .nav-link.active {
