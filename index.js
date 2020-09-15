@@ -243,6 +243,27 @@ app.post('/createUser', (req, res) => {
         }
     })();
 });
+
+app.get('/user', (req, res) => {
+    (async () => {
+        let response;
+        let uid = req.param('uid', false)
+        try {
+            let userDoc = db.collection('Users')
+
+            if (uid!=false) {
+                userDoc = userDoc.doc(uid);
+            }
+            response = await userDoc.get();
+            response = response.data();
+        } catch
+            (error) {
+            console.log(error)
+            return res.status(200).json(null);
+        }
+        return res.status(200).json(response);
+    })();
+});
 //*************************************************************************************************************************//
 //********************************************* PROFILE API ENDS **************************************************************//
 //*************************************************************************************************************************//

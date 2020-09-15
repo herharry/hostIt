@@ -1,10 +1,42 @@
 function loadProfileDetails() {
-    let user = JSON.parse(sessionStorage.getItem("userInfo"));
+   loadUser(JSON.parse(sessionStorage.getItem("userInfo")));
+}
+
+function loadProfileForNewUser(user)
+{
     console.log(user)
     setProfileName(user.displayName)
     setProfileImage(user.photoURL)
     setMobileNumber(user.phoneNumber)
     setEmail(user.email)
+}
+
+function loadProfileForExistingUser(user)
+{
+    console.log(user)
+    setProfileName(user.userName)
+    setProfileImage(user.profileImageURL)
+    setMobileNumber(user.mobileNo)
+    setEmail(user.userEmailID)
+}
+function loadUser(user)
+{
+    fetch("/user?uid="+user.uid)
+        .then(res => res.json())
+        .then(function (res)
+        {
+            console.log("hey")
+            console.log(res)
+            if(res ==null)
+            {
+                loadProfileForNewUser(user);
+            }
+            else
+            {
+                loadProfileForExistingUser(res.user);
+            }
+        })
+        .catch(err => err);
 }
 
 
