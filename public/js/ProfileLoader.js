@@ -250,7 +250,7 @@ function verifyPhoneNumber() {
             let coder = prompter('code')
             return firebase.auth.PhoneAuthProvider.credential(verificationId, coder.toString());
         }).then(function(phoneCredential) {
-           console.log(phoneCredential);
+        console.log(phoneCredential);
     });
 }
 
