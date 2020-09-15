@@ -108,18 +108,20 @@ function createUserInCollection()
     var user = {};
     user.userName = "";
     user.userEmailID="";
-    user.walletAmount="";
+    user.walletAmount=0;
     user.token = "";
-    user.role = "";
+    user.role = 0;
     user.profileImageURL = "";
     user.mobileNo = "";
+    user.vpa = "";
     var bankDetail = {};
-    bankDetail.AccountNumer = "";
-    bankDetail.IFSC = "";
-    bankDetail.UPI = "";
+    bankDetail.accountNo = "";
+    bankDetail.ifsc = "";
+    bankDetail.accountName = "";
     user.bankDetail = bankDetail;
     user.tournamentIDs = [];
 }
+
 function verifyPhoneNumber() {
     let phone = document.getElementById("editMobileNumber").value;
     phone = "+91" + phone;
