@@ -7,19 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
     <link rel="stylesheet" type="text/css" href="css/profile.css">
-    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-    <script src="./js/Constants.js"></script>
-<script src="./js/ProfileLoader.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+
 
 </head>
 
 <body class="custom">
-    <nav class="navbar navbar-expand-lg navbar-dark static-top">
+    <nav class="navbar navbar-expand-lg navbar-dark py-0 static-top">
         <div class="container-fluid iii">
             <a class="navbar-brand" href="#">
                 <img src="http://placehold.it/150x50?text=Logo" alt="">
@@ -48,41 +41,57 @@
     </nav>
 
     <!-- Main content -->
-    <div class="container main-content">
+    <div class="container-lg main-content">
         <div class="row m-1">
-            <div class="col-md-4">
+            <div class="col-md-4 ">
+                <div class="sticky pt-2">
 
-                <!-- profile section  -->
+                    <!-- profile section  -->
 
-                <div class="w-100 profile my-4 rounded-lg sticky-top">
-                    <div class="img_section">
-                        <div class="w-100 profile-bg"></div>
+                    <div class="w-100 profile my-3 rounded-lg ">
+                        <div class="img_section">
+                            <div class="w-100 profile-bg"></div>
 
-                        <img src="https://cdn1.dotesports.com/wp-content/uploads/2020/03/09063109/codm1-1.jpg"
-                            class="mx-auto d-block profile-img img-responsive " alt="Profile thumbnail">
-                    </div>  
+                            <img src="..." class="mx-auto d-block profile-img img-responsive" id="profileImage"
+                                alt="Profile thumbnail">
+                        </div>
 
-                    <div class="profileDetails p-3">
-                        <p class="pl-3 text-uppercase" id="profileName">Name</p>
-                        <p class="pl-3" id="mobile-number">mobile number</p>
-                        <button type="button"
-                            class="btn btn-sm btn-primary d-flex justify-content-center d-md-table mx-auto">Edit profile</button>
+                        <div class="profileDetails p-3">
+                            <p class="pl-3 text-uppercase" id="profileName">Name</p>
+                            <p class="pl-3" id="profileEmail"></p>
+                            <p class="pl-3" id="mobileNumber"></p>
+                            <button type="button"
+                                class="btn btn-sm btn-primary d-flex justify-content-center d-md-table mx-auto"
+                                onclick="showEdit()" id="edittt">Edit profile</button>
+                        </div>
+                    </div>
+
+                    <!-- wallet section -->
+                    <div class="mb-3">
+                        <div class="wallet container" id="wallet">
+                            <h4 class="h5 p-2 border-bottom font-weight-bolder">Wallet</h4>
+                            <div class="py-3 justify-content-center d-flex">
+                                <i class="fas fa-money-check-alt mx-3 fa-2x"></i>
+                                <h2 id="winnings"> 20</h2>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
             <div class="col-md-8 py-md-4">
 
-                <div class="edit-profile rounded-lg p-4">
+                <div class="edit-profile rounded-lg p-4 d-none" id="editProfileCard">
                     <h4>Edit Profile</h4>
 
-                    <form class="needs-validation my-5" novalidate>
-                        <div class="container-fluid">
+                    <form class="needs-validation" novalidate>
+                        <div class="container-fluid my-5">
                             <div class="row mb-3">
                                 <div class="col-4">
-                                    <label class=" p-2" for="validationCustom01">NAME</label></div>
+                                    <label class=" p-2" for="editProfileName">NAME</label></div>
                                 <div class="col-8">
 
-                                    <input type="text" class="form-control text-white bg-dark" id="validationCustom01"
+                                    <input type="text" class="form-control text-white bg-dark" id="editProfileName"
                                         placeholder="Name" value="" required>
                                     <div class="invalid-feedback">
                                         <small> Field empty</small>
@@ -92,20 +101,22 @@
 
                             <div class="row">
                                 <div class="col-4 mb-3">
-                                    <label class=" p-2" for="validationCustom02">E-mail</label></div>
+                                    <label class=" p-2" for="editEmail">E-mail</label></div>
                                 <div class="col-8">
-                                    <input type="text" class="form-control text-white bg-dark" id="validationCustom02"
-                                        placeholder="First name" value="Mark" required readonly>
+                                    <input type="text" class="form-control text-white bg-dark" id="editEmail"
+                                        placeholder="E-mail" value="" required readonly>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-4">
-                                    <label class="p-2" for="validationCustom02">Mobile</label></div>
+                                    <label class="p-2" for="editMobileNumber">Mobile</label></div>
                                 <div class="col-8">
                                     <div class="input-group mb-5">
-                                        <input type="text" class="form-control text-white bg-dark" onkeypress="return isNumberKey(event)" placeholder="Mobile number"
-                                            aria-label="" aria-describedby="button-addon2" required>
+                                        <input type="text" class="form-control text-white bg-dark"
+                                            onkeypress="return isNumberKey(event)" placeholder="Mobile number"
+                                            id="editMobileNumber" aria-label="" aria-describedby="button-addon2"
+                                            required>
                                         <div class="input-group-append">
                                             <button class="btn btn-md btn-default m-0 px-3 py-2 z-depth-0 waves-effect"
                                                 type="button" id="button-addon2">verify</button>
@@ -116,72 +127,82 @@
                             <h2 class="h5 grey-text text-center p-3">Bank details</h2>
                             <div class="row">
                                 <div class="col-4 mb-3">
-                                    <label class=" p-2" for="validationCustom02">Account No</label></div>
+                                    <label class=" p-2" for="editAccountNo">Account No</label></div>
                                 <div class="col-8">
-                                    <input type="text" class="form-control text-white bg-dark" id="validationCustom02"
-                                        placeholder="account number" value=""  >
+                                    <input type="text" class="form-control text-white bg-dark" id="editAccountNo"
+                                        placeholder="account number" value="">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-4 mb-3">
-                                    <label class=" p-2" for="validationCustom02">IFSC</label></div>
+                                    <label class=" p-2" for="editIfsc">IFSC</label></div>
                                 <div class="col-8">
-                                    <input type="text" class="form-control bg-dark" id="validationCustom02"
-                                        placeholder="qwer01234" value="" >
+                                    <input type="text" class="form-control bg-dark" id="editIfsc"
+                                        placeholder="qwer01234" value="">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-4 mb-3">
-                                    <label class=" p-2" for="validationCustom02">UPI ID</label></div>
+                                    <label class=" p-2" for="editUpiID">UPI ID</label></div>
                                 <div class="col-8">
-                                    <input type="text" class="form-control bg-dark" id="validationCustom02"
-                                        placeholder="someone@upi" value="" >
+                                    <input type="text" class="form-control bg-dark" id="editUpiID"
+                                        placeholder="someone@upi" value="">
                                 </div>
                             </div>
                         </div>
 
                         <button class="btn btn-primary btn-md" type="submit">Submit form</button>
                     </form>
+                    <button class="btn btn-primary btn-md" onclick="removeEdit()">cancel</button>
+
                 </div>
 
+
+
                 <!-- My tournaments tabs -->
-                <div class="tabs p-4 rounded-lg">
+                <div class="tabs px-4 pt-2 rounded-lg" id="myTournament">
                     <div class="tab-2">
-                        <label for="tab2-1">One</label>
+                        <label for="tab2-1">Tournament</label>
                         <input id="tab2-1" name="tabs-two" type="radio" checked="checked">
 
                         <div>
-                            <div class="text-center">
+                            <div class="my-5 text-center" id="loader">
                                 <div class="spinner-border" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
+
                             <h4>Remove and populate applied tournamnet</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas consequat id velit quis
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas consequat id velit
+                                quis
                                 vestibulum. Nam id
-                                orci eu urna mollis porttitor. Nunc nisi ante, gravida at velit eu, aliquet sodales dui.
+                                orci eu urna mollis porttitor. Nunc nisi ante, gravida at velit eu, aliquet sodales
+                                dui.
                                 Sed laoreet condimentum
                                 nisi a egestas.</p>
                             <p>Donec interdum ante ut enim consequat, quis varius nulla dapibus. Vivamus mollis
                                 fermentum augue a varius.
-                                Vestibulum in sapien at lectus gravida lobortis vulputate sed metus. Duis scelerisque
+                                Vestibulum in sapien at lectus gravida lobortis vulputate sed metus. Duis
+                                scelerisque
                                 justo et maximus
                                 efficitur. Donec eu eleifend quam. Curabitur aliquet commodo sapien eget vestibulum.
                                 Vestibulum ante ipsum
-                                primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum vel aliquet
+                                primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum vel
+                                aliquet
                                 nunc, finibus posuere
                                 lorem. Suspendisse consectetur volutpat est ut ornare.</p>
                         </div>
                     </div>
                     <div class="tab-2">
-                        <label for="tab2-2">Two</label>
+                        <label for="tab2-2">Upcomming</label>
                         <input id="tab2-2" name="tabs-two" type="radio">
                         <div>
                             <h4>Tab Two</h4>
                             <p>Quisque sit amet turpis leo. Maecenas sed dolor mi. Pellentesque varius elit in neque
                                 ornare commodo ac non tellus. Mauris id iaculis quam. Donec eu felis quam. Morbi
                                 tristique lorem eget iaculis consectetur. Class aptent taciti sociosqu ad litora
-                                torquent per conubia nostra, per inceptos himenaeos. Aenean at tellus eget risus tempus
+                                torquent per conubia nostra, per inceptos himenaeos. Aenean at tellus eget risus
+                                tempus
                                 ultrices. Nam condimentum nisi enim, scelerisque faucibus lectus sodales at.</p>
                         </div>
                     </div>
@@ -191,7 +212,7 @@
         </div>
     </div>
 
-    <section class="footer " id="footer">
+    <section class="footer mt-5" id="footer">
         <div class="container">
             <div class="social-circle-btn p-2 m-2 d-flex justify-content-center">
                 <div class="btnn instagram">
@@ -215,44 +236,22 @@
         <p class="bg-primary mb-0 py-1 w-100 text-center"> Made with <i class="fas fa-heart"></i></p>
     </section>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-    <script>
-        (function () {
-            'use strict';
-            window.addEventListener('load', function () {
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="./js/Constants.js"></script>
+    <script src="./js/ProfileLoader.js"></script>
 
-        function isNumberKey(evt)
-			{
-				var charCode = (evt.which) ? evt.which : evt.keyCode;
-				if (charCode != 46 && charCode > 31 
-				&& (charCode < 48 || charCode > 57))
-				return false;
-				return true;
-			}  
-    </script>
+
 
 </body>
 
-<script>loadProfileDetails()</script>
+<script>
+    loadProfileDetails()
+</script>
 
 </html>

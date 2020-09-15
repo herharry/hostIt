@@ -6,11 +6,8 @@
     <title>Host-it</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
-    <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/dashboard.css">
+
     <style>
         .carousel {
             background: #2f4357;
@@ -28,6 +25,35 @@
 </head>
 
 <body class="custom">
+    <nav class="navbar navbar-expand-lg navbar-dark py-0 static-top">
+        <div class="container-fluid iii">
+            <a class="navbar-brand" href="#">
+                <img src="http://placehold.it/150x50?text=Logo" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link middle" href="/dashboard">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" href="/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" href="#">videos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" href="#footer">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
     <div class="">
 
         <div id="myCarousel" class="carousel slide" data-interval="3000" data-ride="carousel">
@@ -49,14 +75,42 @@
 
 
     <div class="container my-5">
-        <div id = "tournamentCards">
+        <div class="row" id="tournamentCards">
 
         </div>
     </div>
 
-<script>
-    fetchBanners();
-    fetchTournaments();
-</script>
+
+    <!-- Footer section  -->
+
+    <section class="footer mt-5" id="footer">
+        <div class="container">
+            <div class="social-circle-btn p-2 m-2 d-flex justify-content-center">
+                <div class="btnn instagram">
+                    <i class="fab fa-instagram fa-xs"></i>
+                </div>
+                <div class="btnn facebook">
+                    <i class="fab fa-facebook fa-xs"></i>
+                </div>
+                <div class="btnn twitter">
+                    <i class="fab fa-twitter fa-xs"></i>
+                </div>
+                <div class="btnn whatsapp">
+                    <i class="fab fa-whatsapp fa-xs"></i>
+                </div>
+                <div class="btnn youtube fa-xs">
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+
+        </div>
+        <p class="bg-primary mb-0 py-1 w-100 text-center"> Made with <i class="fas fa-heart"></i></p>
+    </section>
+
+    <script>
+        fetchBanners();
+        fetchTournaments();
+    </script>
 </body>
+
 </html>

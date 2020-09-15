@@ -1,59 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Jura:wght@400;600&display=swap');
-:root {
-    --navbar-color:#080808;
-    --main-bg-color: #171717;
-    --bg-color: #1f1f1f;
-    --theme-color: #045de9;
-    --inner-bg-color: #3b444b;
-}
-
-* {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
+@import url("headerfooter.css");
 
 
 
-
-.custom {
-    background-color: var(--bg-color);
-    line-height: 1.2;
-    display: block;
-    font-family: Jura;
-    font-size: 1.1rem;
-    font-weight: 300;
-    color: #ededed;
-}
-
-.main-content{
+.main-content {
     min-height: 72vh;
 }
 
-/* navbar links underline */
-
-a.middle {
-    position: relative;
+@media only screen and (min-width:800px) {
+    .sticky {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+    }
 }
-
-a.middle:before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: var(--theme-color);
-    visibility: hidden;
-    transform: scaleX(0);
-    transition: all 0.3s ease-in-out;
-}
-
-a.middle:hover:before {
-    visibility: visible;
-    transform: scaleX(1);
-
-}
-
 
 
 /* profile card css */
@@ -63,8 +22,9 @@ a.middle:hover:before {
 
 }
 
-.navbar {
-    background-color: var(--navbar-color);
+.wallet {
+    background-color: var(--main-bg-color);
+
 }
 
 .profile-img {
@@ -88,17 +48,17 @@ a.middle:hover:before {
 }
 
 /* edit profile */
-.edit-profile{
+.edit-profile {
     background-color: var(--main-bg-color);
 }
 
-.edit-profile h4{
+.edit-profile h4 {
     font-size: 1.5rem;
     border-bottom: 1px dotted;
-    
+
 }
 
-.edit-profile label{
+.edit-profile label {
     font-size: 1rem;
 }
 
@@ -198,52 +158,4 @@ button:focus {
 
 .tabs .tab-2:last-child [type="radio"]:checked+div {
     margin-left: -100%;
-}
-
-
-
-
-/* footer social button  */
-.footer {
-    background-color: var(--main-bg-color);
-}
-
-.social-circle-btn .btnn {
-    height: 2.6rem;
-    width: 2.6rem;
-    margin: .6rem;
-    float: left;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #FFF;
-    background: #2d2a2a;
-}
-
-
-.btnn:hover {
-    transition: all 1s ease;
-    cursor: pointer;
-}
-
-.instagram:hover {
-    background-image: linear-gradient(to right top, #fcac0f, #fd9522, #fa7f30, #f36a3c, #e85647, #e44751, #dd395b, #d42d65, #d12174, #ca1b85, #be1e96, #ae27a8);
-}
-
-.facebook:hover {
-    background-image: linear-gradient(to right top, #405d9a, #3f5c9a, #3e5b99, #3c5a99, #3b5998);
-}
-
-.twitter:hover {
-    background-image: radial-gradient(circle, #1d9ceb, #1d9ceb, #1d9ceb, #1d9ceb, #1d9ceb);
-
-}
-
-.whatsapp:hover {
-    background: #00bb4a;
-}
-
-.youtube:hover {
-    background: #ff0000;
 }
