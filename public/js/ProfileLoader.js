@@ -103,6 +103,23 @@ function isNumberKey(evt) {
     return true;
 }
 
+function createUserInCollection()
+{
+    var user = {};
+    user.userName = "";
+    user.userEmailID="";
+    user.walletAmount="";
+    user.token = "";
+    user.role = "";
+    user.profileImageURL = "";
+    user.mobileNo = "";
+    var bankDetail = {};
+    bankDetail.AccountNumer = "";
+    bankDetail.IFSC = "";
+    bankDetail.UPI = "";
+    user.bankDetail = bankDetail;
+    user.tournamentIDs = [];
+}
 function verifyPhoneNumber() {
     let phone = document.getElementById("editMobileNumber").value;
     phone = "+91" + phone;
