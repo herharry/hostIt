@@ -1,0 +1,42 @@
+@import url("headerfooter.css");
+
+
+.tournamentImage {
+    width: 135px;
+    height: 180px;
+    box-shadow: gray;
+    object-fit: cover;
+    border-radius: 10%;
+
+}
+
+@media only screen and (min-width:800px) {
+    .row {
+        border-radius: 10px;
+    }
+
+    .progress-gradient {
+        border-radius: 10px;
+    }
+
+
+
+}
+
+.progress-gradient {
+    background: #36D1DC;
+    background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);
+    background: linear-gradient(to right, #5B86E5, #36D1DC);
+}
+
+.rules {
+    background-color: var(--main-bg-color);
+}
+h3{
+    font-weight: 700;
+
+}
+.rules-body {
+    padding: 20px;
+    line-height: 1.4;
+}
