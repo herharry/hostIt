@@ -259,6 +259,36 @@ app.post('/createUser', (req, res) => {
     })();
 });
 
+app.post('/updateUser', (req, res) => {
+    (async () => {
+        try {
+            let u = req.body.user;
+            console.log(req.body.user);
+            console.log(req.body.user.uid);
+            let bankDetail = {}
+            bankDetail.accountName = u.bankDetail.accountName;
+            bankDetail.accountNo = u.bankDetail.accountNo
+            bankDetail.ifsc=u.bankDetail.ifsc;
+            await db.collection('Users').doc(req.body.user.uid)
+                .update({
+                    bankDetail: bankDetail,
+                    mobileNo : u.mobileNo,
+                    userName:    u.userName ,
+                    userEmailID:u.userEmailID,
+                    walletAmount:u.walletAmount,
+                    role:u.role,
+                    profileImageURL:u.profileImageURL,
+                    vpa:u.vpa,
+                    tournamentIds:u.tournamentIDs
+                });
+            res.redirect("/profile")
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
 app.get('/user', (req, res) => {
     (async () => {
         let response;

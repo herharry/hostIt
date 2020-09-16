@@ -1,3 +1,5 @@
+let API;
+
 function loadProfileDetails() {
    loadUser(JSON.parse(sessionStorage.getItem("userInfo")));
 }
@@ -30,12 +32,16 @@ function loadUser(user)
             if(res.val === "false")
             {
                 console.log("in")
+                API = "CREATE_API"
                 loadProfileForNewUser(user);
             }
             else
             {
                 console.log(res.val)
-
+                API = "UPDATE_API"
+                let userInSession = res.val;
+                userInSession.uid = user.uid;
+                sessionStorage.setItem("userInfo", JSON.stringify(res.val))
                 loadProfileForExistingUser(res.val);
             }
         })
@@ -165,15 +171,37 @@ function createUserInCollection()
     user.bankDetail = bankDetail;
     user.tournamentIDs = [];
 
-    fetch("/createUser", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "CSRF-Token": Cookies.get("XSRF-TOKEN"),
-        },
-        body: JSON.stringify({user}),
-    }).then()
+    if(API == "CREATE_API")
+    {
+        fetch("/createUser", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+            },
+            body: JSON.stringify({user}),
+        }).then(function ()
+        {
+            window.location.assign("/profile");
+        })
+    }
+    else
+    {
+        fetch("/updateUser", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+            },
+            body: JSON.stringify({user}),
+        }).then(function()
+        {
+            window.location.assign("/profile");
+        })
+    }
+
 }
 
 function verifyPhoneNumber() {
