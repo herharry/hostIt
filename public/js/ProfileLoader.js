@@ -27,13 +27,16 @@ function loadUser(user)
         {
             console.log("hey")
             console.log(res)
-            if(res ==null)
+            if(res.val === "false")
             {
+                console.log("in")
                 loadProfileForNewUser(user);
             }
             else
             {
-                loadProfileForExistingUser(res.user);
+                console.log(res.val)
+
+                loadProfileForExistingUser(res.val);
             }
         })
         .catch(err => err);
@@ -146,7 +149,7 @@ function checkDetails()
 function createUserInCollection()
 {
     checkDetails();
-    var user = {};
+    let user = {};
     user.uid = JSON.parse(sessionStorage.getItem("userInfo")).uid;
     user.userName = getElementValue("editProfileName");
     user.userEmailID=getElementValue("editEmail");;
@@ -155,7 +158,7 @@ function createUserInCollection()
     user.profileImageURL = document.getElementById("profileImage").getAttribute("src");
     user.mobileNo = getElementValue("editMobileNumber");
     user.vpa = getElementValue("editUpiID");
-    var bankDetail = {};
+    let bankDetail = {};
     bankDetail.accountNo = getElementValue("editAccountNo");
     bankDetail.ifsc = getElementValue("editIfsc");
     bankDetail.accountName = "";
