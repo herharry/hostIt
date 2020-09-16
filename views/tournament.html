@@ -114,10 +114,22 @@
         <p class="bg-primary mb-0 py-1 w-100 text-center"> Made with <i class="fas fa-heart"></i></p>
     </section>
 
+    <form method="post" action="/paynow">
+        <input type="text" id="payable_amount" name="amount" readonly>
+        <input type="number" id="pay_phone" name="phone">
+        <input type="email" id="pay_email" name="email" >
+        <input type="hidden" id="tournament_id">
+        <input type="hidden" id="user_id">
+        <button type="submit">Pay Now</button>
+    </form>
+    
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 
 </body>
+
+
 
 </html>

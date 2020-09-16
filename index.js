@@ -6,6 +6,7 @@ const admin = require("firebase-admin");
 const firebase = require("firebase")
 const qs = require('querystring')
 const path = require("path");
+const http = require("http")
 
 const firebaseConfig = {
     apiKey: "AIzaSyBl_PAX0VGLEvIiFWdjWAEazUM7MJEV-1Y",
@@ -42,13 +43,17 @@ app.use(express.static('static'));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(csrfMiddleware);
+// app.use(csrfMiddleware);
 app.use(express.static(__dirname + '/public'));
 
-app.all("*", (req, res, next) => {
-    res.cookie("XSRF-TOKEN", req.csrfToken());
-    next();
-});
+// app.all("*", (req, res, next) => {
+//     console.log(req.url)
+//     if(req.url != "/paynow")
+//     {
+//         res.cookie("XSRF-TOKEN", req.csrfToken());
+//     }
+//     next();
+// });
 
 
 app.get("/", function (req, res) {
@@ -246,6 +251,12 @@ function checkIfValidUser(req,callback) {
 //*************************************************************************************************************************//
 
 app.post('/paynow', [parseUrl, parseJson], (req, res) => {
+    console.log("DFASDF")
+    console.log(req.body.amount)
+    console.log(req.body.email)
+    console.log(req.body.phone)
+
+
     if (!req.body.amount || !req.body.email || !req.body.phone) {
         res.status(400).send('Payment failed')
     } else {
@@ -298,50 +309,29 @@ app.post('/callback', (req, res) => {
         var result = checksum_lib.verifychecksum(post_data, config.PaytmConfig.key, checksumhash);
         console.log("Checksum Result => ", result, "\n");
 
-        //todo post_data has all the transaction details use it to send a resposne
+        if(result == true)
+        {
 
-        // Send Server-to-Server request to verify Order Status
-        // var params = { "MID": config.PaytmConfig.mid, "ORDERID": post_data.ORDERID };
-        //
-        // checksum_lib.genchecksum(params, config.PaytmConfig.key, function (err, checksum) {
-        //
-        //     params.CHECKSUMHASH = checksum;
-        //     post_data = 'JsonData=' + JSON.stringify(params);
-        //
-        //     var options = {
-        //         hostname: 'securegw.paytm.in', // for production
-        //         port: 443,
-        //         path: '/merchant-status/getTxnStatus',
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/x-www-form-urlencoded',
-        //             'Content-Length': post_data.length
-        //         }
-        //     };
-        //
-        //
-        //     // Set up the request
-        //     var response = "";
-        //     var post_req = https.request(options, function (post_res) {
-        //         post_res.on('data', function (chunk) {
-        //             response += chunk;
-        //         });
-        //
-        //         post_res.on('end', function () {
-        //             console.log('S2S Response: ', response, "\n");
-        //
-        //             var _result = JSON.parse(response);
-        //             res.render('response', {
-        //                 'data': _result
-        //             })
-        //         });
-        //     });
-        //
-        //     // post the data
-        //     post_req.write(post_data);
-        //     post_req.end();
-        // });
+        }
+
     });
+});
+
+app.post("/addTransaction", (req, res) => {
+    (async () => {
+        let transDetails = req.body.transactionDetails;
+        try {
+            let games = db.collection('Banners');
+            const snapshot = await games.get();
+            snapshot.forEach(doc => {
+                response.push(doc.data())
+            });
+        } catch
+            (error) {
+            return res.status(500).send(error);
+        }
+        return res.status(200).json(response);
+    })();
 });
 
 //*************************************************************************************************************************//

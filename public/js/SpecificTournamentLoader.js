@@ -1,3 +1,4 @@
+    let TOURNAMENT;
     let url = window.location.href;
     let urlParams = getParams(url);
     console.log(urlParams);
@@ -66,7 +67,9 @@
         //todo res will have the details, just to set it..
     }
 
-    function joinConfirm() {
-        //todo paytm integ
-        console.log("paytm call")
-    }
+
+function joinConfirm()
+{
+    //todo set all the data here for paytm processing
+    document.getElementById("payable_amount").value = TOURNAMENT.amount;
+}
