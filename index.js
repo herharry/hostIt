@@ -227,6 +227,62 @@ app.get('/banners', (req, res) => {
 //*************************************************************************************************************************//
 
 //*************************************************************************************************************************//
+//********************************************* PROFILE API STARTS **************************************************************//
+//*************************************************************************************************************************//
+app.post('/createUser', (req, res) => {
+    (async () => {
+        try {
+            let u = req.body.user;
+            console.log(req.body.user);
+            console.log(req.body.user.uid);
+            let bankDetail = {}
+            bankDetail.accountName = u.bankDetail.accountName;
+            bankDetail.accountNo = u.bankDetail.accountNo
+            bankDetail.ifsc=u.bankDetail.ifsc;
+            await db.collection('Users').doc(req.body.user.uid)
+                .create({
+                        bankDetail: bankDetail,
+                        mobileNo : u.mobileNo,
+                        userName:    u.userName ,
+                        userEmailID:u.userEmailID,
+                        walletAmount:u.walletAmount,
+                        role:u.role,
+                        profileImageURL:u.profileImageURL,
+                        vpa:u.vpa,
+                        tournamentIds:u.tournamentIDs
+                });
+            res.redirect("/dashboard")
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
+app.get('/user', (req, res) => {
+    (async () => {
+        let response;
+        let uid = req.param('uid', false)
+            let userDoc = db.collection('Users')
+
+            if (uid!=false) {
+                userDoc = userDoc.doc(uid);
+            }
+            response = await userDoc.get();
+            response = response.data();
+            if(response == null)
+            {
+                console.log("hellooos")
+                response = "false"
+            }
+        return res.status(200).json({val : response});
+    })();
+});
+//*************************************************************************************************************************//
+//********************************************* PROFILE API ENDS **************************************************************//
+//*************************************************************************************************************************//
+
+//*************************************************************************************************************************//
 //********************************************* IMP METHODS **************************************************************//
 //*************************************************************************************************************************//
 

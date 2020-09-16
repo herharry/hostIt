@@ -1,10 +1,45 @@
 function loadProfileDetails() {
-    let user = JSON.parse(sessionStorage.getItem("userInfo"));
+   loadUser(JSON.parse(sessionStorage.getItem("userInfo")));
+}
+
+function loadProfileForNewUser(user)
+{
     console.log(user)
     setProfileName(user.displayName)
     setProfileImage(user.photoURL)
     setMobileNumber(user.phoneNumber)
     setEmail(user.email)
+}
+
+function loadProfileForExistingUser(user)
+{
+    console.log(user)
+    setProfileName(user.userName)
+    setProfileImage(user.profileImageURL)
+    setMobileNumber(user.mobileNo)
+    setEmail(user.userEmailID)
+}
+function loadUser(user)
+{
+    fetch("/user?uid="+user.uid)
+        .then(res => res.json())
+        .then(function (res)
+        {
+            console.log("hey")
+            console.log(res)
+            if(res.val === "false")
+            {
+                console.log("in")
+                loadProfileForNewUser(user);
+            }
+            else
+            {
+                console.log(res.val)
+
+                loadProfileForExistingUser(res.val);
+            }
+        })
+        .catch(err => err);
 }
 
 
@@ -101,6 +136,44 @@ function isNumberKey(evt) {
         (charCode < 48 || charCode > 57))
         return false;
     return true;
+}
+
+function getElementValue(id)
+{
+    return document.getElementById(id).value;
+}
+function checkDetails()
+{
+    //todo validate the incoming data.. including phone number, if it isi verified, etc
+}
+function createUserInCollection()
+{
+    checkDetails();
+    let user = {};
+    user.uid = JSON.parse(sessionStorage.getItem("userInfo")).uid;
+    user.userName = getElementValue("editProfileName");
+    user.userEmailID=getElementValue("editEmail");;
+    user.walletAmount=0;
+    user.role = 0;
+    user.profileImageURL = document.getElementById("profileImage").getAttribute("src");
+    user.mobileNo = getElementValue("editMobileNumber");
+    user.vpa = getElementValue("editUpiID");
+    let bankDetail = {};
+    bankDetail.accountNo = getElementValue("editAccountNo");
+    bankDetail.ifsc = getElementValue("editIfsc");
+    bankDetail.accountName = "";
+    user.bankDetail = bankDetail;
+    user.tournamentIDs = [];
+
+    fetch("/createUser", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+        },
+        body: JSON.stringify({user}),
+    }).then()
 }
 
 function verifyPhoneNumber() {
