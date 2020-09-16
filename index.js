@@ -334,7 +334,17 @@ app.post('/callback', (req, res) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({transactionDetails}),
-            });
+            }).then(res => res.json()).then(function (td){
+                console.log(td)
+                        return fetch("http://localhost:3000/addTournamentToUser", {
+                            method: "POST",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({td}),
+                        })
+            })
         }
 
     });
@@ -348,12 +358,51 @@ app.post("/addTransaction", (req, res) => {
             console.log(transDetails.uid);
 
             await db.collection('Transactions').doc()
-                .create({transDetails});
-            res.redirect("/dashboard")
+                .create({
+                    tournamentID : transDetails.tournamentID,
+                    userID :transDetails.userID,
+                    currency :transDetails.currency,
+                    respmsg:transDetails.respmsg,
+                    mid:transDetails.mid ,
+                    respcode:transDetails.respcode,
+                    txnid:transDetails.txnid,
+                    txnamount:transDetails.txnamount,
+                    orderid:transDetails.orderid ,
+                    status:transDetails.status ,
+                    banktxnid:transDetails.banktxnid,
+                    txndate:transDetails.txndate,
+                    checksumhash: transDetails.checksumhash
+                });
+           return res.status(200).json(transDetails);
         } catch (error) {
             console.log(error);
             return res.status(500).send(error);
         }
+    })();
+});
+
+app.post('/addTournamentToUser', (req, res) => {
+    (async () => {
+        let uid = req.body.td.userID;
+        let tid = req.body.td.tournamentID;
+        console.log(uid)
+        console.log(tid)
+        try {
+            let userDoc = db.collection('Users').doc(uid);
+            let userdata = await userDoc.get();
+            let tournaments = userdata.data().tournamentIds;
+            console.log(userdata.data())
+            console.log(tournaments)
+            tournaments.push(tid);
+            await userDoc.update({
+                tournamentIds : tournaments
+            });
+        } catch
+            (error) {
+            console.log(error)
+            return res.status(200).json(null);
+        }
+        return res.status(200).send("success");
     })();
 });
 
