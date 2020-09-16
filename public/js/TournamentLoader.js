@@ -12,7 +12,7 @@ function loadTournamentInCards(tournaments) {
     const cardParent = document.getElementById("tournamentCards")
     for (let i = 0; i < tournaments.length; i++) {
         let card = document.createElement("div");
-        card.className = "card p-0 bg-dark my-2 mx-3 col-12 col-lg-6";
+        card.className = "card p-0 bg-dark my-2 mx-2 col-12 col-lg-6";
         // let img = document.createElement("img");
         // img.src = getGameImage(tournaments[i].gameID)
         // img.className = "card-img-top";
