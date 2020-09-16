@@ -4,7 +4,10 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const admin = require("firebase-admin");
 const firebase = require("firebase")
+const qs = require('querystring')
 const path = require("path");
+const http = require("http")
+const ejs = require('ejs')
 
 const firebaseConfig = {
     apiKey: "AIzaSyBl_PAX0VGLEvIiFWdjWAEazUM7MJEV-1Y",
@@ -30,19 +33,29 @@ const csrfMiddleware = csrf({cookie: true});
 const db = admin.firestore();
 const PORT = process.env.PORT || 3000;
 const app = express();
-let user = null;
+const parseUrl = express.urlencoded({ extended: false })
+const parseJson = express.json({ extended: false })
+const config = require('./Paytm/config');
+const checksum_lib = require('./Paytm/checksum');
+
+
 app.use(express.static('static'));
+app.set('view engine', 'ejs')
 
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(csrfMiddleware);
+// app.use(csrfMiddleware);
 app.use(express.static(__dirname + '/public'));
 
-app.all("*", (req, res, next) => {
-    res.cookie("XSRF-TOKEN", req.csrfToken());
-    next();
-});
+// app.all("*", (req, res, next) => {
+//     console.log(req.url)
+//     if(req.url != "/paynow")
+//     {
+//         res.cookie("XSRF-TOKEN", req.csrfToken());
+//     }
+//     next();
+// });
 
 
 app.get("/", function (req, res) {
@@ -229,6 +242,191 @@ function checkIfValidUser(req,callback) {
             return callback(false);
         });
 }
+
+//*************************************************************************************************************************//
+//********************************************* IMP METHODS ENDS **************************************************************//
+//*************************************************************************************************************************//
+
+
+//*************************************************************************************************************************//
+//********************************************* PAYTM API STARTS **************************************************************//
+//*************************************************************************************************************************//
+
+app.post('/paynow', [parseUrl, parseJson], (req, res) => {
+    console.log("DFASDF")
+    console.log(req.body.amount)
+    console.log(req.body.email)
+    console.log(req.body.phone)
+
+
+    if (!req.body.amount || !req.body.email || !req.body.phone) {
+        res.status(400).send('Payment failed')
+    } else {
+        var params = {};
+        params['MID'] = config.PaytmConfig.mid;
+        params['WEBSITE'] = config.PaytmConfig.website;
+        params['CHANNEL_ID'] = 'WEB';
+        params['INDUSTRY_TYPE_ID'] = 'Retail';
+        params['ORDER_ID'] = 'TEST_' + new Date().getTime();
+        params['CUST_ID'] = 'customer_001';
+        params['TXN_AMOUNT'] = req.body.amount.toString();
+        params['CALLBACK_URL'] = 'http://localhost:3000/callback';
+        params['EMAIL'] = req.body.email;
+        params['MOBILE_NO'] = req.body.phone.toString();
+
+
+        checksum_lib.genchecksum(params, config.PaytmConfig.key, function (err, checksum) {
+            var txn_url = "https://securegw.paytm.in/theia/processTransaction"; // for production
+
+            var form_fields = "";
+            for (var x in params) {
+                form_fields += "<input type='hidden' name='" + x + "' value='" + params[x] + "' >";
+            }
+            form_fields += "<input type='hidden' name='CHECKSUMHASH' value='" + checksum + "' >";
+
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.write('<html><head><title>Merchant Checkout Page</title></head><body><center><h1>Please do not refresh this page...</h1></center><form method="post" action="' + txn_url + '" name="f1">' + form_fields + '</form><script type="text/javascript">document.f1.submit();</script></body></html>');
+            res.end();
+        });
+    }
+});
+
+app.post('/callback', (req, responser) => {
+    var body = '';
+
+    req.on('data', function (data) {
+        body += data;
+    });
+
+    req.on('end', function () {
+        var html = "";
+        var post_data = qs.parse(body);
+
+        // received params in callback
+        console.log('Callback Response: ', post_data, "\n");
+
+        // verify the checksum
+        var checksumhash = post_data.CHECKSUMHASH;
+        // delete post_data.CHECKSUMHASH;
+        var result = checksum_lib.verifychecksum(post_data, config.PaytmConfig.key, checksumhash);
+        console.log("Checksum Result => ", result, "\n");
+
+        if(result == true)
+        {
+            let transactionDetails = {};
+            transactionDetails.tournamentID="dfasdf";
+            transactionDetails.userID= "2aLrKYs2GpfogAvKYANVsjgdD9x2";
+            transactionDetails.currency = post_data.CURRENCY;
+            transactionDetails.respmsg = post_data.RESPMSG;
+            transactionDetails.mid = post_data.MID;
+            transactionDetails.respcode = post_data.RESPCODE;
+            transactionDetails.txnid = post_data.TXNID;
+            transactionDetails.txnamount = post_data.TXNAMOUNT;
+            transactionDetails.orderid = post_data.ORDERID;
+            transactionDetails.status = post_data.STATUS;
+            transactionDetails.banktxnid = post_data.BANKTXNID;
+            transactionDetails.txndate = post_data.TXNDATE;
+            transactionDetails.checksumhash = post_data.CHECKSUMHASH;
+            console.log(transactionDetails);
+
+            return fetch("http://localhost:3000/addTransaction", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({transactionDetails}),
+            }).then(res => res.json()).then(function (td){
+                console.log(td)
+                        return fetch("http://localhost:3000/addTournamentToUser", {
+                            method: "POST",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({td}),
+                        })
+            }).then(res => res.text()).then(function (res){
+                {
+                    console.log("res ",res)
+                    if(res == "success")
+                    {
+                        responser.render('payResponse', {
+                            'data': transactionDetails
+                        })
+                    }
+                    else
+                    {
+                        return responser.status(200).send("failure");
+                    }
+                }
+            });
+        }
+
+    });
+});
+
+app.post("/addTransaction", (req, res) => {
+    (async () => {
+        try {
+            let transDetails = req.body.transactionDetails;
+            console.log(transDetails);
+            console.log(transDetails.uid);
+
+            await db.collection('Transactions').doc()
+                .create({
+                    tournamentID : transDetails.tournamentID,
+                    userID :transDetails.userID,
+                    currency :transDetails.currency,
+                    respmsg:transDetails.respmsg,
+                    mid:transDetails.mid ,
+                    respcode:transDetails.respcode,
+                    txnid:transDetails.txnid,
+                    txnamount:transDetails.txnamount,
+                    orderid:transDetails.orderid ,
+                    status:transDetails.status ,
+                    banktxnid:transDetails.banktxnid,
+                    txndate:transDetails.txndate,
+                    checksumhash: transDetails.checksumhash
+                });
+           return res.status(200).json(transDetails);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
+app.post('/addTournamentToUser', (req, res) => {
+    (async () => {
+        let uid = req.body.td.userID;
+        let tid = req.body.td.tournamentID;
+        console.log(uid)
+        console.log(tid)
+        try {
+            let userDoc = db.collection('Users').doc(uid);
+            let userdata = await userDoc.get();
+            let tournaments = userdata.data().tournamentIds;
+            console.log(userdata.data())
+            console.log(tournaments)
+            tournaments.push(tid);
+            await userDoc.update({
+                tournamentIds : tournaments
+            });
+        } catch
+            (error) {
+            console.log(error)
+            return res.status(200).json(null);
+        }
+        return res.status(200).send("success");
+    })();
+});
+
+//todo if a player registers a tournament.. reduce the vacant seat
+
+//*************************************************************************************************************************//
+//********************************************* PAYTM API ENDS **************************************************************//
+//*************************************************************************************************************************//
 
 app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}`);
