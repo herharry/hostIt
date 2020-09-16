@@ -311,7 +311,30 @@ app.post('/callback', (req, res) => {
 
         if(result == true)
         {
+            let transactionDetails = {};
+            transactionDetails.tournamentID="dfasdf";
+            transactionDetails.userID= "2aLrKYs2GpfogAvKYANVsjgdD9x2";
+            transactionDetails.currency = post_data.CURRENCY;
+            transactionDetails.respmsg = post_data.RESPMSG;
+            transactionDetails.mid = post_data.MID;
+            transactionDetails.respcode = post_data.RESPCODE;
+            transactionDetails.txnid = post_data.TXNID;
+            transactionDetails.txnamount = post_data.TXNAMOUNT;
+            transactionDetails.orderid = post_data.ORDERID;
+            transactionDetails.status = post_data.STATUS;
+            transactionDetails.banktxnid = post_data.BANKTXNID;
+            transactionDetails.txndate = post_data.TXNDATE;
+            transactionDetails.checksumhash = post_data.CHECKSUMHASH;
+            console.log(transactionDetails);
 
+            return fetch("http://localhost:3000/addTransaction", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({transactionDetails}),
+            });
         }
 
     });
@@ -319,18 +342,18 @@ app.post('/callback', (req, res) => {
 
 app.post("/addTransaction", (req, res) => {
     (async () => {
-        let transDetails = req.body.transactionDetails;
         try {
-            let games = db.collection('Banners');
-            const snapshot = await games.get();
-            snapshot.forEach(doc => {
-                response.push(doc.data())
-            });
-        } catch
-            (error) {
+            let transDetails = req.body.transactionDetails;
+            console.log(transDetails);
+            console.log(transDetails.uid);
+
+            await db.collection('Transactions').doc()
+                .create({transDetails});
+            res.redirect("/dashboard")
+        } catch (error) {
+            console.log(error);
             return res.status(500).send(error);
         }
-        return res.status(200).json(response);
     })();
 });
 
