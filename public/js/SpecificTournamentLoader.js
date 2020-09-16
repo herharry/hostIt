@@ -30,6 +30,7 @@
     }
 
     function loadTournamentInHTML(res) {
+        TOURNAMENT = res;
         console.log(res)
         document.getElementById("name").innerHTML = res.name;
         if (!res.isFinished) {
