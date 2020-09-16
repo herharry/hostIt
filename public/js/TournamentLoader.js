@@ -53,6 +53,9 @@ function loadTournamentInCards(tournaments) {
         let button = document.createElement("a");
         button.className = "btn btn-primary float-right mt-4";
         button.text = "Join"
+        button.id = tournaments[i].tid;
+        button.setAttribute("onClick","loadSpecificTournament(this.id)");
+
 
         // card.appendChild(img);
         card.appendChild(cardBody);
@@ -76,4 +79,10 @@ function formatResponse(res) {
         tournamentID: key
     }));
     return ta;
+}
+
+function loadSpecificTournament(tid)
+{
+    console.log(tid)
+    window.location.assign("/tournaments?tid="+tid);
 }

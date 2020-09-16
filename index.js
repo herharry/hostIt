@@ -95,6 +95,7 @@ app.get('/profile', function (req, res) {
 
 
 app.get("/tournaments", function (req, res) {
+    console.log("AFDADf")
     res.sendFile(path.join(__dirname+'/views/tournament.html'));
 });
 
@@ -137,22 +138,35 @@ app.get('/tournament', (req, res) => {
             (async () => {
                 let response = [];
                 console.log("inside")
+                let tid = req.param("tid",false)
                 let gameFetchQuery = req.param('gameID', false)
                 try {
                     let tournaments = db.collection('Tournaments')
-                    tournaments = tournaments.where('isFinished', '==', false);
-                    if (gameFetchQuery!=false) {
-                        tournaments = tournaments.where('gameID', '==', gameFetchQuery);
+                    if(tid!=false)
+                    {
+                        let docData = await tournaments.doc(tid).get();
+                        console.log(docData.data())
+                        response.push(docData.data());
                     }
-                    const snapshot = await tournaments.get();
-                    snapshot.forEach(doc => {
-                        response.push(doc.data());
-                    });
+                    else
+                    {
+                        tournaments = tournaments.where('isFinished', '==', false);
+                        if (gameFetchQuery!=false) {
+                            tournaments = tournaments.where('gameID', '==', gameFetchQuery);
+                        }
+                        const snapshot = await tournaments.get();
+                        snapshot.forEach(doc => {
+                            var docJson = doc.data();
+                            docJson.tid = doc.id;
+                            response.push(docJson)
+                        });
+                    }
+
                 } catch
                     (error) {
                     return res.status(500).send(error);
                 }
-                return res.status(200).send(response);
+                return res.status(200).json(response);
             })();
 });
 
