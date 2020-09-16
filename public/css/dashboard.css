@@ -1,8 +1,7 @@
 @import url("headerfooter.css");
 
 .card {
-    max-width: 440px;
-
+    max-width: 400px;
     font-size: medium;
 }
 

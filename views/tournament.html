@@ -27,9 +27,6 @@
                         <a class="nav-link middle" href="/dashboard">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link middle" href="/tournaments">tournament</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link middle" href="#footer">Contact</a>
                     </li>
                     <li class="nav-item">
@@ -51,27 +48,31 @@
                     <img class="mt-5 mb-4 tournamentImage "
                         src="https://images.unsplash.com/photo-1558507652-2d9626c4e67a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1868&q=80"
                         alt="">
-                    <h4 class="tournamentName"> call of duty</h4>
-                    <p class="">registration status</p>
+                    <h4 class="tournamentName" id="name"> call of duty</h4>
+                    <p class="badge badge-success" id="status">registration status</p>
                 </div>
             </div>
             <div class="col-md-7 d-flex flex-column justify-content-center">
                 <div class="row px-md-4 mt-5 mb-3">
-                    <div class="col-4 text-center">
-                        <i class="far fa-calendar-alt fa-2x p-2"></i>
+                    <div class="col-4 px-1 text-center">
+                        <i class="far fa-calendar-alt gradient fa-2x p-2"></i>
                         <p>date</p>
+                        <p class="elegant-color" id="date"></p>
                     </div>
-                    <div class="col-4 text-center">
-                        <i class="fas fa-users fa-2x p-2"></i>
+                    <div class="col-4 px-1 text-center">
+                        <i class="fas fa-users gradient fa-2x p-2"></i>
                         <p>participants</p>
+                        <p class="elegant-color" id="participants"></p>
                     </div>
 
-                    <div class="col-4 text-center">
-                        <i class="fas fa-award fa-2x p-2"></i>
+                    <div class="col-4 px-1 text-center">
+                        <i class="fas fa-award gradient fa-2x p-2"></i>
                         <p>prize</p>
+                        <p class="elegant-color" id="prize"></p>
                     </div>
                 </div>
-                <button class="btn btn-sm btn-primary w-50  mx-auto d-block my-5 " id="withdraw" onclick="joinConfirm()">join</button>
+                <button class="btn btn-sm btn-primary w-50  mx-auto d-block my-5 " id="withdraw"
+                    onclick="joinConfirm()">join</button>
             </div>
         </div>
     </div>
@@ -82,14 +83,7 @@
         <div class="rules my-3 rounded-lg">
             <h3 class="text-center border-bottom pt-4 pb-2">RULES</h3>
             <div class="rules-body">
-                <p class="p-3"> absdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu
-                    iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu
-                    iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu
-                    iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu
-                    iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu
-                    iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu
-                    iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdiabsdkhabsgdiagdiu
-                    iwgigaiwgdiabsdkhabsgdiagdiu iwgigaiwgdi</p>
+                <p class="p-3" id="rules"> </p>
             </div>
         </div>
     </div>
@@ -119,7 +113,7 @@
         </div>
         <p class="bg-primary mb-0 py-1 w-100 text-center"> Made with <i class="fas fa-heart"></i></p>
     </section>
-    
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>

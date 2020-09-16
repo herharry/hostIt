@@ -12,7 +12,7 @@ function loadTournamentInCards(tournaments) {
     const cardParent = document.getElementById("tournamentCards")
     for (let i = 0; i < tournaments.length; i++) {
         let card = document.createElement("div");
-        card.className = "card bg-dark mr-2 mb-4";
+        card.className = "card p-0 bg-dark my-2 mx-3 col-12 col-lg-6";
         // let img = document.createElement("img");
         // img.src = getGameImage(tournaments[i].gameID)
         // img.className = "card-img-top";
@@ -40,14 +40,15 @@ function loadTournamentInCards(tournaments) {
         players.className = "col-2 text-center p-1";
         players.innerHTML = tournaments[i].vacantSeats + "/" + tournaments[i].totalSeats;
         let progress = document.createElement("div");
-        progress.className = "progress ";
+        progress.className = "progress mt-4";
         let progressBar = document.createElement("div");
         progressBar.className = "progress-bar bg-dark progress-gradient";
         progressBar.setAttribute("role","progressbar");
         let percent = (tournaments[i].vacantSeats / tournaments[i].totalSeats)*100;
-        console.log(percent);
         progressBar.setAttribute("style","width :" +percent+"%");
         progressBar.setAttribute("role","progressbar");
+        progressBar.innerHTML = percent+"% full";
+
 
         
         let button = document.createElement("a");
