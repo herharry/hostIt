@@ -370,8 +370,12 @@ app.post('/callback', (req, responser) => {
         if(result == true)
         {
             let transactionDetails = {};
-            transactionDetails.tournamentID="dfasdf";
+            //todo hardcoded values.. to bbe changed**********
+            transactionDetails.tournamentID="5cf38a9f-2cf3-477f-8314-fe248fa739fb";
             transactionDetails.userID= "2aLrKYs2GpfogAvKYANVsjgdD9x2";
+            transactionDetails.inGameID = "herharry";
+            transactionDetails.inGameName="herharry";
+            //todo hardcoded values.. to bbe changed**********
             transactionDetails.currency = post_data.CURRENCY;
             transactionDetails.respmsg = post_data.RESPMSG;
             transactionDetails.mid = post_data.MID;
@@ -402,27 +406,33 @@ app.post('/callback', (req, responser) => {
                             },
                             body: JSON.stringify({td}),
                         })
-            }).then(res => res.text()).then(function (res){
-                {
-                    console.log("res ",res)
-                    if(res == "success")
-                    {
+                .then(res => res.json()).then(function (trans) {
+                console.log(trans)
+                return fetch("http://localhost:3000/reduceVacantSeat", {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({trans}),
+                }).then(res => res.text()).then(function (res) {
+                    console.log("res ", res)
+                    if (res == "success") {
                         responser.render('payResponse', {
                             'data': transactionDetails
                         })
-                    }
-                    else
-                    {
+                    } else {
                         return responser.status(200).send("failure");
                     }
-                }
+                });
             });
-        }
-
-    });
+        });
+    }
+});
 });
 
-app.post("/addTransaction", (req, res) => {
+
+    app.post("/addTransaction", (req, res) => {
     (async () => {
         try {
             let transDetails = req.body.transactionDetails;
@@ -468,6 +478,42 @@ app.post('/addTournamentToUser', (req, res) => {
             tournaments.push(tid);
             await userDoc.update({
                 tournamentIds : tournaments
+            });
+        } catch
+            (error) {
+            console.log(error)
+            return res.status(200).json(null);
+        }
+        return res.status(200).json(req.body.td);
+    })();
+});
+
+app.post('/reduceVacantSeat', (req, res) => {
+    (async () => {
+        console.log
+        let tid = req.body.trans.tournamentID;
+        let uid = req.body.trans.userID;
+        let userInfo = {}
+        userInfo.inGameID = req.body.trans.inGameID;
+        userInfo.inGameName = req.body.trans.inGameName;
+        userInfo.userID = uid;
+        console.log(tid)
+        try {
+            let userDoc = db.collection('Tournaments').doc(tid);
+            let userdata = await userDoc.get();
+            let availableSeat = userdata.data().vacantSeats;
+                availableSeat=availableSeat-1;
+            let registeredUsers = userdata.data().registeredUsers;
+                registeredUsers.push(uid);
+            let registeredUserDetails = userdata.data().registeredUserDetails;
+                registeredUserDetails.push(userInfo)
+            console.log(availableSeat)
+            console.log(registeredUsers)
+            console.log(registeredUserDetails)
+            await userDoc.update({
+                vacantSeats : availableSeat,
+                registeredUsers:registeredUsers,
+                registeredUserDetails:registeredUserDetails
             });
         } catch
             (error) {
