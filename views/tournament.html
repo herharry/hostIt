@@ -71,8 +71,64 @@
                         <p class="elegant-color" id="prize"></p>
                     </div>
                 </div>
-                <button class="btn btn-sm btn-primary w-50  mx-auto d-block my-5 " id="withdraw"
-                    onclick="joinConfirm()">join</button>
+                <button class="btn btn-sm btn-primary w-50  mx-auto d-block my-5 " id="join" data-toggle="modal"
+                    data-target="#joinTournamentModel" onclick="joinConfirm()">join</button>
+                <!-- onclick="joinConfirm()" -->
+
+                <!-- Modal -->
+                <div class="modal fade" id="joinTournamentModel" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <h5 class="modal-title" id="exampleModalLabel">Join tournament</h5>
+                        <div class="modal-content">
+                            <div class="modal-header">
+
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="/paynow">
+
+                                    <input type="number" class="form-control d-none" id="joinNumber"
+                                        placeholder="phonenumber" value="" readonly>
+                                    <input type="text" class="form-control d-none " id="joinEmail" placeholder="emailid"
+                                        value="" readonly>
+
+                                    <div class="row">
+                                        <div class="col-4 mb-2">
+                                            <label class=" p-2" for="gameID">Game ID</label></div>
+                                        <div class="col-8">
+                                            <input type="text" class="form-control text-white bg-dark" id="gameID"
+                                                placeholder="game ID" value="" >
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row">
+                                        <div class="col-4 mb-2">
+                                            <label class=" p-2" for="gameName">Game Name</label></div>
+                                        <div class="col-8">
+                                            <input type="text" class="form-control text-white bg-dark" id="gameName"
+                                                placeholder="game Name" value="" >
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6 mb-2">
+                                            <label class="p-2" for="payable_amount">Amount to be paid</label></div>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control text-white bg-dark" id="payable_amount"
+                                                placeholder="amount" value="" readonly>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary">proceed to pay</button>
+                            </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -114,15 +170,8 @@
         <p class="bg-primary mb-0 py-1 w-100 text-center"> Made with <i class="fas fa-heart"></i></p>
     </section>
 
-    <form method="post" action="/paynow">
-        <input type="text" id="payable_amount" name="amount" readonly>
-        <input type="number" id="pay_phone" name="phone">
-        <input type="email" id="pay_email" name="email" >
-        <input type="hidden" id="tournament_id">
-        <input type="hidden" id="user_id">
-        <button type="submit">Pay Now</button>
-    </form>
-    
+
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
