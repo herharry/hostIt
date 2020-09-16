@@ -87,3 +87,6 @@ function loadSpecificTournament(tid)
     console.log(tid)
     window.location.assign("/tournaments?tid="+tid);
 }
+
+//todo show only unregistered tournaments
+//todo in the live tournament tab rename it as registered tournament and click to view it...

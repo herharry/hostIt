@@ -7,6 +7,7 @@ const firebase = require("firebase")
 const qs = require('querystring')
 const path = require("path");
 const http = require("http")
+const ejs = require('ejs')
 
 const firebaseConfig = {
     apiKey: "AIzaSyBl_PAX0VGLEvIiFWdjWAEazUM7MJEV-1Y",
@@ -39,6 +40,7 @@ const checksum_lib = require('./Paytm/checksum');
 
 
 app.use(express.static('static'));
+app.set('view engine', 'ejs')
 
 
 app.use(bodyParser.json());
@@ -289,7 +291,7 @@ app.post('/paynow', [parseUrl, parseJson], (req, res) => {
     }
 });
 
-app.post('/callback', (req, res) => {
+app.post('/callback', (req, responser) => {
     var body = '';
 
     req.on('data', function (data) {
@@ -344,7 +346,21 @@ app.post('/callback', (req, res) => {
                             },
                             body: JSON.stringify({td}),
                         })
-            })
+            }).then(res => res.text()).then(function (res){
+                {
+                    console.log("res ",res)
+                    if(res == "success")
+                    {
+                        responser.render('payResponse', {
+                            'data': transactionDetails
+                        })
+                    }
+                    else
+                    {
+                        return responser.status(200).send("failure");
+                    }
+                }
+            });
         }
 
     });
@@ -405,6 +421,8 @@ app.post('/addTournamentToUser', (req, res) => {
         return res.status(200).send("success");
     })();
 });
+
+//todo if a player registers a tournament.. reduce the vacant seat
 
 //*************************************************************************************************************************//
 //********************************************* PAYTM API ENDS **************************************************************//
