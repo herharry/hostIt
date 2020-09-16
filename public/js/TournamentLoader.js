@@ -38,21 +38,23 @@ function loadTournamentInCards(tournaments) {
         time.innerHTML = tournamentDate + "\n" + tournamentTime;
         let players = document.createElement("div");
         players.className = "col-2 text-center p-1";
-        players.innerHTML = tournaments[i].vacantSeats + "/" + tournaments[i].totalSeats;
+        players.innerHTML = (tournaments[i].totalSeats - tournaments[i].vacantSeats) + "/" + tournaments[i].totalSeats;
         let progress = document.createElement("div");
         progress.className = "progress mt-4";
         let progressBar = document.createElement("div");
         progressBar.className = "progress-bar bg-dark progress-gradient";
         progressBar.setAttribute("role","progressbar");
-        let percent = (tournaments[i].vacantSeats / tournaments[i].totalSeats)*100;
+        let percent = ((tournaments[i].totalSeats-tournaments[i].vacantSeats) / tournaments[i].totalSeats)*100;
         progressBar.setAttribute("style","width :" +percent+"%");
         progressBar.setAttribute("role","progressbar");
         progressBar.innerHTML = percent+"% full";
-
+        let remainig = document.createElement("p");
+        remainig.className ="float-left text-small"
+        remainig.innerHTML = tournaments[i].vacantSeats+" remaining";
 
         
         let button = document.createElement("a");
-        button.className = "btn btn-primary float-right mt-4";
+        button.className = "btn btn-primary px-4 py-1 mt-3 mx-3 float-right";
         button.text = "Join"
         button.id = tournaments[i].tid;
         button.setAttribute("onClick","loadSpecificTournament(this.id)");
@@ -69,6 +71,7 @@ function loadTournamentInCards(tournaments) {
         progress.appendChild(progressBar);
 
         cardBody.appendChild(progress);
+        cardBody.appendChild(remainig)
         cardBody.appendChild(button);
         cardParent.appendChild(card);
     }

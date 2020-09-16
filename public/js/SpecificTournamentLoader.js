@@ -42,7 +42,7 @@
             document.getElementById("status").className = "badge badge-danger";
         }
 
-        document.getElementById("participants").innerHTML = res.vacantSeats + "/" + res.totalSeats;
+        document.getElementById("participants").innerHTML = (res.totalSeats - res.vacantSeats) + "/" + res.totalSeats;
         let timestamp = res.time._seconds * 1000;
         let tournamentDate = new Date(timestamp).toLocaleString(undefined, {
             day: '2-digit',
@@ -57,7 +57,7 @@
         document.getElementById("date").innerHTML =tournamentDate+"<br>"+ tournamentTime;
         document.getElementById("prize").innerHTML = res.prizePool[0];
  
-        let percent = (res.vacantSeats / res.totalSeats)*100;
+        let percent = (res.totalSeats- res.vacantSeats / res.totalSeats)*100;
         if(percent==100){
             document.getElementById("withdraw").disabled = "true";
             document.getElementById("withdraw").classList.add("btn-danger")

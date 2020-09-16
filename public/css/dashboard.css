@@ -21,6 +21,10 @@
     max-width: 400px;
     font-size: medium;
 }
+.text-small{
+    font-size:smaller;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
 
 
 .nav-tabs .nav-link.active {
