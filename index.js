@@ -42,6 +42,7 @@ const checksum_lib = require('./Paytm/checksum');
 app.use(express.static('static'));
 app.set('view engine', 'ejs')
 
+var REGISTERED_USER_FOR_TRANSACTION = [];
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -338,11 +339,11 @@ function checkIfValidUser(req,callback) {
 //********************************************* PAYTM API STARTS **************************************************************//
 //*************************************************************************************************************************//
 
-app.post('/paynow', [parseUrl, parseJson], (req, res) => {
-    console.log("DFASDF")
-    console.log(req.body.amount)
-    console.log(req.body.email)
-    console.log(req.body.phone)
+app.post('/paynow', [parseUrl, parseJson], (req, resp) => {
+        let tid = "5cf38a9f-2cf3-477f-8314-fe248fa739fb"
+        let uid ="2aLrKYs2GpfogAvKYANVsjgdD9x2";
+        let inGameID = req.body.phone;
+        let inGameName = req.body.email;
 
 
     if (!req.body.amount || !req.body.email || !req.body.phone) {
@@ -353,7 +354,7 @@ app.post('/paynow', [parseUrl, parseJson], (req, res) => {
         params['WEBSITE'] = config.PaytmConfig.website;
         params['CHANNEL_ID'] = 'WEB';
         params['INDUSTRY_TYPE_ID'] = 'Retail';
-        params['ORDER_ID'] = 'TEST_' + new Date().getTime();
+        params['ORDER_ID'] = 'TEST_'+ uid + new Date().getTime();
         params['CUST_ID'] = 'customer_001';
         params['TXN_AMOUNT'] = req.body.amount.toString();
         params['CALLBACK_URL'] = 'http://localhost:3000/callback';
@@ -362,7 +363,8 @@ app.post('/paynow', [parseUrl, parseJson], (req, res) => {
 
 
         checksum_lib.genchecksum(params, config.PaytmConfig.key, function (err, checksum) {
-            var txn_url = "https://securegw.paytm.in/theia/processTransaction"; // for production
+            // var txn_url = "https://securegw.paytm.in/theia/processTransaction"; // for production
+            var txn_url = "https://securegw-stage.paytm.in/order/process";// for testing
 
             var form_fields = "";
             for (var x in params) {
@@ -370,9 +372,38 @@ app.post('/paynow', [parseUrl, parseJson], (req, res) => {
             }
             form_fields += "<input type='hidden' name='CHECKSUMHASH' value='" + checksum + "' >";
 
-            res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.write('<html><head><title>Merchant Checkout Page</title></head><body><center><h1>Please do not refresh this page...</h1></center><form method="post" action="' + txn_url + '" name="f1">' + form_fields + '</form><script type="text/javascript">document.f1.submit();</script></body></html>');
-            res.end();
+            params['TID'] = tid;
+            params['UID'] = uid;
+            params['IN_GAME_ID'] = inGameID;
+            params['IN_GAME_NAME'] = inGameName;
+            params['api'] = "paynow";
+
+
+            fetch("http://localhost:3000/registerTournament", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({params}),
+            }).then(res => res.text()).then(function(resMsg){
+                if(resMsg == "success")
+                {
+                    resp.writeHead(200, { 'Content-Type': 'text/html' });
+                    resp.write('<html><head><title>Merchant Checkout Page</title></head><body><center><h1>Please do not refresh this page...</h1></center><form method="post" action="' + txn_url + '" name="f1">' + form_fields + '</form><script type="text/javascript">document.f1.submit();</script></body></html>');
+                    resp.end();
+                }
+                else
+                {
+                    return resp.status(400).send("some error! pleas try again later");
+
+                }
+            }).catch(reason => {
+                console.log(reason)
+            });
+
+
+
         });
     }
 });
@@ -389,7 +420,6 @@ app.post('/callback', (req, responser) => {
         var post_data = qs.parse(body);
 
         // received params in callback
-        console.log('Callback Response: ', post_data, "\n");
 
         // verify the checksum
         var checksumhash = post_data.CHECKSUMHASH;
@@ -397,67 +427,56 @@ app.post('/callback', (req, responser) => {
         var result = checksum_lib.verifychecksum(post_data, config.PaytmConfig.key, checksumhash);
         console.log("Checksum Result => ", result, "\n");
 
-        if(result == true)
-        {
-            let transactionDetails = {};
-            //todo hardcoded values.. to bbe changed**********
-            transactionDetails.tournamentID="5cf38a9f-2cf3-477f-8314-fe248fa739fb";
-            transactionDetails.userID= "2aLrKYs2GpfogAvKYANVsjgdD9x2";
-            transactionDetails.inGameID = "herharry";
-            transactionDetails.inGameName="herharry";
-            //todo hardcoded values.. to bbe changed**********
-            transactionDetails.currency = post_data.CURRENCY;
-            transactionDetails.respmsg = post_data.RESPMSG;
-            transactionDetails.mid = post_data.MID;
-            transactionDetails.respcode = post_data.RESPCODE;
-            transactionDetails.txnid = post_data.TXNID;
-            transactionDetails.txnamount = post_data.TXNAMOUNT;
-            transactionDetails.orderid = post_data.ORDERID;
-            transactionDetails.status = post_data.STATUS;
-            transactionDetails.banktxnid = post_data.BANKTXNID;
-            transactionDetails.txndate = post_data.TXNDATE;
-            transactionDetails.checksumhash = post_data.CHECKSUMHASH;
-            console.log(transactionDetails);
+        let transactionDetails = {};
+        transactionDetails.currency = post_data.CURRENCY;
+        transactionDetails.respmsg = post_data.RESPMSG;
+        transactionDetails.mid = post_data.MID;
+        transactionDetails.respcode = post_data.RESPCODE;
+        transactionDetails.txnid = post_data.TXNID;
+        transactionDetails.txnamount = post_data.TXNAMOUNT;
+        transactionDetails.orderid = post_data.ORDERID;
+        transactionDetails.status = post_data.STATUS;
+        transactionDetails.banktxnid = post_data.BANKTXNID;
+        transactionDetails.txndate = post_data.TXNDATE;
+        transactionDetails.checksumhash = post_data.CHECKSUMHASH;
+        transactionDetails.api ="callback";
 
-            return fetch("http://localhost:3000/addTransaction", {
+
+        if(result == true) {
+             return fetch("http://localhost:3000/registerTournament", {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({transactionDetails}),
-            }).then(res => res.json()).then(function (td){
-                console.log(td)
-                        return fetch("http://localhost:3000/addTournamentToUser", {
-                            method: "POST",
-                            headers: {
-                                Accept: "application/json",
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({td}),
-                        })
-                .then(res => res.json()).then(function (trans) {
-                console.log(trans)
-                return fetch("http://localhost:3000/reduceVacantSeat", {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({trans}),
-                }).then(res => res.text()).then(function (res) {
-                    console.log("res ", res)
-                    if (res == "success") {
-                        responser.render('payResponse', {
-                            'data': transactionDetails
-                        })
-                    } else {
-                        return responser.status(200).send("failure");
-                    }
-                });
-            });
-        });
-    }
+            }).then(res => res.text()).then(function(Res)
+             {
+                 if(Res == "success")
+                 {
+                     console.log("indadeiiiiiii")
+                     return responser.render('payResponse', {
+                         'data': transactionDetails
+                     })
+
+                 }
+             });
+        }
+        else {
+           return fetch("http://localhost:3000/addTransaction", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({transactionDetails}),
+            }).then(res=>res.json()).then(function (trans)
+            {
+                responser.render('payResponse', {
+                    'data': trans
+                })
+            })
+        }
 });
 });
 
@@ -466,8 +485,6 @@ app.post('/callback', (req, responser) => {
     (async () => {
         try {
             let transDetails = req.body.transactionDetails;
-            console.log(transDetails);
-            console.log(transDetails.uid);
 
             await db.collection('Transactions').doc()
                 .create({
@@ -497,14 +514,10 @@ app.post('/addTournamentToUser', (req, res) => {
     (async () => {
         let uid = req.body.td.userID;
         let tid = req.body.td.tournamentID;
-        console.log(uid)
-        console.log(tid)
         try {
             let userDoc = db.collection('Users').doc(uid);
             let userdata = await userDoc.get();
             let tournaments = userdata.data().tournamentIds;
-            console.log(userdata.data())
-            console.log(tournaments)
             tournaments.push(tid);
             await userDoc.update({
                 tournamentIds : tournaments
@@ -520,14 +533,12 @@ app.post('/addTournamentToUser', (req, res) => {
 
 app.post('/reduceVacantSeat', (req, res) => {
     (async () => {
-        console.log
         let tid = req.body.trans.tournamentID;
         let uid = req.body.trans.userID;
         let userInfo = {}
         userInfo.inGameID = req.body.trans.inGameID;
         userInfo.inGameName = req.body.trans.inGameName;
         userInfo.userID = uid;
-        console.log(tid)
         try {
             let userDoc = db.collection('Tournaments').doc(tid);
             let userdata = await userDoc.get();
@@ -537,9 +548,6 @@ app.post('/reduceVacantSeat', (req, res) => {
                 registeredUsers.push(uid);
             let registeredUserDetails = userdata.data().registeredUserDetails;
                 registeredUserDetails.push(userInfo)
-            console.log(availableSeat)
-            console.log(registeredUsers)
-            console.log(registeredUserDetails)
             await userDoc.update({
                 vacantSeats : availableSeat,
                 registeredUsers:registeredUsers,
@@ -554,8 +562,82 @@ app.post('/reduceVacantSeat', (req, res) => {
     })();
 });
 
-//todo if a player registers a tournament.. reduce the vacant seat
+app.post("/registerTournament",(req, response) => {
+    let transactionDetails = req.body.transactionDetails || req.body.params;
+    console.log(transactionDetails)
 
+    if(transactionDetails.api == "paynow")
+    {
+        REGISTERED_USER_FOR_TRANSACTION.push(transactionDetails);
+        console.log(transactionDetails.inGameName," ",REGISTERED_USER_FOR_TRANSACTION)
+        return response.status(200).send("success");
+    }
+    else if(transactionDetails.api == "callback")
+    {
+        let flag=false;
+        for(let i =0; i<REGISTERED_USER_FOR_TRANSACTION.length; i++)
+        {
+            if(REGISTERED_USER_FOR_TRANSACTION[i].ORDER_ID == transactionDetails.orderid)
+            {
+                transactionDetails.tournamentID = REGISTERED_USER_FOR_TRANSACTION[i].TID;
+                transactionDetails.userID = REGISTERED_USER_FOR_TRANSACTION[i].UID;
+                transactionDetails.inGameID = REGISTERED_USER_FOR_TRANSACTION[i].IN_GAME_ID;
+                transactionDetails.inGameName = REGISTERED_USER_FOR_TRANSACTION[i].IN_GAME_NAME;
+
+                REGISTERED_USER_FOR_TRANSACTION.splice(i,1);
+                flag = true;
+                break;
+            }
+        }
+
+        if(flag == true) {
+            console.log("true",transactionDetails.inGameName," ",REGISTERED_USER_FOR_TRANSACTION)
+
+            return fetch("http://localhost:3000/addTransaction", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({transactionDetails}),
+            }).then(res => res.json()).then(function (td) {
+                console.log(td)
+                return fetch("http://localhost:3000/addTournamentToUser", {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({td}),
+                })
+                    .then(res => res.json()).then(function (trans) {
+                        console.log(trans)
+                        return fetch("http://localhost:3000/reduceVacantSeat", {
+                            method: "POST",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({trans}),
+                        }).then(res => res.text()).then(function (res) {
+                            console.log("res ", res)
+                            if (res.toString() == "success") {
+                                console.log("compare success")
+                                return response.status(200).send("success");
+
+                            } else {
+                                return response.status(200).send("failure");
+                            }
+                        });
+                    });
+            });
+        }
+        else
+        {
+            console.log("false",transactionDetails.inGameName," ",REGISTERED_USER_FOR_TRANSACTION)
+        }
+    }
+});
 //*************************************************************************************************************************//
 //********************************************* PAYTM API ENDS **************************************************************//
 //*************************************************************************************************************************//
