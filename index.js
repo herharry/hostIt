@@ -136,9 +136,7 @@ app.post("/sessionLogin", (req, res) => {
 
 app.get("/sessionLogout", (req, res) => {
     res.clearCookie("session");
-    // res.redirect("/login");
-    res.end(JSON.stringify({status: "success"}));
-
+    res.redirect("/");
 });
 
 
