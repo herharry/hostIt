@@ -11,6 +11,7 @@ function loadProfileForNewUser(user)
     setProfileImage(user.photoURL)
     setMobileNumber(user.phoneNumber)
     setEmail(user.email)
+    createUserInCollection();
 }
 
 function loadProfileForExistingUser(user)
