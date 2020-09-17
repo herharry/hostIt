@@ -88,16 +88,20 @@
                                 <form method="post" action="/paynow">
 
                                     <input type="number" class="form-control d-none" id="joinNumber"
-                                        placeholder="phonenumber" value="" readonly>
+                                        placeholder="phonenumber" name="phone" value="" readonly>
                                     <input type="text" class="form-control d-none " id="joinEmail" placeholder="emailid"
-                                        value="" readonly>
+                                        value="" name="email" readonly >
+                                    <input type="text" class="form-control d-none" id="tournament_id"
+                                           placeholder="tournamentID" name="tid" value="" readonly>
+                                    <input type="text" class="form-control d-none " id="user_id" placeholder="userID"
+                                           value="" name="uid" readonly >
 
                                     <div class="row">
                                         <div class="col-4 mb-2">
                                             <label class=" p-2" for="gameID">Game ID</label></div>
                                         <div class="col-8">
                                             <input type="text" class="form-control text-white bg-dark" id="gameID"
-                                                placeholder="game ID" value="" >
+                                                placeholder="game ID" value="" name="inGameID" >
                                         </div>
                                     </div>
 
@@ -108,7 +112,7 @@
                                             <label class=" p-2" for="gameName">Game Name</label></div>
                                         <div class="col-8">
                                             <input type="text" class="form-control text-white bg-dark" id="gameName"
-                                                placeholder="game Name" value="" >
+                                                placeholder="game Name" value="" name="inGameName" >
                                         </div>
                                     </div>
 
@@ -117,13 +121,12 @@
                                             <label class="p-2" for="payable_amount">Amount to be paid</label></div>
                                         <div class="col-6">
                                             <input type="text" class="form-control text-white bg-dark" id="payable_amount"
-                                                placeholder="amount" value="" readonly>
+                                                placeholder="amount" value="" name="amount" readonly>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-primary">proceed to pay</button>
-                            </div>
+                                    <button type="submit" class="btn btn-primary">proceed to pay</button>
                             </form>
-
+                            </div>
                         </div>
                     </div>
                 </div>

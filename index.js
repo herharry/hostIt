@@ -340,14 +340,24 @@ function checkIfValidUser(req,callback) {
 //*************************************************************************************************************************//
 
 app.post('/paynow', [parseUrl, parseJson], (req, resp) => {
-        let tid = "5cf38a9f-2cf3-477f-8314-fe248fa739fb"
-        let uid ="2aLrKYs2GpfogAvKYANVsjgdD9x2";
-        let inGameID = req.body.phone;
-        let inGameName = req.body.email;
+    console.log(req)
+    console.log(req.body.amount)
+    console.log(req.body.phone)
+    console.log(req.body.email)
+    console.log(req.body.inGameName)
+    console.log(req.body.inGameID)
+    console.log(req.body.tid)
+    console.log(req.body.uid)
+
+
+    let tid = req.body.tid
+        let uid =req.body.uid
+        let inGameID = req.body.inGameID;
+        let inGameName = req.body.inGameName;
 
 
     if (!req.body.amount || !req.body.email || !req.body.phone) {
-        res.status(400).send('Payment failed')
+        resp.status(400).send('Payment failed')
     } else {
         var params = {};
         params['MID'] = config.PaytmConfig.mid;

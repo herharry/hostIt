@@ -96,8 +96,10 @@ loadGameDetails = (data,tournamentData)=>{
 }
 
 function joinConfirm() {
-    //todo set all the data here for paytm processing
+    //todo verify so dat he doesnt register for the same tournament twice
     document.getElementById("joinEmail").value = sessionDetails.userEmailID;
     document.getElementById("joinNumber").value = sessionDetails.mobileNo;
+    document.getElementById("tournament_id").value=urlParams.tid;
+    document.getElementById("user_id").value=sessionDetails.uid;
     document.getElementById("payable_amount").value = TOURNAMENT.amount;
 }
