@@ -96,7 +96,21 @@ loadGameDetails = (data,tournamentData)=>{
 }
 
 function joinConfirm() {
-    //todo verify so dat he doesnt register for the same tournament twice
+    console.log(sessionDetails.tournamentIds)
+    let registeredTournament = sessionDetails.tournamentIds;
+    console.log(registeredTournament)
+
+    for(let i =0; i<registeredTournament.length;i++)
+    {console.log(registeredTournament[i])
+        if(registeredTournament[i] == urlParams.tid)
+        {
+            //todo create a new modal for displaying already registered and copy line 113 and 114 to set the attribute of the modal
+            alert("already registered!!")
+            return;
+        }
+    }
+    document.getElementById("join").setAttribute("data-toggle","modal");
+    document.getElementById("join").setAttribute("data-target","#joinTournamentModel");
     document.getElementById("joinEmail").value = sessionDetails.userEmailID;
     document.getElementById("joinNumber").value = sessionDetails.mobileNo;
     document.getElementById("tournament_id").value=urlParams.tid;
