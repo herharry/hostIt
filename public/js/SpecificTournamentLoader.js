@@ -92,7 +92,6 @@ loadGameDetails = (data,tournamentData)=>{
             }
         }
         // console.log(element);
-
     });
 }
 
