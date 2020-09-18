@@ -10,7 +10,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const DB= firebase.firestore();
-const USER_IN_SESSION = JSON.parse(sessionStorage.getItem("userInfo"));
+let USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
 
 
 function sessionLogin(result){
@@ -27,7 +27,7 @@ function sessionLogin(result){
         });
     }).then(() => {
         let user = result.user;
-        sessionStorage.setItem("userInfo", JSON.stringify(user))
+        localStorage.setItem("userInfo", JSON.stringify(user))
         window.location.assign("/profile");
     });
 }

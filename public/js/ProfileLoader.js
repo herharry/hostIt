@@ -74,7 +74,7 @@ function loadUser(user)
                 API = "UPDATE_API"
                 let userInSession = res.val;
                 userInSession.uid = user.uid;
-                sessionStorage.setItem("userInfo", JSON.stringify(res.val))
+                localStorage.setItem("userInfo", JSON.stringify(res.val))
                 loadProfileForExistingUser(res.val);
             }
         })
@@ -189,7 +189,7 @@ function createUserInCollection()
 {
     checkDetails();
     let user = {};
-    user.uid = JSON.parse(sessionStorage.getItem("userInfo")).uid;
+    user.uid = JSON.parse(localStorage.getItem("userInfo")).uid;
     user.userName = getElementValue("editProfileName");
     user.userEmailID=getElementValue("editEmail");;
     user.walletAmount=0;
