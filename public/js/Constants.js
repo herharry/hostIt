@@ -41,7 +41,6 @@ function sessionLoginHandler(firebaseUser)
 }
 
 function sessionLogin(user){
-    console.log("inside")
     return user.getIdToken().then((idToken) => {
         return fetch("/sessionLogin", {
             method: "POST",
@@ -51,6 +50,8 @@ function sessionLogin(user){
             },
             body: JSON.stringify({idToken}),
         });
+    }).catch(reason => {
+        alert(reason)
     });
 }
 

@@ -234,7 +234,7 @@ function createUserInCollection()
     {
         alert("YES")
         let user = {};
-        user.uid = JSON.parse(sessionStorage.getItem("userInfo")).uid;
+        user.uid = USER_IN_SESSION.uid;
         user.userName = getElementValue("editProfileName");
         user.userEmailID=getElementValue("editEmail");;
         user.walletAmount=0;
@@ -248,14 +248,11 @@ function createUserInCollection()
         bankDetail.accountName = "";
         user.bankDetail = bankDetail;
         user.tournamentIDs = [];
-        alert("hi")
-        alert(API)
         if(API == "CREATE_API")
         {
             sessionLogin(firebase.auth().currentUser).then(function (res)
             {
                 console.log(res)
-                alert("session logged in")
                 fetch("/createUser", {
                     method: "POST",
                     headers: {
@@ -273,7 +270,6 @@ function createUserInCollection()
         }
         else
         {
-            alert("DUMMY BAAVA")
             fetch("/updateUser", {
                 method: "POST",
                 headers: {

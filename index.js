@@ -49,14 +49,14 @@ app.use(cookieParser());
 // app.use(csrfMiddleware);
 app.use(express.static(__dirname + '/public'));
 
-// app.all("*", (req, res, next) => {
-//     console.log(req.url)
-//     if(req.url != "/paynow")
-//     {
-//         res.cookie("XSRF-TOKEN", req.csrfToken());
-//     }
-//     next();
-// });
+app.all("*", (req, res, next) => {
+    console.log(req.url)
+    // if(req.url != "/paynow")
+    // {
+    //     res.cookie("XSRF-TOKEN", req.csrfToken());
+    // }
+    next();
+});
 
 
 app.get("/", function (req, res) {
@@ -264,6 +264,7 @@ app.post('/createUser', (req, res) => {
 app.post('/updateUser', (req, res) => {
     (async () => {
         try {
+            console.log("inga vandhuruchu da")
             let u = req.body.user;
             console.log(req.body.user);
             console.log(req.body.user.uid);
