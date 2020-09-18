@@ -84,7 +84,7 @@ function loadTournamentInHTML(res) {
     }
 
     document.getElementById("participants").innerHTML = (res.totalSeats - res.vacantSeats) + "/" + res.totalSeats;
-    let timestamp = res.time._seconds * 1000;
+    let timestamp = res.time.seconds * 1000;
     let tournamentDate = new Date(timestamp).toLocaleString(undefined, {
         month: 'short',
         day: '2-digit',
@@ -102,16 +102,16 @@ function loadTournamentInHTML(res) {
     });
     document.getElementById("prize").innerHTML = total;
 
-    let percent = (res.totalSeats - res.vacantSeats / res.totalSeats) * 100;
+    let percent = ((res.totalSeats - res.vacantSeats) / res.totalSeats) * 100;
     if (percent == 100) {
         document.getElementById("join").disabled = "true";
         document.getElementById("join").classList.add("btn-danger")
         document.getElementById("join").innerHTML = "Full";
     }
 
-    // console.log(USER_IN_SESSION)
     getGame(res);
 
+    document.getElementById("overlay").classList.add("d-none")
     document.getElementById("rules").innerHTML = res.rules;
 
 }
@@ -129,9 +129,18 @@ loadGameDetails = (data,tournamentData)=>{
             document.getElementById("tournamentImage").setAttribute("src",element.gameImage)
             if("gameMode" in tournamentData){
                 console.log(element.gameModes[tournamentData.gameMode]);
+
+                // console.log(tournamentData.gameMode);
+
+                // tournamentData.gameMode.forEach(hahe = ()=>{
+                // })
+
+                let span = document.createElement("span");
+                span.className = "badge badge-pill px-3 badge-danger";
+                span.innerHTML = element.gameModes[tournamentData.gameMode];
+                document.getElementById("gameTags").appendChild(span);
             }
         }
-        // console.log(element);
     });
 }
 
