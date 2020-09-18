@@ -17,6 +17,8 @@ async function loadProfileJS()
         }).then(res => res.text()).then(function(res){
             firebase.auth().signInWithCustomToken(res.toString()).then(function (user)
             {
+                localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
+                USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
                 loadUser(USER_IN_SESSION);
                 setCookie("SU_SY",res.toString(),1);
             })
@@ -26,6 +28,8 @@ async function loadProfileJS()
     {
         firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user)
         {
+            localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
+            USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
             loadUser(USER_IN_SESSION);
         }).catch(reason => {
             console.log(reason);
@@ -199,28 +203,25 @@ function checkDetails()
 {
     let overallFlag = 0;
     let no_of_check = 1;
+    let userPhone = firebase.auth().currentUser.phoneNumber;
     //CHECK 1 Starts
-    if(PHONE_VERIFICATION_FLAG == true)
+    console.log("+91"+getElementValue("editMobileNumber"))
+    if(PHONE_VERIFICATION_FLAG == true || userPhone == "+91"+getElementValue("editMobileNumber"))
     {
         overallFlag++;
     }
     else
     {
-        let userPhone = firebase.auth().currentUser.phoneNumber;
         if(userPhone != null)
         {
-            if(userPhone == getElementValue("editMobileNumber"))
-            {
-                overallFlag++;
-            }
-        }
-        else {
             alert("please enter and verify your phone number first")
         }
     }
     //CHECK 1 ends
     if(overallFlag == no_of_check)
     {
+        alert("YES")
+
         return true;
     }
     else{
@@ -231,6 +232,7 @@ function createUserInCollection()
 {
     if(checkDetails() == true)
     {
+        alert("YES")
         let user = {};
         user.uid = JSON.parse(sessionStorage.getItem("userInfo")).uid;
         user.userName = getElementValue("editProfileName");
@@ -246,25 +248,32 @@ function createUserInCollection()
         bankDetail.accountName = "";
         user.bankDetail = bankDetail;
         user.tournamentIDs = [];
-
+        alert("hi")
+        alert(API)
         if(API == "CREATE_API")
         {
-            sessionLogin(firebase.auth().currentUser);
-            fetch("/createUser", {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    "CSRF-Token": Cookies.get("XSRF-TOKEN"),
-                },
-                body: JSON.stringify({user}),
-            }).then(function ()
+            sessionLogin(firebase.auth().currentUser).then(function (res)
             {
-                window.location.assign("/profile");
-            })
+                console.log(res)
+                alert("session logged in")
+                fetch("/createUser", {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+                    },
+                    body: JSON.stringify({user}),
+                }).then(function ()
+                {
+                    window.location.assign("/profile");
+                })
+            });
+
         }
         else
         {
+            alert("DUMMY BAAVA")
             fetch("/updateUser", {
                 method: "POST",
                 headers: {
@@ -318,7 +327,7 @@ function verifyPhoneNumber(phone) {
     firebase.auth().currentUser.linkWithPhoneNumber(phone,applicationVerifier).then(function (confirmationResult){
         getOTP().then(function (otp){
             return confirmationResult.confirm(otp.toString()).then(()=>{
-
+                PHONE_VERIFICATION_FLAG=true;
             });
         })
     }).catch(function (error){

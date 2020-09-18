@@ -27,7 +27,10 @@ function sessionLoginHandler(firebaseUser)
         if(response.val != "false")
         {
             console.log("existing user")
-            sessionLogin(firebaseUser)
+            sessionLogin(firebaseUser).then(function (res)
+            {
+                window.location.assign("/profile");
+            })
         }
         else
         {
@@ -48,8 +51,6 @@ function sessionLogin(user){
             },
             body: JSON.stringify({idToken}),
         });
-    }).then(() => {
-        window.location.assign("/profile");
     });
 }
 

@@ -126,11 +126,11 @@ app.post("/sessionLogin", (req, res) => {
             (sessionCookie) => {
                 const options = {maxAge: expiresIn, httpOnly: true};
                 res.cookie("session", sessionCookie, options);
-                res.end(JSON.stringify({status: "success"}));
+               return res.end(JSON.stringify({status: "success"}));
             },
             (error) => {
                 console.log(error)
-                res.status(401).send("UNAUTHORIZED REQUEST!");
+               return res.status(401).send("UNAUTHORIZED REQUEST!");
             }
         );
 });
