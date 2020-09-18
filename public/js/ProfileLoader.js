@@ -1,5 +1,5 @@
 let API;
-
+let PHONE_VERIFICATION_FLAG = false;
 // FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
 
 async function loadProfileJS()
@@ -39,11 +39,19 @@ async function loadProfileJS()
 
 function loadProfileForNewUser(user)
 {
+    renderForNewUser();
     setProfileName(user.displayName)
     setProfileImage(user.photoURL)
     setMobileNumber(user.phoneNumber)
     setEmail(user.email)
-    createUserInCollection();
+}
+
+function renderForNewUser()
+{
+    showEdit();
+    document.getElementById("cancel_btn").classList.add("d-none");
+    document.getElementById("withdraw").classList.add("d-none");
+
 }
 
 function loadProfileForExistingUser(user)
@@ -125,8 +133,11 @@ setUpiId = (number) => {
 //     showEdit();
 //   });
 removeEdit = () => {
-    document.getElementById("editProfileCard").classList.add("d-none");
-    document.getElementById("myTournament").classList.remove("d-none");
+    if(API != "CREATE_API")
+    {
+        document.getElementById("editProfileCard").classList.add("d-none");
+        document.getElementById("myTournament").classList.remove("d-none");
+    }
 }
 
 showEdit = () => {
@@ -183,58 +194,90 @@ function getElementValue(id)
 }
 function checkDetails()
 {
-    //todo validate the incoming data.. including phone number, if it isi verified, etc
-}
-function createUserInCollection()
-{
-    checkDetails();
-    let user = {};
-    user.uid = JSON.parse(localStorage.getItem("userInfo")).uid;
-    user.userName = getElementValue("editProfileName");
-    user.userEmailID=getElementValue("editEmail");;
-    user.walletAmount=0;
-    user.role = 0;
-    user.profileImageURL = document.getElementById("profileImage").getAttribute("src");
-    user.mobileNo = getElementValue("editMobileNumber");
-    user.vpa = getElementValue("editUpiID");
-    let bankDetail = {};
-    bankDetail.accountNo = getElementValue("editAccountNo");
-    bankDetail.ifsc = getElementValue("editIfsc");
-    bankDetail.accountName = "";
-    user.bankDetail = bankDetail;
-    user.tournamentIDs = [];
-
-    if(API == "CREATE_API")
+    let overallFlag = 0;
+    let no_of_check = 1;
+    //CHECK 1 Starts
+    if(PHONE_VERIFICATION_FLAG == true)
     {
-        fetch("/createUser", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                "CSRF-Token": Cookies.get("XSRF-TOKEN"),
-            },
-            body: JSON.stringify({user}),
-        }).then(function ()
-        {
-            window.location.assign("/profile");
-        })
+        overallFlag++;
     }
     else
     {
-        fetch("/updateUser", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                "CSRF-Token": Cookies.get("XSRF-TOKEN"),
-            },
-            body: JSON.stringify({user}),
-        }).then(function()
+        let userPhone = firebase.auth().currentUser.phoneNumber;
+        if(userPhone != null)
         {
-            window.location.assign("/profile");
-        })
+            if(userPhone == getElementValue("editMobileNumber"))
+            {
+                overallFlag++;
+            }
+        }
+        else {
+            alert("please enter and verify your phone number first")
+        }
     }
+    //CHECK 1 ends
+    if(overallFlag == no_of_check)
+    {
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+function createUserInCollection()
+{
+    if(checkDetails() == true)
+    {
+        let user = {};
+        user.uid = JSON.parse(sessionStorage.getItem("userInfo")).uid;
+        user.userName = getElementValue("editProfileName");
+        user.userEmailID=getElementValue("editEmail");;
+        user.walletAmount=0;
+        user.role = 0;
+        user.profileImageURL = document.getElementById("profileImage").getAttribute("src");
+        user.mobileNo = getElementValue("editMobileNumber");
+        user.vpa = getElementValue("editUpiID");
+        let bankDetail = {};
+        bankDetail.accountNo = getElementValue("editAccountNo");
+        bankDetail.ifsc = getElementValue("editIfsc");
+        bankDetail.accountName = "";
+        user.bankDetail = bankDetail;
+        user.tournamentIDs = [];
 
+        if(API == "CREATE_API")
+        {
+            fetch("/createUser", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+                },
+                body: JSON.stringify({user}),
+            }).then(function ()
+            {
+                window.location.assign("/profile");
+            })
+        }
+        else
+        {
+            fetch("/updateUser", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+                },
+                body: JSON.stringify({user}),
+            }).then(function()
+            {
+                window.location.assign("/profile");
+            })
+        }
+    }
+    else {
+        alert("check details failed")
+    }
 }
 
 function verifyPhoneNumber() {
@@ -244,21 +287,35 @@ function verifyPhoneNumber() {
     var applicationVerifier = new firebase.auth.RecaptchaVerifier('button-addon2', {
         'size': 'invisible'
     });
-    var provider = new firebase.auth.PhoneAuthProvider();
-    provider.verifyPhoneNumber(phone, applicationVerifier)
-        .then(function (verificationId) {
-            let coder = prompter('code')
-            return firebase.auth.PhoneAuthProvider.credential(verificationId, coder.toString());
-        }).then(function(phoneCredential) {
-        console.log(phoneCredential);
+    firebase.auth().currentUser.linkWithPhoneNumber(phone,applicationVerifier).then(function (confirmationResult){
+        getOTP().then(function (otp){
+            return confirmationResult.confirm(otp.toString()).then(()=>{
+
+            });
+        })
+    }).catch(reason => {
+        alert(reason);
+    })
+}
+
+let OTP = null;
+
+function getOTP() {
+   return  new Promise((resolve, reject) => {
+        let otpTimer =  setInterval(()=>{
+            if(OTP!=null)
+            {
+                window.clearInterval(otpTimer);
+                resolve(OTP);
+            }
+            console.log("A")
+        },100)
     });
 }
 
-async function prompter(text) {
-
-    let promise = new Promise((resolve, reject) => {
-        setTimeout(() => resolve(window.prompt(text)), 1000)
-    });
-
-    return await promise; // wait until the promise resolves (*)
+function setOTP()
+{
+     OTP = document.getElementById("otp").value;
 }
+
+//
