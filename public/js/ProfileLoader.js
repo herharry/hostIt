@@ -101,6 +101,8 @@ setProfileImage = (image) => {
 
 setMobileNumber = (number) => {
     if (number != null) {
+        number = number.toString().split("+91").pop();
+        console.log(number)
         document.getElementById("mobileNumber").innerHTML = number;
         document.getElementById("editMobileNumber").setAttribute("value", number);
     }
@@ -180,6 +182,7 @@ updateProfile = () => {
     }, false);
 })();
 
+
 function isNumberKey(evt) {
     var charCode = (evt.which) ? evt.which : evt.keyCode;
     if (charCode != 46 && charCode > 31 &&
@@ -246,6 +249,7 @@ function createUserInCollection()
 
         if(API == "CREATE_API")
         {
+            sessionLogin(firebase.auth().currentUser);
             fetch("/createUser", {
                 method: "POST",
                 headers: {
@@ -280,9 +284,33 @@ function createUserInCollection()
     }
 }
 
-function verifyPhoneNumber() {
+function phoneChecker()
+{
     let phone = document.getElementById("editMobileNumber").value;
     phone = "+91" + phone;
+
+    if(phone == firebase.auth().currentUser.phoneNumber)
+    {
+        alert("already verified");
+    }
+    else
+    {
+        if(firebase.auth().currentUser.phoneNumber == null)
+        {
+            verifyPhoneNumber(phone)
+        }
+        else {
+            console.log(firebase.auth().currentUser.providerData);
+            firebase.auth().currentUser.unlink("phone").then(function (res)
+            {
+                verifyPhoneNumber(phone)
+            });
+        }
+
+    }
+}
+
+function verifyPhoneNumber(phone) {
 
     var applicationVerifier = new firebase.auth.RecaptchaVerifier('button-addon2', {
         'size': 'invisible'
@@ -293,8 +321,8 @@ function verifyPhoneNumber() {
 
             });
         })
-    }).catch(reason => {
-        alert(reason);
+    }).catch(function (error){
+            alert(error)
     })
 }
 
@@ -316,4 +344,5 @@ function getOTP() {
 function setOTP()
 {
      OTP = document.getElementById("otp").value;
+     document.getElementById("modalRegisterForm").setAttribute("aria-hidden" ,"true");
 }

@@ -31,7 +31,7 @@
                         <a class="nav-link middle" href="/profile">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link middle" href="/sessionLogout">logout</a>
+                        <a class="nav-link middle" onclick="logout()">logout</a>
                     </li>
                 </ul>
             </div>
@@ -121,38 +121,13 @@
                                             <button class="btn btn-md btn-default m-0 px-3 py-2 z-depth-0 waves-effect"
                                                 maxlength="10" data-target="#modalRegisterForm" data-toggle="modal"
                                                 type="button" id="button-addon2"
-                                                onclick="verifyPhoneNumber()">verify</button>
+                                                onclick="phoneChecker()">verify</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
 
-                            <!--Otp section-->
-                            <section>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog"
-                                    aria-labelledby="myModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="text-dark font-weight-bold modal-title mx-auto">OTP</h5>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p class="text-dark font-weight-bold text-center">Enter valid OTP</p>
-                                                <input type="text" maxlength="6" onkeypress="return isNumberKey(event)"
-                                                    id="otp" class="mx-auto w-50 form-control" required>
-                                            </div>
-                                            <div class="modal-footer d-flex justify-content-center">
-                                                <button class="btn btn-primary" id="otpVerify" onclick="setOTP()">verify</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </section>
 
 
                             <h2 class="h5 grey-text text-center p-3">Bank details</h2>
@@ -185,6 +160,33 @@
                         <button class="btn btn-primary btn-md" type="submit" onclick="createUserInCollection()">Submit form</button>
                     </form>
                     <button class="btn btn-primary btn-md" onclick="removeEdit()" id="cancel_btn">cancel</button>
+
+                    <!--Otp section-->
+                    <section>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="text-dark font-weight-bold modal-title mx-auto">OTP</h5>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="text-dark font-weight-bold text-center">Enter valid OTP</p>
+                                        <input type="text" maxlength="6" onkeypress="return isNumberKey(event)"
+                                               id="otp" class="mx-auto w-50 form-control" required>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center">
+                                        <button class="btn btn-primary" id="otpVerify" onclick="setOTP()">verify</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+
 
                 </div>
 

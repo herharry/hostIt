@@ -20,11 +20,19 @@ function checkUser(user)
 
 function sessionLoginHandler(firebaseUser)
 {
+    localStorage.setItem("userInfo", JSON.stringify(firebaseUser))
     checkUser(firebaseUser).then(function (response)
     {
+        console.log(response.val)
         if(response.val != "false")
         {
-            sessionLogin()
+            console.log("existing user")
+            sessionLogin(firebaseUser)
+        }
+        else
+        {
+            //todo try to hide the url param
+            window.location.assign("/profile?new=true");
         }
     })
 }
@@ -41,7 +49,6 @@ function sessionLogin(user){
             body: JSON.stringify({idToken}),
         });
     }).then(() => {
-        localStorage.setItem("userInfo", JSON.stringify(user))
         window.location.assign("/profile");
     });
 }
@@ -70,4 +77,10 @@ function setCookie(cname, cvalue, exhours) {
 }
 function delete_cookie(name) {
     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+function logout()
+{
+    localStorage.clear();
+    window.location.assign("/sessionLogout");
 }

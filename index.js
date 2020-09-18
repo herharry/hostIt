@@ -93,9 +93,11 @@ app.get('/dashboard', function (req, res) {
 })
 
 app.get('/profile', function (req, res) {
+
+    let x = req.param('new', false)
     checkIfValidUser(req,function (callback)
     {
-        if (callback == true)
+        if (callback == true || x=="true")
         {
             res.sendFile(path.join(__dirname+'/views/profile.html'));
         }
@@ -136,6 +138,7 @@ app.post("/sessionLogin", (req, res) => {
 
 app.get("/sessionLogout", (req, res) => {
     res.clearCookie("session");
+    res.clearCookie("SU_SY");
     res.redirect("/");
 });
 
