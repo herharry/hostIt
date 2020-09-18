@@ -12,21 +12,35 @@ firebase.initializeApp(firebaseConfig);
 const DB= firebase.firestore();
 let USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
 
+function checkUser(user)
+{
+    return fetch("/user?uid="+user.uid)
+        .then(res => res.json()).catch(reason => {});
+}
 
-function sessionLogin(result){
+function sessionLoginHandler(firebaseUser)
+{
+    checkUser(firebaseUser).then(function (response)
+    {
+        if(response.val != "false")
+        {
+            sessionLogin()
+        }
+    })
+}
+
+function sessionLogin(user){
     console.log("inside")
-    return result.user.getIdToken().then((idToken) => {
+    return user.getIdToken().then((idToken) => {
         return fetch("/sessionLogin", {
             method: "POST",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                "CSRF-Token": Cookies.get("XSRF-TOKEN"),
             },
             body: JSON.stringify({idToken}),
         });
     }).then(() => {
-        let user = result.user;
         localStorage.setItem("userInfo", JSON.stringify(user))
         window.location.assign("/profile");
     });

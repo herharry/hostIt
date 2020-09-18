@@ -317,5 +317,3 @@ function setOTP()
 {
      OTP = document.getElementById("otp").value;
 }
-
-//
