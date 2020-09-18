@@ -43,6 +43,7 @@ function tournamentListener()
                 let tournament={};
                 tournament = doc.data();
                 tournament.id = doc.id;
+                console.log(tournament.id)
                 let flag = document.getElementById("CARD"+tournament.id);
                 if(typeof(flag) != 'undefined' && flag!=null)
                 {
@@ -116,7 +117,7 @@ function loadTournamentInNewCard(tournament) {
         let button = document.createElement("a");
         button.className = "btn btn-primary px-4 py-1 mt-3 mx-3 float-right";
         button.text = "Join"
-        button.id = tournament.tid;
+        button.id = tournament.id;
         button.setAttribute("onClick","loadSpecificTournament(this.id)");
 
 
