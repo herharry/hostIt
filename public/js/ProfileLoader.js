@@ -1,12 +1,44 @@
 let API;
 
-function loadProfileDetails() {
-   loadUser(JSON.parse(sessionStorage.getItem("userInfo")));
+// FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
+
+async function loadProfileJS()
+{
+    let uid = USER_IN_SESSION.uid;
+    if(getCookie("SU_SY") == "")
+    {
+        await fetch("/createToken", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({uid}),
+        }).then(res => res.text()).then(function(res){
+            firebase.auth().signInWithCustomToken(res.toString()).then(function (user)
+            {
+                loadUser(USER_IN_SESSION);
+                setCookie("SU_SY",res.toString(),1);
+            })
+        });
+    }
+    else
+    {
+        firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user)
+        {
+            loadUser(USER_IN_SESSION);
+        }).catch(reason => {
+            console.log(reason);
+            delete_cookie("SU_SY");
+            loadProfileJS();
+        });
+    }
 }
+
+//FIREBASE AUTHENTICATION FOR THE CURRENT USER ENDS *****************************************************************************
 
 function loadProfileForNewUser(user)
 {
-    console.log(user)
     setProfileName(user.displayName)
     setProfileImage(user.photoURL)
     setMobileNumber(user.phoneNumber)
@@ -16,7 +48,7 @@ function loadProfileForNewUser(user)
 
 function loadProfileForExistingUser(user)
 {
-    console.log(user)
+    console.log(firebase.auth().currentUser)
     setProfileName(user.userName)
     setProfileImage(user.profileImageURL)
     setMobileNumber(user.mobileNo)

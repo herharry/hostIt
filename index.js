@@ -650,6 +650,15 @@ app.post("/registerTournament",(req, response) => {
 //********************************************* PAYTM API ENDS **************************************************************//
 //*************************************************************************************************************************//
 
+app.post("/createToken", (req, response) => {
+    let uid = req.body.uid;
+    admin.auth().createCustomToken(uid).then(function (customToken)
+    {
+        response.status(200).send(customToken);
+    })
+});
+
+
 app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}`);
 });

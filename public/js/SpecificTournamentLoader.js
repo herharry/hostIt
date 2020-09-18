@@ -2,12 +2,52 @@ let TOURNAMENT;
 let url = window.location.href;
 let urlParams = getParams(url);
 console.log(urlParams);
-fetch("/tournament?tid=" + urlParams.tid)
-    .then(res => res.json())
-    .then(res => this.loadTournamentInHTML(this.formatResponse(res)[0]))
-    .catch(err => err);
 
-let sessionDetails = JSON.parse(sessionStorage.getItem("userInfo"))
+// FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
+
+async function loadSpecificTournamentJS()
+{
+    let uid = USER_IN_SESSION.uid;
+    if(getCookie("SU_SY") == "")
+    {
+        await fetch("/createToken", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({uid}),
+        }).then(res => res.text()).then(function(res){
+            firebase.auth().signInWithCustomToken(res.toString()).then(function (user)
+            {
+                setCookie("SU_SY",res.toString(),1);
+                specificTournamentListener();
+            })
+        });
+    }
+    else
+    {
+        firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user)
+        {
+            console.log("hey")
+            specificTournamentListener();
+        }).catch(reason => {
+            console.log(reason);
+            delete_cookie("SU_SY");
+            loadSpecificTournamentJS();
+        });
+    }
+}
+
+function specificTournamentListener()
+{
+    DB.collection("Tournaments").doc(urlParams.tid).onSnapshot(function (doc){
+        console.log(doc.data())
+        loadTournamentInHTML(doc.data())
+    });
+}
+//FIREBASE AUTHENTICATION FOR THE CURRENT USER ENDS *****************************************************************************
+
 
 function getParams(url) {
     var params = {};
@@ -69,7 +109,7 @@ function loadTournamentInHTML(res) {
         document.getElementById("join").innerHTML = "Full";
     }
 
-    // console.log(sessionDetails)
+    // console.log(USER_IN_SESSION)
     getGame(res);
 
     document.getElementById("rules").innerHTML = res.rules;
@@ -96,8 +136,8 @@ loadGameDetails = (data,tournamentData)=>{
 }
 
 function joinConfirm() {
-    console.log(sessionDetails.tournamentIds)
-    let registeredTournament = sessionDetails.tournamentIds;
+    console.log(USER_IN_SESSION.tournamentIds)
+    let registeredTournament = USER_IN_SESSION.tournamentIds;
     console.log(registeredTournament)
 
     for(let i =0; i<registeredTournament.length;i++)
@@ -111,9 +151,9 @@ function joinConfirm() {
     }
     document.getElementById("join").setAttribute("data-toggle","modal");
     document.getElementById("join").setAttribute("data-target","#joinTournamentModel");
-    document.getElementById("joinEmail").value = sessionDetails.userEmailID;
-    document.getElementById("joinNumber").value = sessionDetails.mobileNo;
+    document.getElementById("joinEmail").value = USER_IN_SESSION.userEmailID;
+    document.getElementById("joinNumber").value = USER_IN_SESSION.mobileNo;
     document.getElementById("tournament_id").value=urlParams.tid;
-    document.getElementById("user_id").value=sessionDetails.uid;
+    document.getElementById("user_id").value=USER_IN_SESSION.uid;
     document.getElementById("payable_amount").value = TOURNAMENT.amount;
 }
