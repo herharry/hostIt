@@ -10,12 +10,14 @@
 
 }
 
-.gradient{
+.gradient {
     background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);
-    background: linear-gradient(to right, #5B86E5, #36D1DC);    -webkit-background-clip: text;
+    background: linear-gradient(to right, #5B86E5, #36D1DC);
+    -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: transparent;    
+    -webkit-text-fill-color: transparent;
 }
+
 @media only screen and (min-width:800px) {
     .row {
         border-radius: 10px;
@@ -38,11 +40,50 @@
 .rules {
     background-color: var(--main-bg-color);
 }
-h3{
+
+h3 {
     font-weight: 700;
 
 }
+
 .rules-body {
     padding: 20px;
     line-height: 1.4;
+}
+
+/* loader */
+
+#overlay {
+    background: var(--main-bg-color);
+    color: #fff;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 5000;
+    top: 0;
+    left: 0;
+    float: left;
+    text-align: center;
+    padding-top: 25%;
+    opacity: .90;
+}
+
+.spinner {
+    margin: 0 auto;
+    height: 64px;
+    width: 64px;
+    animation: rotate 0.8s infinite linear;
+    border: 5px solid var(--theme-color);
+    border-right-color: transparent;
+    border-radius: 50%;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
