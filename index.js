@@ -49,14 +49,14 @@ app.use(cookieParser());
 // app.use(csrfMiddleware);
 app.use(express.static(__dirname + '/public'));
 
-// app.all("*", (req, res, next) => {
-//     console.log(req.url)
-//     if(req.url != "/paynow")
-//     {
-//         res.cookie("XSRF-TOKEN", req.csrfToken());
-//     }
-//     next();
-// });
+app.all("*", (req, res, next) => {
+    console.log(req.url)
+    // if(req.url != "/paynow")
+    // {
+    //     res.cookie("XSRF-TOKEN", req.csrfToken());
+    // }
+    next();
+});
 
 
 app.get("/", function (req, res) {
@@ -93,9 +93,11 @@ app.get('/dashboard', function (req, res) {
 })
 
 app.get('/profile', function (req, res) {
+
+    let x = req.param('new', false)
     checkIfValidUser(req,function (callback)
     {
-        if (callback == true)
+        if (callback == true || x=="true")
         {
             res.sendFile(path.join(__dirname+'/views/profile.html'));
         }
@@ -124,11 +126,11 @@ app.post("/sessionLogin", (req, res) => {
             (sessionCookie) => {
                 const options = {maxAge: expiresIn, httpOnly: true};
                 res.cookie("session", sessionCookie, options);
-                res.end(JSON.stringify({status: "success"}));
+               return res.end(JSON.stringify({status: "success"}));
             },
             (error) => {
                 console.log(error)
-                res.status(401).send("UNAUTHORIZED REQUEST!");
+               return res.status(401).send("UNAUTHORIZED REQUEST!");
             }
         );
 });
@@ -136,6 +138,7 @@ app.post("/sessionLogin", (req, res) => {
 
 app.get("/sessionLogout", (req, res) => {
     res.clearCookie("session");
+    res.clearCookie("SU_SY");
     res.redirect("/");
 });
 
@@ -147,77 +150,77 @@ app.get("/sessionLogout", (req, res) => {
 
 // ############# GET ALL TOURNAMENT AND LIVE TOURNAMENT DETAILS
 app.get('/tournament', (req, res) => {
-            (async () => {
-                let response = [];
-                console.log("inside")
-                let tid = req.param("tid",false)
-                let gameFetchQuery = req.param('gameID', false)
-                try {
-                    let tournaments = db.collection('Tournaments')
-                    if(tid!=false)
-                    {
-                        let docData = await tournaments.doc(tid).get();
-                        console.log(docData.data())
-                        response.push(docData.data());
-                    }
-                    else
-                    {
-                        tournaments = tournaments.where('isFinished', '==', false);
-                        if (gameFetchQuery!=false) {
-                            tournaments = tournaments.where('gameID', '==', gameFetchQuery);
-                        }
-                        const snapshot = await tournaments.get();
-                        snapshot.forEach(doc => {
-                            var docJson = doc.data();
-                            docJson.tid = doc.id;
-                            response.push(docJson)
-                        });
-                    }
-
-                } catch
-                    (error) {
-                    return res.status(500).send(error);
+    (async () => {
+        let response = [];
+        console.log("inside")
+        let tid = req.param("tid",false)
+        let gameFetchQuery = req.param('gameID', false)
+        try {
+            let tournaments = db.collection('Tournaments')
+            if(tid!=false)
+            {
+                let docData = await tournaments.doc(tid).get();
+                console.log(docData.data())
+                response.push(docData.data());
+            }
+            else
+            {
+                tournaments = tournaments.where('isFinished', '==', false);
+                if (gameFetchQuery!=false) {
+                    tournaments = tournaments.where('gameID', '==', gameFetchQuery);
                 }
-                return res.status(200).json(response);
-            })();
+                const snapshot = await tournaments.get();
+                snapshot.forEach(doc => {
+                    var docJson = doc.data();
+                    docJson.tid = doc.id;
+                    response.push(docJson)
+                });
+            }
+
+        } catch
+            (error) {
+            return res.status(500).send(error);
+        }
+        return res.status(200).json(response);
+    })();
 });
 
 // ############# GET ALL GAMES
 app.get('/games', (req, res) => {
-            (async () => {
-                let response = [];
-                try {
-                    let games = db.collection('Games');
-                    const snapshot = await games.get();
-                    snapshot.forEach(doc => {
-                        var docJson = doc.data();
-                        docJson.gameID = doc.id;
-                        response.push(docJson)
-                    });
-                } catch
-                    (error) {
-                    return res.status(500).send(error);
-                }
-                return res.status(200).json(response);
-            })();
+    (async () => {
+        let response = [];
+        try {
+            let games = db.collection('Games');
+            const snapshot = await games.get();
+            snapshot.forEach(doc => {
+                var docJson = doc.data();
+                docJson.gameID = doc.id;
+                response.push(docJson)
+            });
+        } catch
+            (error) {
+            return res.status(500).send(error);
+        }
+        return res.status(200).json(response);
+    })();
 });
 
 // ############# GET ALL BANNERS
 app.get('/banners', (req, res) => {
-            (async () => {
-                let response = [];
-                try {
-                    let games = db.collection('Banners');
-                    const snapshot = await games.get();
-                    snapshot.forEach(doc => {
-                        response.push(doc.data())
-                    });
-                } catch
-                    (error) {
-                    return res.status(500).send(error);
-                }
-                return res.status(200).json(response);
-            })();
+    (async () => {
+        let response = [];
+        try {
+            let games = db.collection('Banners');
+            const snapshot = await games.get();
+            snapshot.forEach(doc => {
+                response.push(doc.data())
+            });
+        } catch
+            (error) {
+            return res.status(500).send(error);
+        }
+        return res.status(200).json(response);
+    })();
 });
 
 
@@ -240,15 +243,15 @@ app.post('/createUser', (req, res) => {
             bankDetail.ifsc=u.bankDetail.ifsc;
             await db.collection('Users').doc(req.body.user.uid)
                 .create({
-                        bankDetail: bankDetail,
-                        mobileNo : u.mobileNo,
-                        userName:    u.userName ,
-                        userEmailID:u.userEmailID,
-                        walletAmount:u.walletAmount,
-                        role:u.role,
-                        profileImageURL:u.profileImageURL,
-                        vpa:u.vpa,
-                        tournamentIds:u.tournamentIDs
+                    bankDetail: bankDetail,
+                    mobileNo : u.mobileNo,
+                    userName:    u.userName ,
+                    userEmailID:u.userEmailID,
+                    walletAmount:u.walletAmount,
+                    role:u.role,
+                    profileImageURL:u.profileImageURL,
+                    vpa:u.vpa,
+                    tournamentIds:u.tournamentIDs
                 });
             res.redirect("/dashboard")
         } catch (error) {
@@ -261,6 +264,7 @@ app.post('/createUser', (req, res) => {
 app.post('/updateUser', (req, res) => {
     (async () => {
         try {
+            console.log("inga vandhuruchu da")
             let u = req.body.user;
             console.log(req.body.user);
             console.log(req.body.user.uid);
@@ -292,18 +296,18 @@ app.get('/user', (req, res) => {
     (async () => {
         let response;
         let uid = req.param('uid', false)
-            let userDoc = db.collection('Users')
+        let userDoc = db.collection('Users')
 
-            if (uid!=false) {
-                userDoc = userDoc.doc(uid);
-            }
-            response = await userDoc.get();
-            response = response.data();
-            if(response == null)
-            {
-                console.log("hellooos")
-                response = "false"
-            }
+        if (uid!=false) {
+            userDoc = userDoc.doc(uid);
+        }
+        response = await userDoc.get();
+        response = response.data();
+        if(response == null)
+        {
+            console.log("hellooos")
+            response = "false"
+        }
         return res.status(200).json({val : response});
     })();
 });
@@ -349,9 +353,9 @@ app.post('/paynow', [parseUrl, parseJson], (req, resp) => {
 
 
     let tid = req.body.tid
-        let uid =req.body.uid
-        let inGameID = req.body.inGameID;
-        let inGameName = req.body.inGameName;
+    let uid =req.body.uid
+    let inGameID = req.body.inGameID;
+    let inGameName = req.body.inGameName;
 
 
     if (!req.body.amount || !req.body.email || !req.body.phone) {
@@ -451,7 +455,7 @@ app.post('/callback', (req, responser) => {
 
 
         if(result == true) {
-             return fetch("http://localhost:3000/registerTournament", {
+            return fetch("http://localhost:3000/registerTournament", {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -459,19 +463,19 @@ app.post('/callback', (req, responser) => {
                 },
                 body: JSON.stringify({transactionDetails}),
             }).then(res => res.text()).then(function(Res)
-             {
-                 if(Res == "success")
-                 {
-                     console.log("indadeiiiiiii")
-                     return responser.render('payResponse', {
-                         'data': transactionDetails
-                     })
+            {
+                if(Res == "success")
+                {
+                    console.log("indadeiiiiiii")
+                    return responser.render('payResponse', {
+                        'data': transactionDetails
+                    })
 
-                 }
-             });
+                }
+            });
         }
         else {
-           return fetch("http://localhost:3000/addTransaction", {
+            return fetch("http://localhost:3000/addTransaction", {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -485,11 +489,11 @@ app.post('/callback', (req, responser) => {
                 })
             })
         }
-});
+    });
 });
 
 
-    app.post("/addTransaction", (req, res) => {
+app.post("/addTransaction", (req, res) => {
     (async () => {
         try {
             let transDetails = req.body.transactionDetails;
@@ -510,7 +514,7 @@ app.post('/callback', (req, responser) => {
                     txndate:transDetails.txndate,
                     checksumhash: transDetails.checksumhash
                 });
-           return res.status(200).json(transDetails);
+            return res.status(200).json(transDetails);
         } catch (error) {
             console.log(error);
             return res.status(500).send(error);
@@ -551,11 +555,11 @@ app.post('/reduceVacantSeat', (req, res) => {
             let userDoc = db.collection('Tournaments').doc(tid);
             let userdata = await userDoc.get();
             let availableSeat = userdata.data().vacantSeats;
-                availableSeat=availableSeat-1;
+            availableSeat=availableSeat-1;
             let registeredUsers = userdata.data().registeredUsers;
-                registeredUsers.push(uid);
+            registeredUsers.push(uid);
             let registeredUserDetails = userdata.data().registeredUserDetails;
-                registeredUserDetails.push(userInfo)
+            registeredUserDetails.push(userInfo)
             await userDoc.update({
                 vacantSeats : availableSeat,
                 registeredUsers:registeredUsers,

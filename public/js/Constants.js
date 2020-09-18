@@ -12,23 +12,46 @@ firebase.initializeApp(firebaseConfig);
 const DB= firebase.firestore();
 let USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
 
+function checkUser(user)
+{
+    return fetch("/user?uid="+user.uid)
+        .then(res => res.json()).catch(reason => {});
+}
 
-function sessionLogin(result){
-    console.log("inside")
-    return result.user.getIdToken().then((idToken) => {
+function sessionLoginHandler(firebaseUser)
+{
+    localStorage.setItem("userInfo", JSON.stringify(firebaseUser))
+    checkUser(firebaseUser).then(function (response)
+    {
+        console.log(response.val)
+        if(response.val != "false")
+        {
+            console.log("existing user")
+            sessionLogin(firebaseUser).then(function (res)
+            {
+                window.location.assign("/profile");
+            })
+        }
+        else
+        {
+            //todo try to hide the url param
+            window.location.assign("/profile?new=true");
+        }
+    })
+}
+
+function sessionLogin(user){
+    return user.getIdToken().then((idToken) => {
         return fetch("/sessionLogin", {
             method: "POST",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                "CSRF-Token": Cookies.get("XSRF-TOKEN"),
             },
             body: JSON.stringify({idToken}),
         });
-    }).then(() => {
-        let user = result.user;
-        localStorage.setItem("userInfo", JSON.stringify(user))
-        window.location.assign("/profile");
+    }).catch(reason => {
+        alert(reason)
     });
 }
 
@@ -56,4 +79,10 @@ function setCookie(cname, cvalue, exhours) {
 }
 function delete_cookie(name) {
     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+function logout()
+{
+    localStorage.clear();
+    window.location.assign("/sessionLogout");
 }

@@ -49,7 +49,7 @@ function isEmailVerified(result)
         if (firebase.auth().currentUser.emailVerified) {
             console.log("Email Verified!",firebase.auth().currentUser.emailVerified);
             clearInterval(timer);
-            sessionLogin(result)
+            sessionLoginHandler(result.user)
         }
     }, 1000);
 }
