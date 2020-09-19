@@ -396,3 +396,32 @@ function storeImage()
         });
     }
 }
+
+function changeRole()
+{
+    let address = document.getElementById("inputEmail3").value;
+    let socialAddress = document.getElementById("editSocialURL").value;
+    let q1 = document.getElementById("question1").checked;
+    let q2 = document.getElementById("question2").checked;
+
+
+    let details = {}
+    details.address= address;
+    details.socialUrl = socialAddress;
+    details.q1 = q1;
+    details.q2 = q2;
+    details.userName = userInDB.userName;
+    details.uid = firebase.auth().currentUser.uid;
+
+    return fetch("/requestRoleChange", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({details}),
+    }).then(res=>res.text()).then(function ()
+    {
+        alert("request submitted, wait for approval")
+    });
+}
