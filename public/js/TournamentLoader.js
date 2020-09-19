@@ -1,5 +1,4 @@
 // FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
-let userInDB;
 async function loadTournamentJS()
 {
     let uid = USER_IN_SESSION.uid;

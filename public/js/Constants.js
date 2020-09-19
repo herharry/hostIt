@@ -11,6 +11,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const DB= firebase.firestore();
 let USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
+let userInDB;
 
 function checkUser(user)
 {

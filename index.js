@@ -292,6 +292,25 @@ app.post('/updateUser', (req, res) => {
     })();
 });
 
+
+app.post('/updateProfileImage', (req, res) => {
+    (async () => {
+        try {
+            let url = req.body.u.url;
+            let uid = req.body.u.uid;
+            await db.collection('Users').doc(uid)
+                .update({
+                    profileImageURL:url,
+                });
+            return res.status(200).send("success");
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
+
 app.get('/user', (req, res) => {
     (async () => {
         let response;
