@@ -89,6 +89,7 @@ getElementValue = (id) => {
 }
 
 setProfileName = (name) => {
+    $("#overlay").fadeOut(2000);
     document.getElementById("profileName").innerHTML = name;
     document.getElementById("editProfileName").setAttribute("value", name);
 }
