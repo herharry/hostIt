@@ -309,6 +309,77 @@ app.get('/banners', (req, res) => {
 //*******************************************************************************************************************************************
 
 
+
+
+
+//*********************************************************************************************************************************************//
+//******************************************** WALLET API STARTS *************************************************************************************//
+//*******************************************************************************************************************************************
+
+app.post('/requestWallet', (req, res) => {
+    (async () => {
+        try {
+            let payload = req.body.payLoad;
+            let details = {}
+            if(payload.type == 1)
+            {
+                details.accountName = payload.accountName;
+                details.accountNo = payload.accountNo
+                details.ifsc=payload.ifsc;
+            }
+            else if(payload.type ==2)
+            {
+                details.vpa = payload.vpa;
+            }
+
+            await db.collection('WalletRequests').doc()
+                .create({
+                    amount: payload.amount,
+                    details : details,
+                    name:    payload.uname ,
+                    status: 1,
+                    type:payload.type,
+                    userID:payload.uid
+                });
+            return res.status(200).send("success");
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
+app.get('/availableRequest', (req, res) => {
+    (async () => {
+        let response = [];
+        try {
+            let uid = req.param("uid",false);
+            console.log("helossss")
+            let games = db.collection('WalletRequests').where("status","==",1);
+            const snapshot = await games.get();
+            console.log(snapshot)
+            snapshot.forEach(doc => {
+                if(uid == doc.data().userID || uid==false)
+                {
+                    console.log(doc.data());
+                    response.push(doc.data());
+                }
+            });
+        } catch
+            (error) {
+            return res.status(500).send(error);
+        }
+        return res.status(200).json(response);
+    })();
+});
+
+//*********************************************************************************************************************************************//
+//******************************************** WALLET API ENDS *************************************************************************************//
+//*******************************************************************************************************************************************
+
+
+
+
 //*********************************************************************************************************************************************//
 //******************************************** USER API STARTS *************************************************************************************//
 //*******************************************************************************************************************************************

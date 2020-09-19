@@ -40,6 +40,7 @@ async function loadProfileJS()
 }
 
 //FIREBASE AUTHENTICATION FOR THE CURRENT USER ENDS *****************************************************************************
+//todo set all details
 
 function loadProfileForNewUser(user)
 {
@@ -397,6 +398,82 @@ function storeImage()
     }
 }
 
+function withdraw() {
+
+    fetch("/availableRequest?uid="+firebase.auth().currentUser.uid).then(res=>res.json())
+        .then(function (res){
+            console.log(res)
+            if(res.length == 0){
+                console.log("no request pending")
+                let accName = userInDB.bankDetail.accountName;
+                let accNo = userInDB.bankDetail.accountNo;
+                let ifsc = userInDB.bankDetail.ifsc;
+                let upid = userInDB.vpa;
+                //todo decide from a radio button  --- > either accountnno or upi id
+                let typeOfTransaction = "";
+                let payLoad = {}
+                payLoad.amount = userInDB.walletAmount;
+                payLoad.uid = firebase.auth().currentUser.uid;
+                payLoad.uname = userInDB.userName;
+                if(payLoad.amount ==0)
+                {
+                    alert("first earn, then ask")
+                }
+                else
+                {
+                    if(typeOfTransaction == "account")
+                    {
+                        if ((accName == "" || accNo == "" || ifsc == ""))
+                        {
+                            console.log("furnish your account details");
+                            return;
+                        }
+                        else {
+                            payLoad.type = 1;
+                            payLoad.accountNo = accNo;
+                            payLoad.accountName = accName;
+                            payLoad.ifsc = ifsc;
+                        }
+                    }
+                    else
+                    {
+                        if(upid=="")
+                        {
+                            console.log("furnish your upid first")
+                            return;
+                        }
+                        else {
+                            payLoad.type = 2;
+                            payLoad.vpa = upid;
+                        }
+                    }
+
+                    fetch("/requestWallet", {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({payLoad}),
+                    }).then(res=>res.text()).then(function (res)
+                    {
+                        if(res == "success")
+                        {
+                            console.log("request made! keep checking your account, money maybe on the way")
+                        }
+                    }).catch(reason => {
+                        alert(reason)
+                    })
+                }
+            }
+            else
+            {
+                alert("patience is virtue! Request is already made.. wait for processing")
+            }
+        });
+
+
+}
 function changeRole()
 {
     let address = document.getElementById("inputEmail3").value;
