@@ -391,6 +391,22 @@ app.post('/updateProfileImage', (req, res) => {
     })();
 });
 
+app.post('/updateRole', (req, res) => {
+    (async () => {
+        try {
+            let uid = req.body.uid;
+            await db.collection('Users').doc(uid)
+                .update({
+                    role:1,
+                });
+            return res.status(200).send("success");
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
 app.get('/user', (req, res) => {
     (async () => {
         let response;

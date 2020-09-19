@@ -396,3 +396,10 @@ function storeImage()
         });
     }
 }
+
+function changeRole()
+{
+    console.log(userInDB.role);
+    let uid = userInDB.uid;
+
+}
