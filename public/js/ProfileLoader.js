@@ -83,6 +83,7 @@ function loadUser(user)
             else
             {
                 console.log(res.val)
+                userInDB = res.val;
                 API = "UPDATE_API"
                 let userInSession = res.val;
                 userInSession.uid = user.uid;
@@ -350,4 +351,48 @@ function setOTP()
 {
      OTP = document.getElementById("otp").value;
      document.getElementById("modalRegisterForm").setAttribute("aria-hidden" ,"true");
+}
+
+function storeImage()
+{
+    let img = document.getElementById("image-file").files[0];
+    console.log(img)
+    if(typeof(img)!="undefined")
+    {
+        let url;
+        let uploadTask = firebase.app().storage("gs://hostitgaming-36a6b.appspot.com")
+            .ref("user/"+userInDB.uid).child( "profile.jpg").put(img);
+
+        uploadTask.on('state_changed', function(snapshot){
+            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+        }, function(error) {
+                alert("we are little depressed for the time being, try again later!")
+        }, function() {
+            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                console.log('File available at', downloadURL);
+                let u = {}
+                u.uid = userInDB.uid;
+                u.url = downloadURL;
+                url = downloadURL;
+                return fetch("/updateProfileImage", {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({u}),
+                });
+            }).catch(reason => {
+                alert(reason)
+            }).then(res=>res.text()).then(function (res)
+            {
+                if(res=="success")
+                {
+                    console.log("image updated in db")
+                    setProfileImage(url)
+                }
+            });
+        });
+    }
 }
