@@ -15,7 +15,7 @@
 .wallet {
     background-color: var(--main-bg-color);
     border-radius: 10px;
-    min-height:300px;
+    min-height:200px;
 }
 #upload {
     opacity: 0;
