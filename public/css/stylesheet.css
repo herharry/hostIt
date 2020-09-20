@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Squada+One&display=swap');
 @import url("headerfooter.css");
 
-html{
+html {
     width: 100%;
     height: 100%;
 }
@@ -19,21 +19,22 @@ html{
     margin-bottom: 30px;
     font-weight: 700;
     color: var(--theme-color);
-    
+
 }
 
 @media only screen and (max-width: 800px) {
-    
-    .header h1{
+
+    .header h1 {
         margin-top: 170px;
         font-size: 3rem;
         letter-spacing: 20px;
     }
-    .header h3{
-    font-size: 1.2rem;
-    line-height: 1.3;
+
+    .header h3 {
+        font-size: 1.2rem;
+        line-height: 1.3;
     }
-    
+
 }
 
 
@@ -117,6 +118,7 @@ html{
     /* Firefox */
 
 }
+
 .game-scroll::-webkit-scrollbar {
     display: none;
 }
@@ -128,7 +130,8 @@ html{
     padding: 15px;
     border: 1px solid rgb(0, 247, 255);
 }
-.card_img{
+
+.card_img {
     object-fit: cover;
 }
 
@@ -141,14 +144,14 @@ html{
 }
 
 .download-desc {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     color: #a3a3a3;
     text-align: center;
     margin: 0 30px 30px;
 }
 
 .download-redirect {
-    max-width: 130px;
+    max-width: 170px;
 }
 
 .download-img {

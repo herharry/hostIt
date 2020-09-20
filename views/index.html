@@ -7,13 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
     <script src="js/GameLoader.js"></script>
 
 </head>
 
-<body class="custom">
+<body class="custom" data-aos="fade-in" data-aos-duration="5000">
 
     <section class="header d-flex">
         <div class="container header-content my-auto">
@@ -34,7 +36,7 @@
     <section class="games">
         <div class="container py-5">
             <h3 class="games-heading mb-5">GAMES</h3>
-            <div class="game-scroll px-3 mb-4">
+            <div class="game-scroll px-3 mb-4" data-aos="zoom-in">
                 <div class="row d-flex flex-nowrap justify-content-between" id="cards">
 
                 </div>
@@ -65,10 +67,10 @@
 
     <section class="container">
         <div class="row">
-            <div class="col-md-6 py-2 my-auto">
+            <div class="col-md-6 py-2 my-auto" data-aos="fade-right" data-aos-duration="2000">
                 <h3>Live Streaming on <a href="" > <small class="text-danger">YOUTUBE <i class="fab fa-youtube"></i></small></a></h2>
             </div>
-            <div class="col-md-6 my-5 m-md-0">
+            <div class="col-md-6 my-5 m-md-0" data-aos="fade-left" data-aos-duration="2000">
                 <div class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item rounded"
                         src="https://www.youtube.com/watch?v=AvC1j1GX3k8&list=PL69JopC7wmPrqK2O3kcxPkKSYG0Ny5uw4&index=2"></iframe>
@@ -76,12 +78,12 @@
             </div>
         </div>
     </section>
-    
-    <hr>
+
+    <hr class="mb-0">
 
     <!-- Site footer -->
     <section class="footer">
-        <div class="container">
+        <div class="container py-2">
             <div class="social-circle-btn p-2 m-2 d-flex justify-content-center">
                 <div class="btnn instagram">
                     <i class="fab fa-instagram fa-xs"></i>
@@ -103,6 +105,10 @@
         </div>
         <p class="bg-primary mb-0 py-1 w-100 text-center"> Made with <i class="fas fa-heart"></i></p>
     </section>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 <script>
     fetchGame();
