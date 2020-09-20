@@ -89,13 +89,17 @@ getElementValue = (id) => {
 }
 
 setProfileName = (name) => {
-    $("#overlay").fadeOut(2000);
+    $("#overlay").fadeOut('slow');
     document.getElementById("profileName").innerHTML = name;
     document.getElementById("editProfileName").setAttribute("value", name);
 }
 
 setProfileImage = (image) => {
-    document.getElementById("profileImage").setAttribute("src", image)
+    if(image!=null){
+        document.getElementById("profileImage").setAttribute("src", image)
+    }else{
+        document.getElementById("imgup").classList.add("d-none");
+    }
 }
 
 setMobileNumber = (number) => {
@@ -135,7 +139,7 @@ removeEdit = () => {
         document.getElementById("editProfileCard").classList.add("d-none");
         document.getElementById("myTournament").classList.remove("d-none");
         document.getElementById("imgup").classList.add("d-none");
-
+        document.getElementById("imgup").classList.add("d-none");
     }
 }
 
@@ -208,7 +212,7 @@ function checkDetails() {
         if (userPhone != null) {
             iziToast.warning({
                 title: 'Caution',
-                message: "please enter and verify your phone number first",
+                message: "please enter Valid mobile number",
                 position: 'topRight'
             });
         }
@@ -277,7 +281,10 @@ function createUserInCollection() {
                 })
             }
         } else {
-            alert("check details failed")
+            iziToast.warning({
+                message: "please enter and verify your phone number first",
+                position: 'topRight'
+            });
         }
     }
 }
