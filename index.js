@@ -544,7 +544,6 @@ app.post('/requestRoleChange', (req, res) => {
                     userId:details.uid,
                     userName:details.userName,
                 });
-            res.redirect("/profile")
         } catch (error) {
             console.log(error);
             return res.status(500).send(error);

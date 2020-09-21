@@ -18,6 +18,7 @@ async function loadProfileJS() {
             firebase.auth().signInWithCustomToken(res.toString()).then(function (user) {
                 localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
                 USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
+                profileListener();
                 loadUser(USER_IN_SESSION);
                 setCookie("SU_SY", res.toString(), 1);
             })
@@ -26,6 +27,7 @@ async function loadProfileJS() {
         firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {
             localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
             USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
+            profileListener();
             loadUser(USER_IN_SESSION);
         }).catch(reason => {
             console.log(reason);
@@ -37,12 +39,38 @@ async function loadProfileJS() {
 
 function profileListener()
 {
-    DB.collection("Tournaments").doc(firebase.auth().currentUser.uid)
-        .onSnapshot(function(snapshot) {
-            snapshot.forEach(function (doc) {
-            });
-            })
+    DB.collection("Users").doc(firebase.auth().currentUser.uid)
+        .onSnapshot(function(doc) {
+            let newUser= doc.data();
+            loadProfileForExistingUser(newUser)
+        })
 
+    DB.collection("UserAuthRequest").doc(firebase.auth().currentUser.uid)
+        .onSnapshot(function (doc)
+        {
+            let data = doc.data();
+            if(data == undefined)
+            {
+                //normal user
+                document.getElementById("req_pending").classList.add("d-none")
+                document.getElementById("requestTournament").classList.add("d-none")
+                document.getElementById("normal_user").classList.remove("d-none")
+            }
+            if(data.status == true)
+            {
+                //super user
+                document.getElementById("normal_user").classList.add("d-none")
+                document.getElementById("req_pending").classList.add("d-none")
+                document.getElementById("requestTournament").classList.remove("d-none")
+            }
+            else
+            {
+                //req pending user
+                document.getElementById("requestTournament").classList.add("d-none")
+                document.getElementById("normal_user").classList.add("d-none")
+                document.getElementById("req_pending").classList.remove("d-none")
+            }
+        })
 }
 
 //FIREBASE AUTHENTICATION FOR THE CURRENT USER ENDS *****************************************************************************
@@ -603,6 +631,3 @@ function changeRole() {
         });
     }
 }
-
-//  to hide the admin panel
-
