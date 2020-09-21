@@ -13,12 +13,6 @@ const DB= firebase.firestore();
 let USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
 let userInDB;
 
-let AUTH_ROLE = 1;
-// ROLE_USAGES
-// 1 -- normal user
-// 2 -- requested for super user, req pending
-// 3 -- super user
-
 function checkUser(user)
 {
     return fetch("/user?uid="+user.uid)
