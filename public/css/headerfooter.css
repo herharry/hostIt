@@ -21,7 +21,7 @@ html {
 }
 
 .custom {
-    cursor: context-menu;
+    cursor: default;
     background-color: var(--bg-color);
     line-height: 1.2;
     display: block;

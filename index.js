@@ -400,7 +400,7 @@ app.post('/createUser', (req, res) => {
                     mobileNo : u.mobileNo,
                     userName:    u.userName ,
                     userEmailID:u.userEmailID,
-                    walletAmount:u.walletAmount,
+                    walletAmount:0,
                     role:u.role,
                     profileImageURL:u.profileImageURL,
                     vpa:u.vpa,
