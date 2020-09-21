@@ -35,6 +35,16 @@ async function loadProfileJS() {
     }
 }
 
+function profileListener()
+{
+    DB.collection("Tournaments").doc(firebase.auth().currentUser.uid)
+        .onSnapshot(function(snapshot) {
+            snapshot.forEach(function (doc) {
+            });
+            })
+
+}
+
 //FIREBASE AUTHENTICATION FOR THE CURRENT USER ENDS *****************************************************************************
 //todo set all details
 
@@ -594,4 +604,5 @@ function changeRole() {
     }
 }
 
-// document.getElementById('editProfileName').classList.add("is-invalid");
+//  to hide the admin panel
+
