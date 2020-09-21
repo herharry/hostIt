@@ -18,6 +18,7 @@ async function loadProfileJS() {
             firebase.auth().signInWithCustomToken(res.toString()).then(function (user) {
                 localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
                 USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
+                profileListener();
                 loadUser(USER_IN_SESSION);
                 setCookie("SU_SY", res.toString(), 1);
             })
@@ -26,6 +27,7 @@ async function loadProfileJS() {
         firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {
             localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
             USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
+            profileListener();
             loadUser(USER_IN_SESSION);
         }).catch(reason => {
             console.log(reason);
@@ -33,6 +35,42 @@ async function loadProfileJS() {
             loadProfileJS();
         });
     }
+}
+
+function profileListener()
+{
+    DB.collection("Users").doc(firebase.auth().currentUser.uid)
+        .onSnapshot(function(doc) {
+            let newUser= doc.data();
+            loadProfileForExistingUser(newUser)
+        })
+
+    DB.collection("UserAuthRequest").doc(firebase.auth().currentUser.uid)
+        .onSnapshot(function (doc)
+        {
+            let data = doc.data();
+            if(data == undefined)
+            {
+                //normal user
+                document.getElementById("req_pending").classList.add("d-none")
+                document.getElementById("requestTournament").classList.add("d-none")
+                document.getElementById("normal_user").classList.remove("d-none")
+            }
+            else if(data.status == true)
+            {
+                //super user
+                document.getElementById("normal_user").classList.add("d-none")
+                document.getElementById("req_pending").classList.add("d-none")
+                document.getElementById("requestTournament").classList.remove("d-none")
+            }
+            else
+            {
+                //req pending user
+                document.getElementById("requestTournament").classList.add("d-none")
+                document.getElementById("normal_user").classList.add("d-none")
+                document.getElementById("req_pending").classList.remove("d-none")
+            }
+        })
 }
 
 //FIREBASE AUTHENTICATION FOR THE CURRENT USER ENDS *****************************************************************************
@@ -44,6 +82,9 @@ function loadProfileForNewUser(user) {
     setProfileImage(user.photoURL)
     setMobileNumber(user.phoneNumber)
     setEmail(user.email)
+    setBankDetails(user.bankDetail)
+    setUpiId(user.vpa)
+    setWalletAmt(user.walletAmount)
 }
 
 function renderForNewUser() {
@@ -54,11 +95,14 @@ function renderForNewUser() {
 }
 
 function loadProfileForExistingUser(user) {
-    console.log(firebase.auth().currentUser)
+    console.log(user)
     setProfileName(user.userName)
     setProfileImage(user.profileImageURL)
     setMobileNumber(user.mobileNo)
     setEmail(user.userEmailID)
+    setUpiId(user.vpa)
+    setBankDetails(user.bankDetail)
+    setWalletAmt(user.walletAmount)
 }
 
 loadUser = (user) => {
@@ -95,9 +139,9 @@ setProfileName = (name) => {
 }
 
 setProfileImage = (image) => {
-    if(image!=null){
+    if (image != null) {
         document.getElementById("profileImage").setAttribute("src", image)
-    }else{
+    } else {
         document.getElementById("imgup").classList.add("d-none");
     }
 }
@@ -116,21 +160,24 @@ setEmail = (email) => {
     document.getElementById("editEmail").setAttribute("value", email);
 }
 
-setAccountNo = (number) => {
-    if (number != null) {
-        document.getElementById("editAccountNo").setAttribute("value", number);
+setWalletAmt = (amt) => {
+    document.getElementById("winnings").setAttribute("value", amt);
+}
+
+
+
+setBankDetails = (bankDetail) => {
+    if ((bankDetail.accountNo != null) && (bankDetail.ifsc != null) && (bankDetail.accountName != null)) {
+        document.getElementById("editAccountNo").setAttribute("value", bankDetail.accountNo);
+        document.getElementById("editIfsc").setAttribute("value", bankDetail.ifsc);
+        document.getElementById("editAccountName").setAttribute("value", bankDetail.accountName);
     }
 }
-setIfsc = (number) => {
-    if (number != null) {
-        document.getElementById("mobileNumber").innerHTML = number;
-        document.getElementById("editMobileNumber").setAttribute("value", number);
-    }
-}
+
+
 setUpiId = (number) => {
     if (number) {
-        document.getElementById("mobileNumber").innerHTML = number;
-        document.getElementById("editMobileNumber").setAttribute("value", number);
+        document.getElementById("editUpiID").setAttribute("value", number);
     }
 }
 
@@ -372,10 +419,11 @@ document.getElementById("otpVerify").addEventListener('click', () => {
         OTP = document.getElementById("otp").value;
     }
 });
+var flagr = 1;
 
 /*      SHOW UPLOADED IMAGE        */
 function readURL(input) {
-    if (input.files && input.files[0]) {
+    if (input.files[0]) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
@@ -384,7 +432,10 @@ function readURL(input) {
         };
 
         reader.readAsDataURL(input.files[0]);
-        storeImage(input.files[0])
+        if (flagr) {
+            storeImage(input.files[0])
+        }
+        flagr = 0;
     }
 }
 
@@ -419,10 +470,10 @@ function storeImage(img) {
 
         uploadTask.on('state_changed', function (snapshot) {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            $("#uploadProgress")
+            $("#dynamic")
                 .css("width", progress + "%")
                 .attr("aria-valuenow", progress)
-                .text(progress + "% Complete");
+                .text(Math.floor(progress) + "% Complete");
 
             // console.log('Upload is ' + progress + '% done');
         }, function (error) {
@@ -458,7 +509,7 @@ function storeImage(img) {
                 if (res == "success") {
                     // console.log("image updated in db")
                     document.getElementById("uploadProgress").classList.add('d-none');
-                    $("#uploadProgress")
+                    $("#dynamic")
                         .css("width", 0 + "%")
                         .attr("aria-valuenow", 0)
                         .text(0 + "% Complete");
@@ -466,6 +517,8 @@ function storeImage(img) {
                         message: "profile pic updated successfully",
                         position: 'topLeft'
                     });
+                    flagr = 1;
+
                     setProfileImage(url)
                 }
             });
@@ -593,5 +646,3 @@ function changeRole() {
         });
     }
 }
-
-// document.getElementById('editProfileName').classList.add("is-invalid");

@@ -154,7 +154,9 @@ function joinConfirm() {
         if(registeredTournament[i] == urlParams.tid)
         {
             //todo create a new modal for displaying already registered and copy line 113 and 114 to set the attribute of the modal
-            alert("already registered!!")
+            iziToast.warning({
+                message:"already registered"
+            });
             return;
         }
     }
