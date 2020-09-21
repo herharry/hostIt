@@ -17,6 +17,10 @@
     background: linear-gradient(to right, #5B86E5, #36D1DC);
 }
 
+.tournamentSection{
+    background-color: var(--main-bg-color);
+}
+
 .card {
     max-width: 400px;
     font-size: medium;
