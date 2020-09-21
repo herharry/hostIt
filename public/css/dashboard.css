@@ -1,6 +1,8 @@
 @import url("headerfooter.css");
 
-
+#overlay{
+    opacity: 1;
+}
 .carousel {
     background: #2f4357;
 }
