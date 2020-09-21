@@ -419,10 +419,10 @@ document.getElementById("otpVerify").addEventListener('click', () => {
         OTP = document.getElementById("otp").value;
     }
 });
+var flagr = 1;
 
 /*      SHOW UPLOADED IMAGE        */
 function readURL(input) {
-    var flag = 1;
     if (input.files[0]) {
         var reader = new FileReader();
 
@@ -432,11 +432,10 @@ function readURL(input) {
         };
 
         reader.readAsDataURL(input.files[0]);
-        if (flag) {
+        if (flagr) {
             storeImage(input.files[0])
         }
-        flag = 0;
-
+        flagr = 0;
     }
 }
 
@@ -471,10 +470,10 @@ function storeImage(img) {
 
         uploadTask.on('state_changed', function (snapshot) {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            $("#uploadProgress")
+            $("#dynamic")
                 .css("width", progress + "%")
                 .attr("aria-valuenow", progress)
-                .text(progress + "% Complete");
+                .text(Math.floor(progress) + "% Complete");
 
             // console.log('Upload is ' + progress + '% done');
         }, function (error) {
@@ -510,7 +509,7 @@ function storeImage(img) {
                 if (res == "success") {
                     // console.log("image updated in db")
                     document.getElementById("uploadProgress").classList.add('d-none');
-                    $("#uploadProgress")
+                    $("#dynamic")
                         .css("width", 0 + "%")
                         .attr("aria-valuenow", 0)
                         .text(0 + "% Complete");
@@ -518,6 +517,8 @@ function storeImage(img) {
                         message: "profile pic updated successfully",
                         position: 'topLeft'
                     });
+                    flagr = 1;
+
                     setProfileImage(url)
                 }
             });
