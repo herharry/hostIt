@@ -1,5 +1,8 @@
 let API;
 let PHONE_VERIFICATION_FLAG = false;
+let applicationVerifier = new firebase.auth.RecaptchaVerifier('button-addon2', {
+    'size': 'invisible'
+});
 // FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
 
 async function loadProfileJS() {
@@ -16,19 +19,13 @@ async function loadProfileJS() {
             }),
         }).then(res => res.text()).then(function (res) {
             firebase.auth().signInWithCustomToken(res.toString()).then(function (user) {
-                localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
-                USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
-                profileListener();
-                loadUser(USER_IN_SESSION);
                 setCookie("SU_SY", res.toString(), 1);
+                profileListener();
             })
         });
     } else {
         firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {
-            localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
-            USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
             profileListener();
-            loadUser(USER_IN_SESSION);
         }).catch(reason => {
             console.log(reason);
             delete_cookie("SU_SY");
@@ -42,7 +39,20 @@ function profileListener()
     DB.collection("Users").doc(firebase.auth().currentUser.uid)
         .onSnapshot(function(doc) {
             let newUser= doc.data();
-            loadProfileForExistingUser(newUser)
+             if(newUser == undefined)
+             {
+                 API = "CREATE_API";
+                 localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
+                 USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
+                 loadProfileForNewUser(USER_IN_SESSION);
+             }
+             else
+             {
+                 API = "UPDATE_API";
+                 userInDB = newUser;
+                 loadProfileForExistingUser(newUser)
+             }
+
         })
 
     DB.collection("UserAuthRequest").doc(firebase.auth().currentUser.uid)
@@ -77,6 +87,7 @@ function profileListener()
 //todo set all details
 
 function loadProfileForNewUser(user) {
+    console.log("firebase auth sesssion",user)
     renderForNewUser();
     setProfileName(user.displayName)
     setProfileImage(user.photoURL)
@@ -95,7 +106,7 @@ function renderForNewUser() {
 }
 
 function loadProfileForExistingUser(user) {
-    console.log(user)
+    console.log("db Details",user)
     setProfileName(user.userName)
     setProfileImage(user.profileImageURL)
     setMobileNumber(user.mobileNo)
@@ -103,29 +114,6 @@ function loadProfileForExistingUser(user) {
     setUpiId(user.vpa)
     setBankDetails(user.bankDetail)
     setWalletAmt(user.walletAmount)
-}
-
-loadUser = (user) => {
-    fetch("/user?uid=" + user.uid)
-        .then(res => res.json())
-        .then(function (res) {
-            console.log("hey")
-            console.log(res)
-            if (res.val === "false") {
-                console.log("in")
-                API = "CREATE_API"
-                loadProfileForNewUser(user);
-            } else {
-                console.log(res.val)
-                userInDB = res.val;
-                API = "UPDATE_API"
-                let userInSession = res.val;
-                userInSession.uid = user.uid;
-                localStorage.setItem("userInfo", JSON.stringify(res.val))
-                loadProfileForExistingUser(res.val);
-            }
-        })
-        .catch(err => err);
 }
 
 getElementValue = (id) => {
@@ -152,6 +140,24 @@ setMobileNumber = (number) => {
         console.log(number)
         document.getElementById("mobileNumber").innerHTML = number;
         document.getElementById("editMobileNumber").setAttribute("value", number);
+        verifyOrVerified("+91"+number);
+    }
+}
+
+function verifyOrVerified(num)
+{
+    let verifyButton =document.getElementById("button-addon2");
+    if(num == firebase.auth().currentUser.phoneNumber)
+    {
+        verifyButton.innerHTML="verified!";
+        verifyButton.disabled = true;
+        PHONE_VERIFICATION_FLAG =true;
+    }
+    else
+    {
+        verifyButton.innerHTML="verify";
+        verifyButton.disabled = false;
+        PHONE_VERIFICATION_FLAG = false;
     }
 }
 
@@ -161,7 +167,8 @@ setEmail = (email) => {
 }
 
 setWalletAmt = (amt) => {
-    document.getElementById("winnings").setAttribute("value", amt);
+    console.log("heyo")
+    document.getElementById("winnings").innerHTML =  amt;
 }
 
 
@@ -240,6 +247,11 @@ ValidateProfile = () => {
 }
 
 function isNumberKey(evt) {
+    let num = "+91"+document.getElementById("editMobileNumber").value+String.fromCharCode(evt.keyCode);
+    if(num.length<14 || evt.keyCode == 8)
+    {
+        verifyOrVerified(num);
+    }
     var charCode = (evt.which) ? evt.which : evt.keyCode;
     if (charCode != 46 && charCode > 31 &&
         (charCode < 48 || charCode > 57))
@@ -281,8 +293,8 @@ function createUserInCollection() {
             let user = {};
             user.uid = USER_IN_SESSION.uid;
             user.userName = getElementValue("editProfileName");
-            user.userEmailID = getElementValue("editEmail");;
-            user.walletAmount = 0;
+            user.userEmailID = getElementValue("editEmail");
+            user.walletAmount = getElementValue("winnings");;
             user.role = 0;
             user.profileImageURL = document.getElementById("profileImage").getAttribute("src");
             user.mobileNo = getElementValue("editMobileNumber");
@@ -370,10 +382,6 @@ function phoneChecker() {
 }
 
 function verifyPhoneNumber(phone) {
-
-    var applicationVerifier = new firebase.auth.RecaptchaVerifier('button-addon2', {
-        'size': 'invisible'
-    });
     firebase.auth().currentUser.linkWithPhoneNumber(phone, applicationVerifier).then(function (confirmationResult) {
         $("#modalRegisterForm").modal('show');
         iziToast.success({
@@ -383,6 +391,7 @@ function verifyPhoneNumber(phone) {
         getOTP().then(function (otp) {
             return confirmationResult.confirm(otp.toString()).then(() => {
                 PHONE_VERIFICATION_FLAG = true;
+                verifyOrVerified(phone)
                 $("#modalRegisterForm").modal('toggle');
                 iziToast.success({
                     message: "number verified successfully",
@@ -390,6 +399,8 @@ function verifyPhoneNumber(phone) {
                 });
             });
         })
+    }).then(()=>{
+        applicationVerifier.clear();
     }).catch(function (error) {
         $("#modalRegisterForm").modal('toggle');
         iziToast.error({
