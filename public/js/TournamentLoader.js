@@ -38,7 +38,6 @@ async function loadTournamentJS() {
 }
 
 function tournamentListener() {
-    $("#overlay").fadeOut('slow');
     DB.collection("Tournaments").where("isFinished", "==", false)
         .onSnapshot(function (snapshot) {
             snapshot.forEach(function (doc) {
@@ -161,6 +160,8 @@ function loadTournamentInNewCard(tournament, ids) {
         cardBody.appendChild(button);
     }
     cardParent.appendChild(card);
+    $("#overlay").fadeOut('slow');
+
 }
 
 
