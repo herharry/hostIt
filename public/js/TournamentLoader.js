@@ -76,7 +76,7 @@ function loadTournamentInNewCard(tournament, ids) {
     console.log(tournament)
     const cardParent = document.getElementById(ids)
     let card = document.createElement("div");
-    card.className = "card p-0 bg-dark my-2 mx-2 col-12 col-lg-6";
+    card.className = "card col-12 col-lg-6 p-0 my-2 px-1";
     card.id = ids + "CARD" + tournament.id;
     // let img = document.createElement("img");
     // img.src = getGameImage(tournaments[i].gameID)
@@ -87,7 +87,7 @@ function loadTournamentInNewCard(tournament, ids) {
     tournamentNames.className = "card-title text-upper";
     tournamentNames.innerText = tournament.name;
     let cardBody = document.createElement("div");
-    cardBody.className = "card-body container-fluid py-2";
+    cardBody.className = "card-body  bg-dark rounded-lg py-2";
     let cardBottom = document.createElement("div");
     cardBottom.className = "row mb-2 border-bottom";
     let tournamentprize = document.createElement("div");
@@ -153,7 +153,8 @@ function loadTournamentInNewCard(tournament, ids) {
 
     if (ids != "myTournamentCards") {
         let button = document.createElement("a");
-        button.className = "btn btn-primary px-4 py-1 mt-3 mx-3 float-right";
+        button.className = "btn btn-sm btn-primary px-4 py-1 mt-3 mx-3 float-right";
+        (percent==100)? button.classList.add("active"):button.classList.add("btn-primary") 
         button.text = "Join"
         button.id = tournament.id;
         button.setAttribute("onClick", "loadSpecificTournament(this.id)");

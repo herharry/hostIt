@@ -9,7 +9,8 @@
 
 .carousel-item {
     text-align: center;
-    max-height: 250px;
+    max-height: 350px;
+    object-fit: cover;
     /* Prevent carousel from being distorted if for some reason image doesn't load */
 }
 
@@ -24,8 +25,8 @@
 }
 
 .card {
-    max-width: 400px;
     font-size: medium;
+    background-color: var(--main-bg-color);
 }
 .text-small{
     font-size:smaller;
