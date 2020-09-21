@@ -56,7 +56,7 @@ function profileListener()
                 document.getElementById("requestTournament").classList.add("d-none")
                 document.getElementById("normal_user").classList.remove("d-none")
             }
-            if(data.status == true)
+            else if(data.status == true)
             {
                 //super user
                 document.getElementById("normal_user").classList.add("d-none")
