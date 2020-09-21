@@ -1,5 +1,8 @@
 let API;
 let PHONE_VERIFICATION_FLAG = false;
+let applicationVerifier = new firebase.auth.RecaptchaVerifier('button-addon2', {
+    'size': 'invisible'
+});
 // FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
 
 async function loadProfileJS() {
@@ -16,19 +19,13 @@ async function loadProfileJS() {
             }),
         }).then(res => res.text()).then(function (res) {
             firebase.auth().signInWithCustomToken(res.toString()).then(function (user) {
-                localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
-                USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
-                profileListener();
-                loadUser(USER_IN_SESSION);
                 setCookie("SU_SY", res.toString(), 1);
+                profileListener();
             })
         });
     } else {
         firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {
-            localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
-            USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
             profileListener();
-            loadUser(USER_IN_SESSION);
         }).catch(reason => {
             console.log(reason);
             delete_cookie("SU_SY");
@@ -42,7 +39,20 @@ function profileListener()
     DB.collection("Users").doc(firebase.auth().currentUser.uid)
         .onSnapshot(function(doc) {
             let newUser= doc.data();
-            loadProfileForExistingUser(newUser)
+             if(newUser == undefined)
+             {
+                 API = "CREATE_API";
+                 localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
+                 USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
+                 loadProfileForNewUser(USER_IN_SESSION);
+             }
+             else
+             {
+                 API = "UPDATE_API";
+                 userInDB = newUser;
+                 loadProfileForExistingUser(newUser)
+             }
+
         })
 
     DB.collection("UserAuthRequest").doc(firebase.auth().currentUser.uid)
@@ -77,11 +87,15 @@ function profileListener()
 //todo set all details
 
 function loadProfileForNewUser(user) {
+    console.log("firebase auth sesssion",user)
     renderForNewUser();
     setProfileName(user.displayName)
     setProfileImage(user.photoURL)
     setMobileNumber(user.phoneNumber)
     setEmail(user.email)
+    setBankDetails(user.bankDetail)
+    setUpiId(user.vpa)
+    setWalletAmt(user.walletAmount)
 }
 
 function renderForNewUser() {
@@ -92,34 +106,14 @@ function renderForNewUser() {
 }
 
 function loadProfileForExistingUser(user) {
-    console.log(firebase.auth().currentUser)
+    console.log("db Details",user)
     setProfileName(user.userName)
     setProfileImage(user.profileImageURL)
     setMobileNumber(user.mobileNo)
     setEmail(user.userEmailID)
-}
-
-loadUser = (user) => {
-    fetch("/user?uid=" + user.uid)
-        .then(res => res.json())
-        .then(function (res) {
-            console.log("hey")
-            console.log(res)
-            if (res.val === "false") {
-                console.log("in")
-                API = "CREATE_API"
-                loadProfileForNewUser(user);
-            } else {
-                console.log(res.val)
-                userInDB = res.val;
-                API = "UPDATE_API"
-                let userInSession = res.val;
-                userInSession.uid = user.uid;
-                localStorage.setItem("userInfo", JSON.stringify(res.val))
-                loadProfileForExistingUser(res.val);
-            }
-        })
-        .catch(err => err);
+    setUpiId(user.vpa)
+    setBankDetails(user.bankDetail)
+    setWalletAmt(user.walletAmount)
 }
 
 getElementValue = (id) => {
@@ -133,9 +127,9 @@ setProfileName = (name) => {
 }
 
 setProfileImage = (image) => {
-    if(image!=null){
+    if (image != null) {
         document.getElementById("profileImage").setAttribute("src", image)
-    }else{
+    } else {
         document.getElementById("imgup").classList.add("d-none");
     }
 }
@@ -146,6 +140,24 @@ setMobileNumber = (number) => {
         console.log(number)
         document.getElementById("mobileNumber").innerHTML = number;
         document.getElementById("editMobileNumber").setAttribute("value", number);
+        verifyOrVerified("+91"+number);
+    }
+}
+
+function verifyOrVerified(num)
+{
+    let verifyButton =document.getElementById("button-addon2");
+    if(num == firebase.auth().currentUser.phoneNumber)
+    {
+        verifyButton.innerHTML="verified!";
+        verifyButton.disabled = true;
+        PHONE_VERIFICATION_FLAG =true;
+    }
+    else
+    {
+        verifyButton.innerHTML="verify";
+        verifyButton.disabled = false;
+        PHONE_VERIFICATION_FLAG = false;
     }
 }
 
@@ -154,21 +166,25 @@ setEmail = (email) => {
     document.getElementById("editEmail").setAttribute("value", email);
 }
 
-setAccountNo = (number) => {
-    if (number != null) {
-        document.getElementById("editAccountNo").setAttribute("value", number);
+setWalletAmt = (amt) => {
+    console.log("heyo")
+    document.getElementById("winnings").innerHTML =  amt;
+}
+
+
+
+setBankDetails = (bankDetail) => {
+    if ((bankDetail.accountNo != null) && (bankDetail.ifsc != null) && (bankDetail.accountName != null)) {
+        document.getElementById("editAccountNo").setAttribute("value", bankDetail.accountNo);
+        document.getElementById("editIfsc").setAttribute("value", bankDetail.ifsc);
+        document.getElementById("editAccountName").setAttribute("value", bankDetail.accountName);
     }
 }
-setIfsc = (number) => {
-    if (number != null) {
-        document.getElementById("mobileNumber").innerHTML = number;
-        document.getElementById("editMobileNumber").setAttribute("value", number);
-    }
-}
+
+
 setUpiId = (number) => {
     if (number) {
-        document.getElementById("mobileNumber").innerHTML = number;
-        document.getElementById("editMobileNumber").setAttribute("value", number);
+        document.getElementById("editUpiID").setAttribute("value", number);
     }
 }
 
@@ -231,6 +247,11 @@ ValidateProfile = () => {
 }
 
 function isNumberKey(evt) {
+    let num = "+91"+document.getElementById("editMobileNumber").value+String.fromCharCode(evt.keyCode);
+    if(num.length<14 || evt.keyCode == 8)
+    {
+        verifyOrVerified(num);
+    }
     var charCode = (evt.which) ? evt.which : evt.keyCode;
     if (charCode != 46 && charCode > 31 &&
         (charCode < 48 || charCode > 57))
@@ -272,8 +293,8 @@ function createUserInCollection() {
             let user = {};
             user.uid = USER_IN_SESSION.uid;
             user.userName = getElementValue("editProfileName");
-            user.userEmailID = getElementValue("editEmail");;
-            user.walletAmount = 0;
+            user.userEmailID = getElementValue("editEmail");
+            user.walletAmount = getElementValue("winnings");;
             user.role = 0;
             user.profileImageURL = document.getElementById("profileImage").getAttribute("src");
             user.mobileNo = getElementValue("editMobileNumber");
@@ -361,10 +382,6 @@ function phoneChecker() {
 }
 
 function verifyPhoneNumber(phone) {
-
-    var applicationVerifier = new firebase.auth.RecaptchaVerifier('button-addon2', {
-        'size': 'invisible'
-    });
     firebase.auth().currentUser.linkWithPhoneNumber(phone, applicationVerifier).then(function (confirmationResult) {
         $("#modalRegisterForm").modal('show');
         iziToast.success({
@@ -374,6 +391,7 @@ function verifyPhoneNumber(phone) {
         getOTP().then(function (otp) {
             return confirmationResult.confirm(otp.toString()).then(() => {
                 PHONE_VERIFICATION_FLAG = true;
+                verifyOrVerified(phone)
                 $("#modalRegisterForm").modal('toggle');
                 iziToast.success({
                     message: "number verified successfully",
@@ -381,6 +399,8 @@ function verifyPhoneNumber(phone) {
                 });
             });
         })
+    }).then(()=>{
+        applicationVerifier.clear();
     }).catch(function (error) {
         $("#modalRegisterForm").modal('toggle');
         iziToast.error({
@@ -410,10 +430,11 @@ document.getElementById("otpVerify").addEventListener('click', () => {
         OTP = document.getElementById("otp").value;
     }
 });
+var flagr = 1;
 
 /*      SHOW UPLOADED IMAGE        */
 function readURL(input) {
-    if (input.files && input.files[0]) {
+    if (input.files[0]) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
@@ -422,7 +443,10 @@ function readURL(input) {
         };
 
         reader.readAsDataURL(input.files[0]);
-        storeImage(input.files[0])
+        if (flagr) {
+            storeImage(input.files[0])
+        }
+        flagr = 0;
     }
 }
 
@@ -457,10 +481,10 @@ function storeImage(img) {
 
         uploadTask.on('state_changed', function (snapshot) {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            $("#uploadProgress")
+            $("#dynamic")
                 .css("width", progress + "%")
                 .attr("aria-valuenow", progress)
-                .text(progress + "% Complete");
+                .text(Math.floor(progress) + "% Complete");
 
             // console.log('Upload is ' + progress + '% done');
         }, function (error) {
@@ -496,7 +520,7 @@ function storeImage(img) {
                 if (res == "success") {
                     // console.log("image updated in db")
                     document.getElementById("uploadProgress").classList.add('d-none');
-                    $("#uploadProgress")
+                    $("#dynamic")
                         .css("width", 0 + "%")
                         .attr("aria-valuenow", 0)
                         .text(0 + "% Complete");
@@ -504,6 +528,8 @@ function storeImage(img) {
                         message: "profile pic updated successfully",
                         position: 'topLeft'
                     });
+                    flagr = 1;
+
                     setProfileImage(url)
                 }
             });

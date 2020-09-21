@@ -1,8 +1,7 @@
 // FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
-async function loadTournamentJS()
-{
+async function loadTournamentJS() {
     let uid = USER_IN_SESSION.uid;
-    await fetch("/user?uid="+uid)
+    await fetch("/user?uid=" + uid)
         .then(res => res.json())
         .then(function (res) {
             if (res.val != "false") {
@@ -10,27 +9,24 @@ async function loadTournamentJS()
             }
         });
 
-    if(getCookie("SU_SY") == "")
-    {
+    if (getCookie("SU_SY") == "") {
         await fetch("/createToken", {
             method: "POST",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({uid}),
-        }).then(res => res.text()).then(function(res){
-            firebase.auth().signInWithCustomToken(res.toString()).then(function (user)
-            {
-                setCookie("SU_SY",res.toString(),1);
+            body: JSON.stringify({
+                uid
+            }),
+        }).then(res => res.text()).then(function (res) {
+            firebase.auth().signInWithCustomToken(res.toString()).then(function (user) {
+                setCookie("SU_SY", res.toString(), 1);
                 tournamentListener();
             })
         });
-    }
-    else
-    {
-        firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user)
-        {
+    } else {
+        firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {
             console.log("hey")
             tournamentListener();
         }).catch(reason => {
@@ -41,38 +37,30 @@ async function loadTournamentJS()
     }
 }
 
-function tournamentListener()
-{
-    DB.collection("Tournaments").where("isFinished","==",false)
-        .onSnapshot(function(snapshot) {
-            snapshot.forEach(function (doc)
-            {
-                let tournament={};
+function tournamentListener() {
+    DB.collection("Tournaments").where("isFinished", "==", false)
+        .onSnapshot(function (snapshot) {
+            snapshot.forEach(function (doc) {
+                let tournament = {};
                 tournament = doc.data();
                 tournament.id = doc.id;
                 console.log(tournament.id)
-                let flag = document.getElementById("tournamentCards"+"CARD"+tournament.id);
-                if(typeof(flag) != 'undefined' && flag!=null)
-                {
-                    loadTournamentInExistingCard(tournament,"tournamentCards");
-                }
-                else {
-                    loadTournamentInNewCard(tournament,"tournamentCards")
+                let flag = document.getElementById("tournamentCards" + "CARD" + tournament.id);
+                if (typeof (flag) != 'undefined' && flag != null) {
+                    loadTournamentInExistingCard(tournament, "tournamentCards");
+                } else {
+                    loadTournamentInNewCard(tournament, "tournamentCards")
                 }
                 let myTournaments = userInDB.tournamentIds;
 
-                for(let i=0;i<myTournaments.length;i++)
-                {
+                for (let i = 0; i < myTournaments.length; i++) {
                     console.log(myTournaments[i])
-                    if (tournament.id == myTournaments[i])
-                    {
-                        let flag = document.getElementById("myTournamentCards"+"CARD"+tournament.id);
-                        if(typeof(flag) != 'undefined' && flag!=null)
-                        {
-                            loadTournamentInExistingCard(tournament,"myTournamentCards");
-                        }
-                        else {
-                            loadTournamentInNewCard(tournament,"myTournamentCards")
+                    if (tournament.id == myTournaments[i]) {
+                        let flag = document.getElementById("myTournamentCards" + "CARD" + tournament.id);
+                        if (typeof (flag) != 'undefined' && flag != null) {
+                            loadTournamentInExistingCard(tournament, "myTournamentCards");
+                        } else {
+                            loadTournamentInNewCard(tournament, "myTournamentCards")
                         }
 
                     }
@@ -84,107 +72,130 @@ function tournamentListener()
 //FIREBASE AUTHENTICATION FOR THE CURRENT USER ENDS *****************************************************************************
 
 
-function loadTournamentInNewCard(tournament,ids) {
+function loadTournamentInNewCard(tournament, ids) {
     console.log(tournament)
     const cardParent = document.getElementById(ids)
-        let card = document.createElement("div");
-        card.className = "card p-0 bg-dark my-2 mx-2 col-12 col-lg-6";
-        card.id=ids+"CARD"+tournament.id;
-        // let img = document.createElement("img");
-        // img.src = getGameImage(tournaments[i].gameID)
-        // img.className = "card-img-top";
-        // img.alt = "";
-        let tournamentNames = document.createElement("h3");
-        tournamentNames.id = ids+"NAMES"+tournament.id;
-        tournamentNames.className = "card-title text-upper";
-        tournamentNames.innerText = tournament.name;
-        let cardBody = document.createElement("div");
-        cardBody.className = "card-body container-fluid py-2";
-        let cardBottom = document.createElement("div");
-        cardBottom.className = "row mb-2 border-bottom";
-        let tournamentName = document.createElement("div");
-        tournamentName.id = ids+"NAME"+tournament.id;
-        tournamentName.className = "col-3 p-1 border-right";
-        tournamentName.innerText = tournament.name;
-        let amount = document.createElement("div");
-        amount.id = ids+"AMOUNT"+tournament.id;
-        amount.className = "col-2 text-center p-1 border-right";
-        amount.innerText = tournament.amount;
-        let time = document.createElement("div");
-        time.id = ids+"TIME"+tournament.id;
-        time.className = "col-5 p-1 border-right";
-        let timestamp = tournament.time._seconds * 1000;
-        let tournamentTime = new Date(timestamp).toLocaleTimeString();
-        let tournamentDate = new Date(timestamp).toDateString();
-        time.innerHTML = tournamentDate + "\n" + tournamentTime;
-        let players = document.createElement("div");
-        players.id = ids+"PLAYERS"+tournament.id;
-        players.className = "col-2 text-center p-1";
-        players.innerHTML = (tournament.totalSeats - tournament.vacantSeats) + "/" + tournament.totalSeats;
-        let progress = document.createElement("div");
-        progress.className = "progress mt-4";
-        let progressBar = document.createElement("div");
-        progressBar.id = ids+"PROGRESS_BAR"+tournament.id;
-        progressBar.className = "progress-bar bg-dark progress-gradient";
-        progressBar.setAttribute("role","progressbar");
-        let percent = ((tournament.totalSeats-tournament.vacantSeats) / tournament.totalSeats)*100;
-        progressBar.setAttribute("style","width :" +percent+"%");
-        progressBar.setAttribute("role","progressbar");
-        progressBar.innerHTML = percent+"% full";
-        let remainig = document.createElement("p");
-        remainig.id = ids+"REMAINING"+tournament.id;
-        remainig.className ="float-left text-small"
-        remainig.innerHTML = tournament.vacantSeats+" remaining";
+    let card = document.createElement("div");
+    card.className = "card p-0 bg-dark my-2 mx-2 col-12 col-lg-6";
+    card.id = ids + "CARD" + tournament.id;
+    // let img = document.createElement("img");
+    // img.src = getGameImage(tournaments[i].gameID)
+    // img.className = "card-img-top";
+    // img.alt = "";
+    let tournamentNames = document.createElement("h3");
+    tournamentNames.id = ids + "NAMES" + tournament.id;
+    tournamentNames.className = "card-title text-upper";
+    tournamentNames.innerText = tournament.name;
+    let cardBody = document.createElement("div");
+    cardBody.className = "card-body container-fluid py-2";
+    let cardBottom = document.createElement("div");
+    cardBottom.className = "row mb-2 border-bottom";
+    let tournamentprize = document.createElement("div");
+    tournamentprize.id = ids + "NAME" + tournament.id;
+    tournamentprize.className = "col-3 p-1 text-center";
+    var total = 0;
+    tournament.prizePool.forEach(element => {
+        total += element;
+    });
+    tournamentprize.innerText = "prize pool" + '\n' + total;
+    let amount = document.createElement("div");
+    amount.id = ids + "AMOUNT " + tournament.id;
+    amount.className = "col-3 text-center p-1 border-right";
+    amount.innerText = "Amount " + '\n' + tournament.amount;
+    let time = document.createElement("div");
+    time.id = ids + "TIME" + tournament.id;
+    time.className = "col-4 p-1 border-right";
+    let timestamp = tournament.time.seconds * 1000;
+    let tournamentDate = new Date(timestamp).toLocaleString(undefined, {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric'
+
+    })
+    let tournamentTime = new Date(timestamp).toLocaleTimeString(undefined, {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    time.innerHTML = tournamentDate + "<br>" + tournamentTime;
+    let players = document.createElement("div");
+    players.id = ids + "PLAYERS" + tournament.id;
+    players.className = "col-2 text-center border-right p-1";
+    players.innerHTML = "seats <br>" + (tournament.totalSeats - tournament.vacantSeats) + "/" + tournament.totalSeats;
+    let progress = document.createElement("div");
+    progress.className = "progress mt-4";
+    let progressBar = document.createElement("div");
+    progressBar.id = ids + "PROGRESS_BAR" + tournament.id;
+    progressBar.className = "progress-bar bg-dark progress-gradient";
+    progressBar.setAttribute("role", "progressbar");
+    let percent = ((tournament.totalSeats - tournament.vacantSeats) / tournament.totalSeats) * 100;
+    progressBar.setAttribute("style", "width :" + percent + "%");
+    progressBar.setAttribute("role", "progressbar");
+    progressBar.innerHTML = percent + "% full";
+    let remainig = document.createElement("p");
+    remainig.id = ids + "REMAINING" + tournament.id;
+    remainig.className = "float-left text-small"
+    remainig.innerHTML = tournament.vacantSeats + " remaining";
 
 
 
-        // card.appendChild(img);
-        card.appendChild(cardBody);
-        cardBody.appendChild(tournamentNames);
-        cardBody.appendChild(cardBottom);
-        cardBottom.appendChild(tournamentName);
-        cardBottom.appendChild(amount);
-        cardBottom.appendChild(time);
-        cardBottom.appendChild(players);
-        progress.appendChild(progressBar);
+    // card.appendChild(img);
+    card.appendChild(cardBody);
+    cardBody.appendChild(tournamentNames);
+    cardBody.appendChild(cardBottom);
+    cardBottom.appendChild(amount);
+    cardBottom.appendChild(time);
+    cardBottom.appendChild(players);
+    cardBottom.appendChild(tournamentprize);
+    progress.appendChild(progressBar);
 
-        cardBody.appendChild(progress);
-        cardBody.appendChild(remainig);
+    cardBody.appendChild(progress);
+    cardBody.appendChild(remainig);
 
-    if(ids != "myTournamentCards")
-    {
+    if (ids != "myTournamentCards") {
         let button = document.createElement("a");
         button.className = "btn btn-primary px-4 py-1 mt-3 mx-3 float-right";
         button.text = "Join"
         button.id = tournament.id;
-        button.setAttribute("onClick","loadSpecificTournament(this.id)");
+        button.setAttribute("onClick", "loadSpecificTournament(this.id)");
         cardBody.appendChild(button);
     }
-        cardParent.appendChild(card);
+    cardParent.appendChild(card);
 }
 
 
-function loadTournamentInExistingCard(tournament,ids) {
+function loadTournamentInExistingCard(tournament, ids) {
 
-    let tournamentNames = document.getElementById(ids+"NAMES"+tournament.id);
+    let tournamentNames = document.getElementById(ids + "NAMES" + tournament.id);
     tournamentNames.innerText = tournament.name;
-    let tournamentName = document.getElementById(ids+"NAME"+tournament.id);
-    tournamentName.innerText = tournament.name;
-    let amount = document.getElementById(ids+"AMOUNT"+tournament.id);
+    let tournamentprize = document.getElementById(ids + "NAME" + tournament.id);
+    var total = 0;
+    tournament.prizePool.forEach(element => {
+        total += element;
+    });
+    tournamentprize.innerText = "prize pool" + '\n' + total;
+    let amount = document.getElementById(ids + "AMOUNT" + tournament.id);
     amount.innerText = tournament.amount;
-    let time = document.getElementById(ids+"TIME"+tournament.id);
-    let timestamp = tournament.time._seconds * 1000;
-    let tournamentTime = new Date(timestamp).toLocaleTimeString();
-    let tournamentDate = new Date(timestamp).toDateString();
-    time.innerHTML = tournamentDate + "\n" + tournamentTime;
-    let players = document.getElementById(ids+"PLAYERS"+tournament.id);
+    let time = document.getElementById(ids + "TIME" + tournament.id);
+    let timestamp = tournament.time.seconds * 1000;
+    let tournamentDate = new Date(timestamp).toLocaleString(undefined, {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric'
+
+    })
+    let tournamentTime = new Date(timestamp).toLocaleTimeString(undefined, {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    time.innerHTML = tournamentDate + "<br>" + tournamentTime;
+    let players = document.getElementById(ids + "PLAYERS" + tournament.id);
     players.innerHTML = (tournament.totalSeats - tournament.vacantSeats) + "/" + tournament.totalSeats;
-    let progressBar = document.getElementById(ids+"PROGRESS_BAR"+tournament.id);
-    let percent = ((tournament.totalSeats-tournament.vacantSeats) / tournament.totalSeats)*100;
-    progressBar.setAttribute("style","width :" +percent+"%");
-    progressBar.innerHTML = percent+"% full";
-    let remainig = document.getElementById(ids+"REMAINING"+tournament.id);
-    remainig.innerHTML = tournament.vacantSeats+" remaining";
+    let progressBar = document.getElementById(ids + "PROGRESS_BAR" + tournament.id);
+    let percent = ((tournament.totalSeats - tournament.vacantSeats) / tournament.totalSeats) * 100;
+    progressBar.setAttribute("style", "width :" + percent + "%");
+    progressBar.innerHTML = percent + "% full";
+    let remainig = document.getElementById(ids + "REMAINING" + tournament.id);
+    remainig.innerHTML = tournament.vacantSeats + " remaining";
 }
 
 
@@ -196,10 +207,9 @@ function formatResponse(res) {
     return ta;
 }
 
-function loadSpecificTournament(tid)
-{
+function loadSpecificTournament(tid) {
     console.log(tid)
-    window.location.assign("/tournaments?tid="+tid);
+    window.location.assign("/tournaments?tid=" + tid);
 }
 
 //todo show only unregistered tournaments
