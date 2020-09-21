@@ -18,12 +18,11 @@ function loadGameInCard(games)
         card.addEventListener("click", function() {fetchTournamentGames(games[i].gameID)},true);
         let img = document.createElement("img");
         img.src = games[i].gameImage;
-        
         let card_im = document.createAttribute("class");
-        card_im.value = "card-img-top"
+        card_im.value = "card-img-top card_img"
         img.setAttributeNode(card_im)
         let att = document.createAttribute("class");
-        att.value = "col-3 p-0 mr-4 bg-dark card";
+        att.value = "col-3 p-0 mr-4 bg-dark game-scroll-box  card";
         card.setAttributeNode(att);
         card.appendChild(img);
         parent.appendChild(card);

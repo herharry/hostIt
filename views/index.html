@@ -7,20 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
     <script src="js/GameLoader.js"></script>
 
 </head>
 
-<body class="custom">
+<body class="custom" data-aos="fade-in" data-aos-duration="5000">
 
     <section class="header d-flex">
-        <div class="container my-auto">
+        <div class="container header-content my-auto">
             <h1> HOST IT</h1>
-            <h3>Enter the world of gamerz and <br>compete in tournaments <br>and earn real cash</h3>
+            <h3>Enter the world of gamerz <br>compete in tournaments <br>and earn real cash</h3>
             <form method="GET" action="/register">
-                <button class="btn btn-1 my-5">
+                <button class="btn btn-1 mx-0 my-3">
                     <svg>
                         <rect x="0" y="0" fill="none" width="100%" height="100%" />
                     </svg>
@@ -34,8 +36,8 @@
     <section class="games">
         <div class="container py-5">
             <h3 class="games-heading mb-5">GAMES</h3>
-            <div class="game-scroll px-3 mb-4">
-                <div class="row d-flex flex-nowrap" id="cards">
+            <div class="game-scroll px-3 mb-4" data-aos="zoom-in">
+                <div class="row d-flex flex-nowrap justify-content-between" id="cards">
 
                 </div>
             </div>
@@ -44,9 +46,9 @@
 
     <hr>
 
-    <div class="container py-2">
-        <div class="row align-items-center">
-            <div class="col-sm-6 py-2 text-center">
+    <section class="container py-5">
+        <div class="row">
+            <div class="col-sm-12 my-auto text-center">
                 <h2 class="content-heading">Install and Compete</h2>
                 <p class="download-desc px-md-4">Download our app for smoooth and engaging user experience at your
                     finger tips.</p>
@@ -55,21 +57,34 @@
                         alt='Get it on Google Play' class="download-redirect w-100 pb-2"
                         src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' /></a>
             </div>
-            <div class="col-sm-6 py-3">
+            <!-- <div class="col-sm-6 py-3">
                 <img src="img/app-down.svg" alt="Nature" class="mx-auto mb-4 mb-md-0 d-block my-3 download-img w-100">
+            </div> -->
+        </div>
+    </section>
+
+    <hr>
+
+    <section class="container">
+        <div class="row">
+            <div class="col-md-6 py-2 my-auto animated" data-aos="fade-right">
+                <h3>Live Streaming on <a href=""> <small class="text-danger">YOUTUBE <i
+                                class="fab fa-youtube"></i></small></a></h2>
+            </div>
+            <div class="col-md-6 my-5 m-md-0 animated" data-aos="fade-left">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item rounded"
+                        src="https://www.youtube.com/watch?v=AvC1j1GX3k8&list=PL69JopC7wmPrqK2O3kcxPkKSYG0Ny5uw4&index=2"></iframe>
+                </div>
             </div>
         </div>
-
-    </div>
-    <hr>
-    <section class=" youtube">
-
     </section>
-    <hr>
+
+    <hr class="mb-0">
 
     <!-- Site footer -->
     <section class="footer">
-        <div class="container">
+        <div class="container py-2">
             <div class="social-circle-btn p-2 m-2 d-flex justify-content-center">
                 <div class="btnn instagram">
                     <i class="fab fa-instagram fa-xs"></i>
@@ -91,6 +106,10 @@
         </div>
         <p class="bg-primary mb-0 py-1 w-100 text-center"> Made with <i class="fas fa-heart"></i></p>
     </section>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 <script>
     fetchGame();
