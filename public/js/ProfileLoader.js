@@ -1,8 +1,6 @@
 let API;
 let PHONE_VERIFICATION_FLAG = false;
-let applicationVerifier = new firebase.auth.RecaptchaVerifier('button-addon2', {
-    'size': 'invisible'
-});
+let applicationVerifier = null;
 // FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
 
 async function loadProfileJS() {
@@ -246,15 +244,17 @@ ValidateProfile = () => {
 
 }
 
+document.getElementById("editMobileNumber").addEventListener("input",checker)
+
+function checker()
+{
+    verifyOrVerified("+91"+document.getElementById("editMobileNumber").value);
+}
+
 function isNumberKey(evt) {
-    let num = "+91"+document.getElementById("editMobileNumber").value+String.fromCharCode(evt.keyCode);
-    if(num.length<14 || evt.keyCode == 8)
-    {
-        verifyOrVerified(num);
-    }
     var charCode = (evt.which) ? evt.which : evt.keyCode;
     if (charCode != 46 && charCode > 31 &&
-        (charCode < 48 || charCode > 57))
+        (charCode < 48 || charCode > 57) && (charCode < 37 || charCode > 39))
         return false;
     return true;
 }
@@ -294,7 +294,7 @@ function createUserInCollection() {
             user.uid = USER_IN_SESSION.uid;
             user.userName = getElementValue("editProfileName");
             user.userEmailID = getElementValue("editEmail");
-            user.walletAmount = getElementValue("winnings");;
+            user.walletAmount = document.getElementById("winnings").innerHTML;
             user.role = 0;
             user.profileImageURL = document.getElementById("profileImage").getAttribute("src");
             user.mobileNo = getElementValue("editMobileNumber");
@@ -325,6 +325,7 @@ function createUserInCollection() {
                 });
 
             } else {
+                console.log(user)
                 fetch("/updateUser", {
                     method: "POST",
                     headers: {
@@ -367,6 +368,13 @@ function phoneChecker() {
                 console.log(firebase.auth().currentUser.providerData);
                 firebase.auth().currentUser.unlink("phone").then(function (res) {
                     verifyPhoneNumber(phone)
+                }).then(function ()
+                {
+                    firebase.firestore().collection("Users").doc(firebase.auth().currentUser.uid).update(
+                        {
+                            mobileNo : null
+                        }
+                    ).catch(reason => {})
                 });
             }
         }
@@ -382,6 +390,18 @@ function phoneChecker() {
 }
 
 function verifyPhoneNumber(phone) {
+    if(applicationVerifier !=null)
+    {
+        applicationVerifier.clear();
+        document.getElementById("recaptcha_parent").removeChild(document.getElementById("recaptcha"));
+        let recaptcha = document.createElement("div");
+        recaptcha.id = "recaptcha"
+        document.getElementById("recaptcha_parent").appendChild(recaptcha);
+    }
+    applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
+        'size': 'invisible'
+    });
+
     firebase.auth().currentUser.linkWithPhoneNumber(phone, applicationVerifier).then(function (confirmationResult) {
         $("#modalRegisterForm").modal('show');
         iziToast.success({
@@ -397,10 +417,17 @@ function verifyPhoneNumber(phone) {
                     message: "number verified successfully",
                     position: 'topRight'
                 });
+            }).catch(function (error){
+                $("#modalRegisterForm").modal('toggle');
+                iziToast.error({
+                    title: 'Caution',
+                    message: 'incorrect otp',
+                    position: 'topRight'
+                });
             });
         })
-    }).then(()=>{
-        applicationVerifier.clear();
+        OTP = null;
+        document.getElementById("otp").value=null;
     }).catch(function (error) {
         $("#modalRegisterForm").modal('toggle');
         iziToast.error({
@@ -420,7 +447,7 @@ function getOTP() {
                 window.clearInterval(otpTimer);
                 resolve(OTP);
             }
-            // console.log("A")
+            console.log(OTP)
         }, 100)
     });
 }
@@ -555,11 +582,17 @@ function withdraw() {
                 payLoad.uid = firebase.auth().currentUser.uid;
                 payLoad.uname = userInDB.userName;
                 if (payLoad.amount == 0) {
-                    alert("first earn, then ask")
+                    iziToast.error({
+                        message: "first earn, then ask",
+                        position: 'topRight'
+                    });
                 } else {
                     if (typeOfTransaction == "account") {
                         if ((accName == "" || accNo == "" || ifsc == "")) {
-                            console.log("furnish your account details");
+                            iziToast.error({
+                                message: "furnish your account details",
+                                position: 'topRight'
+                            });
                             return;
                         } else {
                             payLoad.type = 1;
@@ -569,7 +602,10 @@ function withdraw() {
                         }
                     } else {
                         if (upid == "") {
-                            console.log("furnish your upid first")
+                            iziToast.error({
+                                message: "furnish your upid first",
+                                position: 'topRight'
+                            });
                             return;
                         } else {
                             payLoad.type = 2;
@@ -588,14 +624,20 @@ function withdraw() {
                         }),
                     }).then(res => res.text()).then(function (res) {
                         if (res == "success") {
-                            console.log("request made! keep checking your account, money maybe on the way")
+                            iziToast.success({
+                                message: "request made! keep checking your account, money maybe on the way",
+                                position: 'topRight'
+                            });
                         }
                     }).catch(reason => {
                         alert(reason)
                     })
                 }
             } else {
-                alert("patience is virtue! Request is already made.. wait for processing")
+                iziToast.error({
+                    message: "patience is virtue! Request is already made.. wait for processing",
+                    position: 'topRight'
+                });
             }
         });
 
