@@ -82,6 +82,9 @@ function loadProfileForNewUser(user) {
     setProfileImage(user.photoURL)
     setMobileNumber(user.phoneNumber)
     setEmail(user.email)
+    setBankDetails(user.bankDetail)
+    setUpiId(user.vpa)
+    setWalletAmt(user.walletAmount)
 }
 
 function renderForNewUser() {
@@ -92,11 +95,14 @@ function renderForNewUser() {
 }
 
 function loadProfileForExistingUser(user) {
-    console.log(firebase.auth().currentUser)
+    console.log(user)
     setProfileName(user.userName)
     setProfileImage(user.profileImageURL)
     setMobileNumber(user.mobileNo)
     setEmail(user.userEmailID)
+    setUpiId(user.vpa)
+    setBankDetails(user.bankDetail)
+    setWalletAmt(user.walletAmount)
 }
 
 loadUser = (user) => {
@@ -133,9 +139,9 @@ setProfileName = (name) => {
 }
 
 setProfileImage = (image) => {
-    if(image!=null){
+    if (image != null) {
         document.getElementById("profileImage").setAttribute("src", image)
-    }else{
+    } else {
         document.getElementById("imgup").classList.add("d-none");
     }
 }
@@ -154,21 +160,24 @@ setEmail = (email) => {
     document.getElementById("editEmail").setAttribute("value", email);
 }
 
-setAccountNo = (number) => {
-    if (number != null) {
-        document.getElementById("editAccountNo").setAttribute("value", number);
+setWalletAmt = (amt) => {
+    document.getElementById("winnings").setAttribute("value", amt);
+}
+
+
+
+setBankDetails = (bankDetail) => {
+    if ((bankDetail.accountNo != null) && (bankDetail.ifsc != null) && (bankDetail.accountName != null)) {
+        document.getElementById("editAccountNo").setAttribute("value", bankDetail.accountNo);
+        document.getElementById("editIfsc").setAttribute("value", bankDetail.ifsc);
+        document.getElementById("editAccountName").setAttribute("value", bankDetail.accountName);
     }
 }
-setIfsc = (number) => {
-    if (number != null) {
-        document.getElementById("mobileNumber").innerHTML = number;
-        document.getElementById("editMobileNumber").setAttribute("value", number);
-    }
-}
+
+
 setUpiId = (number) => {
     if (number) {
-        document.getElementById("mobileNumber").innerHTML = number;
-        document.getElementById("editMobileNumber").setAttribute("value", number);
+        document.getElementById("editUpiID").setAttribute("value", number);
     }
 }
 
@@ -413,7 +422,8 @@ document.getElementById("otpVerify").addEventListener('click', () => {
 
 /*      SHOW UPLOADED IMAGE        */
 function readURL(input) {
-    if (input.files && input.files[0]) {
+    var flag = 1;
+    if (input.files[0]) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
@@ -422,7 +432,11 @@ function readURL(input) {
         };
 
         reader.readAsDataURL(input.files[0]);
-        storeImage(input.files[0])
+        if (flag) {
+            storeImage(input.files[0])
+        }
+        flag = 0;
+
     }
 }
 
