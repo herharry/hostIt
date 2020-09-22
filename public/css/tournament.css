@@ -11,8 +11,8 @@
 }
 
 .gradient {
-    background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);
-    background: linear-gradient(to right, #5B86E5, #36D1DC);
+    background: -webkit-linear-gradient(to right, #5B86E5, var(--theme-color));
+    background: linear-gradient(to right, #5B86E5, var(--theme-color));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;

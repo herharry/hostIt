@@ -9,7 +9,7 @@ function fetchBanners()
 //todo action to create cards
 function loadBannerInCarousel(banners) {
     for (let i = 0; i < banners.length; i++) {
-
+        
         let itemss = document.createElement("div");
         let img = document.createElement("img");
         img.src = banners[i].imageUrl;
