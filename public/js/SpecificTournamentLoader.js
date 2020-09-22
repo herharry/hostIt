@@ -41,6 +41,11 @@ async function loadSpecificTournamentJS()
 
 function specificTournamentListener()
 {
+    let doc =  DB.collection("Users").doc(USER_IN_SESSION.uid);
+    doc.get().then(function(DOC){
+        userInDB = DOC.data();
+    });
+
     DB.collection("Tournaments").doc(urlParams.tid).onSnapshot(function (doc){
         console.log(doc.data())
         loadTournamentInHTML(doc.data())
@@ -145,8 +150,8 @@ loadGameDetails = (data,tournamentData)=>{
 }
 
 function joinConfirm() {
-    console.log(USER_IN_SESSION.tournamentIds)
-    let registeredTournament = USER_IN_SESSION.tournamentIds;
+    console.log(userInDB.tournamentIds)
+    let registeredTournament = userInDB.tournamentIds;
     console.log(registeredTournament)
 
     for(let i =0; i<registeredTournament.length;i++)
@@ -162,8 +167,9 @@ function joinConfirm() {
     }
     document.getElementById("join").setAttribute("data-toggle","modal");
     document.getElementById("join").setAttribute("data-target","#joinTournamentModel");
-    document.getElementById("joinEmail").value = USER_IN_SESSION.userEmailID;
-    document.getElementById("joinNumber").value = USER_IN_SESSION.mobileNo;
+    document.getElementById("joinEmail").value = USER_IN_SESSION.email;
+    let number =  USER_IN_SESSION.phoneNumber.toString().split("+91").pop();
+    document.getElementById("joinNumber").value = number;
     document.getElementById("tournament_id").value=urlParams.tid;
     document.getElementById("user_id").value=USER_IN_SESSION.uid;
     document.getElementById("payable_amount").value = TOURNAMENT.amount;
