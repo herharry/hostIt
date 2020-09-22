@@ -9,7 +9,9 @@
 
 }
 
-
+.container-fluid{
+    height: 50vh;
+}
 a {
     cursor: pointer;
 }
