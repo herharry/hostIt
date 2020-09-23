@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="css/registerStyle.css" />
   <link rel="stylesheet" href="css/iziToast.min.css" />
   <title>Host-it,Sign in & Sign up Form</title>
@@ -14,21 +13,22 @@
   <div class="container">
     <div class="forms-container">
       <div class="signin-signup">
-        <form action="#" class="sign-in-form" >
+        <form action="" class="sign-in-form" >
           <h2 class="title">Sign in</h2>
           <div class="input-field">
             <i class="fas fa-user"></i>
-            <input id="sign-in-email" type="text" placeholder="Email" />
+            <input id="sign-in-email" type="email" placeholder="Email" />
           </div>
           <div class="input-field">
             <i class="fas fa-lock"></i>
             <input id="sign-in-pass" type="password" placeholder="Password" />
           </div>
-          <button value="Login" class="btn solid" onclick="loginWithEmail()">login</button>
+          <button value="Login" class="btn solid" id="signinlog" >login</button>
+          <!-- onclick="loginWithEmail()" -->
           <p class="warning"></p>
           <p class="social-text">Or Sign in with social platforms</p>
         </form>
-        <form action="#" class="sign-up-form" onsubmit="signupWithEmail()">
+        <form action="" class="sign-up-form" >
           <h2 class="title">Sign up</h2>
           <div class="input-field">
             <i class="fas fa-user"></i>
@@ -42,10 +42,11 @@
             <i class="fas fa-lock"></i>
             <input id="sign-up-pass" type="password" placeholder="Password" />
           </div>
-          <input type="submit" class="btn" value="Sign up" />
+          <input type="submit" class="btn" id="signuplog" value="Sign up" />
           <p class="social-text">Or Sign up with social platforms</p>
         </form>
-        <button onclick="loginWithGoogle()" style="width: 45%;padding: 5px 10px;margin: 0px auto;">Sign with google</button>
+            
+            <button onclick="loginWithGoogle()" style="width: 45%;padding: 5px 10px;margin: 0px auto;"></i>Sign with google</button>
       </div>
     </div>
 

@@ -36,6 +36,7 @@ html {
 
 a.middle {
     position: relative;
+    cursor: pointer;
 }
 
 a.middle:before {
@@ -54,7 +55,6 @@ a.middle:before {
 a.middle:hover:before {
     visibility: visible;
     transform: scaleX(1);
-
 }
 
 .navbar {
