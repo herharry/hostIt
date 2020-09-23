@@ -45,24 +45,22 @@ function signupWithEmail() {
 }
 
 function isEmailVerified(result) {
+    console.log(firebase.auth().currentUser.emailVerified);
     if (!firebase.auth().currentUser.emailVerified) {
-        // alert("verify your email for further processing")
-        iziToast.Success({
-            message: "Verification mail sent",
-            position: "topRight"
-        })
-        iziToast.Success({
-            message: "please verify to continue",
-            position: "topRight"
-        })
-    }
+        alert("verify your email for further processing")
+        // iziToast.Success({
+        //     message: "Verification mail sent, confirm to continue",
+        //     position: "topRight"
+        // })
 
-    var timer = setInterval(function () {
-        firebase.auth().currentUser.reload();
-        if (firebase.auth().currentUser.emailVerified) {
-            console.log("Email Verified!", firebase.auth().currentUser.emailVerified);
-            clearInterval(timer);
-            sessionLoginHandler(result.user)
-        }
-    }, 1000);
+        var timer = setInterval(function () {
+            console.log("ddd")
+            firebase.auth().currentUser.reload();
+            if (firebase.auth().currentUser.emailVerified) {
+                console.log("Email Verified!", firebase.auth().currentUser.emailVerified);
+                clearInterval(timer);
+                sessionLoginHandler(result.user)
+            }
+        }, 1000);
+    }
 }
