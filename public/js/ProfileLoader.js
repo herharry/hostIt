@@ -91,15 +91,13 @@ function loadProfileForNewUser(user) {
     setProfileImage(user.photoURL)
     setMobileNumber(user.phoneNumber)
     setEmail(user.email)
-    setBankDetails(user.bankDetail)
-    setUpiId(user.vpa)
-    setWalletAmt(user.walletAmount)
 }
 
 function renderForNewUser() {
     showEdit();
     document.getElementById("cancel_btn").classList.add("d-none");
     document.getElementById("withdraw").classList.add("d-none");
+    document.getElementById("tot_navbar").classList.add("d-none");
 
 }
 
@@ -523,7 +521,7 @@ function storeImage(img) {
             uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
                 console.log('File available at', downloadURL);
                 let u = {}
-                u.uid = userInDB.uid;
+                u.uid = firebase.auth().currentUser.uid;
                 u.url = downloadURL;
                 url = downloadURL;
                 return fetch("/updateProfileImage", {
