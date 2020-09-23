@@ -521,7 +521,7 @@ function storeImage(img) {
             uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
                 console.log('File available at', downloadURL);
                 let u = {}
-                u.uid = userInDB.uid;
+                u.uid = firebase.auth().currentUser.uid;
                 u.url = downloadURL;
                 url = downloadURL;
                 return fetch("/updateProfileImage", {
