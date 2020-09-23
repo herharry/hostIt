@@ -91,15 +91,13 @@ function loadProfileForNewUser(user) {
     setProfileImage(user.photoURL)
     setMobileNumber(user.phoneNumber)
     setEmail(user.email)
-    setBankDetails(user.bankDetail)
-    setUpiId(user.vpa)
-    setWalletAmt(user.walletAmount)
 }
 
 function renderForNewUser() {
     showEdit();
     document.getElementById("cancel_btn").classList.add("d-none");
     document.getElementById("withdraw").classList.add("d-none");
+    document.getElementById("tot_navbar").classList.add("d-none");
 
 }
 
