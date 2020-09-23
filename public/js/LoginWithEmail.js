@@ -52,7 +52,7 @@ function isEmailVerified(result) {
         //     message: "Verification mail sent, confirm to continue",
         //     position: "topRight"
         // })
-
+    }
         var timer = setInterval(function () {
             console.log("ddd")
             firebase.auth().currentUser.reload();
@@ -62,5 +62,5 @@ function isEmailVerified(result) {
                 sessionLoginHandler(result.user)
             }
         }, 1000);
-    }
+
 }
