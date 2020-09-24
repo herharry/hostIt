@@ -98,7 +98,7 @@ function renderForNewUser() {
     document.getElementById("cancel_btn").classList.add("d-none");
     document.getElementById("withdraw").classList.add("d-none");
     document.getElementById("tot_navbar").classList.add("d-none");
-
+    document.getElementById("edittt").classList.add("d-none");
 }
 
 function loadProfileForExistingUser(user) {
@@ -415,6 +415,13 @@ function verifyPhoneNumber(phone) {
                     message: "number verified successfully",
                     position: 'topRight'
                 });
+            }).then(function ()
+            {
+                firebase.firestore().collection("Users").doc(firebase.auth().currentUser.uid).update(
+                    {
+                        mobileNo : phone.toString().split("+91").pop()
+                    }
+                ).catch(reason => {})
             }).catch(function (error){
                 $("#modalRegisterForm").modal('toggle');
                 iziToast.error({
