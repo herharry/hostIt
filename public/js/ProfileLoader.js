@@ -98,7 +98,7 @@ function renderForNewUser() {
     document.getElementById("cancel_btn").classList.add("d-none");
     document.getElementById("withdraw").classList.add("d-none");
     document.getElementById("tot_navbar").classList.add("d-none");
-
+    document.getElementById("edittt").classList.add("d-none");
 }
 
 function loadProfileForExistingUser(user) {
