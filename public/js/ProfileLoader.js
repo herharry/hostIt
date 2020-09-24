@@ -415,6 +415,13 @@ function verifyPhoneNumber(phone) {
                     message: "number verified successfully",
                     position: 'topRight'
                 });
+            }).then(function ()
+            {
+                firebase.firestore().collection("Users").doc(firebase.auth().currentUser.uid).update(
+                    {
+                        mobileNo : phone.toString().split("+91").pop()
+                    }
+                ).catch(reason => {})
             }).catch(function (error){
                 $("#modalRegisterForm").modal('toggle');
                 iziToast.error({

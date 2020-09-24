@@ -41,6 +41,8 @@ async function loadSpecificTournamentJS()
 
 function specificTournamentListener()
 {
+    localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
+    USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
     let doc =  DB.collection("Users").doc(USER_IN_SESSION.uid);
     doc.get().then(function(DOC){
         userInDB = DOC.data();
