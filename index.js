@@ -52,6 +52,31 @@ app.use(cookieParser());
 app.use(express.static(__dirname + '/public'));
 
 //*********************************************************************************************************************************************//
+//******************************************** LOCAL CREDENTIALS *************************************************************************************//
+//***************************************************************************************************************************************
+let callBack = 'http://host-it-test.herokuapp.com/callback';
+let registerTournament = 'http://host-it-test.herokuapp.com/registerTournament';
+let addTransaction = 'http://host-it-test.herokuapp.com/addTransaction';
+let addTournament = 'http://host-it-test.herokuapp.com/addTournamentToUser';
+let reduceVacantSeat = 'http://host-it-test.herokuapp.com/reduceVacantSeat';
+if(process.argv[0] == "local")
+{
+    callBack = 'http://localhost:3000/callback';
+    registerTournament= 'http://localhost:3000/registerTournament';
+    addTransaction = 'http://localhost:3000/addTransaction';
+    addTournament='http://localhost:3000/addTournamentToUser';
+    reduceVacantSeat = 'http://localhost:3000/reduceVacantSeat';
+}
+
+//*********************************************************************************************************************************************//
+//******************************************** LOCAL CREDENTIALS ENDS *************************************************************************************//
+//***************************************************************************************************************************************
+
+
+
+
+
+//*********************************************************************************************************************************************//
 //******************************************** INIT ENDS *************************************************************************************//
 //**********************************************************************************************************************************************//
 
@@ -596,7 +621,7 @@ app.post('/paynow', [parseUrl, parseJson], (req, resp) => {
         params['ORDER_ID'] = 'TEST_'+ uid + new Date().getTime();
         params['CUST_ID'] = 'customer_001';
         params['TXN_AMOUNT'] = req.body.amount.toString();
-        params['CALLBACK_URL'] = 'http://localhost:3000/callback';
+        params['CALLBACK_URL'] = callBack;
         params['EMAIL'] = req.body.email;
         params['MOBILE_NO'] = req.body.phone.toString();
 
@@ -618,7 +643,7 @@ app.post('/paynow', [parseUrl, parseJson], (req, resp) => {
             params['api'] = "paynow";
 
 
-            fetch("http://localhost:3000/registerTournament", {
+            fetch(registerTournament, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -682,7 +707,7 @@ app.post('/callback', (req, responser) => {
 
 
         if(result == true) {
-            return fetch("http://localhost:3000/registerTournament", {
+            return fetch(registerTournament, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -702,7 +727,7 @@ app.post('/callback', (req, responser) => {
             });
         }
         else {
-            return fetch("http://localhost:3000/addTransaction", {
+            return fetch(addTransaction, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -779,7 +804,7 @@ app.post("/registerTournament",(req, response) => {
         if(flag == true) {
             console.log("true",transactionDetails.inGameName," ",REGISTERED_USER_FOR_TRANSACTION)
 
-            return fetch("http://localhost:3000/addTransaction", {
+            return fetch(addTransaction, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -788,7 +813,7 @@ app.post("/registerTournament",(req, response) => {
                 body: JSON.stringify({transactionDetails}),
             }).then(res => res.json()).then(function (td) {
                 console.log(td)
-                return fetch("http://localhost:3000/addTournamentToUser", {
+                return fetch(addTournament, {
                     method: "POST",
                     headers: {
                         Accept: "application/json",
@@ -798,7 +823,7 @@ app.post("/registerTournament",(req, response) => {
                 })
                     .then(res => res.json()).then(function (trans) {
                         console.log(trans)
-                        return fetch("http://localhost:3000/reduceVacantSeat", {
+                        return fetch(reduceVacantSeat, {
                             method: "POST",
                             headers: {
                                 Accept: "application/json",

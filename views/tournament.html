@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="">
     <link rel="stylesheet" type="text/css" href="css/tournament.css">
+    <link rel="stylesheet" type="text/css" href="css/iziToast.min.css">
+
 </head>
 
 <body class="custom">
@@ -48,9 +50,7 @@
         <div class="row bg-dark my-md-4">
             <div class="col-md-5 progress-gradient ">
                 <div class=" p-3 text-center">
-                    <img class="mt-5 mb-4 tournamentImage " id="tournamentImage"
-                        src="img/loader.png"
-                        alt="">
+                    <img class="mt-5 mb-4 tournamentImage " id="tournamentImage" src="img/loader.png" alt="">
                     <h4 class="tournamentName" id="name"> tournament name</h4>
                     <p class="badge badge-success" id="status">registration status</p>
                 </div>
@@ -74,7 +74,7 @@
                         <p class="elegant-color" id="prize"></p>
                     </div>
                 </div>
-                <div class="mx-2 text-center" id="gameTags">game modes  :  </div>
+                <div class="mx-2 text-center" id="gameTags">game modes : </div>
                 <button class="btn btn-sm btn-primary w-50  mx-auto d-block my-5 " id="join"
                     onclick="joinConfirm()">join</button>
 
@@ -82,13 +82,12 @@
                 <div class="modal fade" id="joinTournamentModel" tabindex="-1" role="dialog"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <h5 class="modal-title" id="exampleModalLabel">Join tournament</h5>
                         <div class="modal-content">
                             <div class="modal-header">
-
+                                <h5 class="modal-title" id="exampleModalLabel">Join tournament</h5>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="/paynow">
+                                <form method="post" action="/paynow" class="needs-validation" novalidate>
 
                                     <input type="number" class="form-control d-none" id="joinNumber"
                                         placeholder="phonenumber" name="phone" value="" readonly>
@@ -104,8 +103,11 @@
                                             <label class=" p-2" for="gameID">Game ID</label></div>
                                         <div class="col-8">
                                             <input type="text" class="form-control text-white bg-dark" id="gameID"
-                                                placeholder="game ID" value="" name="inGameID">
+                                                placeholder="game ID" value="" name="inGameID" required>
+                                                <div class="invalid-feedback">
+                                                   <small> Field empty </small></div>
                                         </div>
+                                        
                                     </div>
 
 
@@ -115,7 +117,9 @@
                                             <label class=" p-2" for="gameName">Game Name</label></div>
                                         <div class="col-8">
                                             <input type="text" class="form-control text-white bg-dark" id="gameName"
-                                                placeholder="game Name" value="" name="inGameName">
+                                                placeholder="game Name" value="" name="inGameName" required>
+                                                <div class="invalid-feedback">
+                                                    <small> Field empty </small></div>
                                         </div>
                                     </div>
 

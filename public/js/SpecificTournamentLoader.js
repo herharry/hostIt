@@ -5,30 +5,26 @@ console.log(urlParams);
 
 // FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
 
-async function loadSpecificTournamentJS()
-{
+async function loadSpecificTournamentJS() {
     let uid = USER_IN_SESSION.uid;
-    if(getCookie("SU_SY") == "")
-    {
+    if (getCookie("SU_SY") == "") {
         await fetch("/createToken", {
             method: "POST",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({uid}),
-        }).then(res => res.text()).then(function(res){
-            firebase.auth().signInWithCustomToken(res.toString()).then(function (user)
-            {
-                setCookie("SU_SY",res.toString(),1);
+            body: JSON.stringify({
+                uid
+            }),
+        }).then(res => res.text()).then(function (res) {
+            firebase.auth().signInWithCustomToken(res.toString()).then(function (user) {
+                setCookie("SU_SY", res.toString(), 1);
                 specificTournamentListener();
             })
         });
-    }
-    else
-    {
-        firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user)
-        {
+    } else {
+        firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {
             console.log("hey")
             specificTournamentListener();
         }).catch(reason => {
@@ -39,14 +35,15 @@ async function loadSpecificTournamentJS()
     }
 }
 
-function specificTournamentListener()
-{
-    let doc =  DB.collection("Users").doc(USER_IN_SESSION.uid);
-    doc.get().then(function(DOC){
+function specificTournamentListener() {
+    localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
+    USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
+    let doc = DB.collection("Users").doc(USER_IN_SESSION.uid);
+    doc.get().then(function (DOC) {
         userInDB = DOC.data();
     });
 
-    DB.collection("Tournaments").doc(urlParams.tid).onSnapshot(function (doc){
+    DB.collection("Tournaments").doc(urlParams.tid).onSnapshot(function (doc) {
         console.log(doc.data())
         loadTournamentInHTML(doc.data())
     });
@@ -101,7 +98,7 @@ function loadTournamentInHTML(res) {
         minute: '2-digit'
     });
     document.getElementById("date").innerHTML = tournamentDate + "<br>" + tournamentTime;
-    let total  = 0;
+    let total = 0;
     res.prizePool.forEach(element => {
         total += element;
     });
@@ -121,18 +118,18 @@ function loadTournamentInHTML(res) {
 
 }
 
-getGame = (data) =>{
+getGame = (data) => {
     fetch("/games")
         .then(res => res.json())
-        .then(res => this.loadGameDetails(this.formatResponse(res),data))
+        .then(res => this.loadGameDetails(this.formatResponse(res), data))
         .catch(err => err);
 }
 
-loadGameDetails = (data,tournamentData)=>{
+loadGameDetails = (data, tournamentData) => {
     data.forEach(element => {
-        if(tournamentData.gameID == element.gameID){
-            document.getElementById("tournamentImage").setAttribute("src",element.gameImage)
-            if("gameMode" in tournamentData){
+        if (tournamentData.gameID == element.gameID) {
+            document.getElementById("tournamentImage").setAttribute("src", element.gameImage)
+            if ("gameMode" in tournamentData) {
                 console.log(element.gameModes[tournamentData.gameMode]);
 
                 // console.log(tournamentData.gameMode);
@@ -153,24 +150,45 @@ function joinConfirm() {
     console.log(userInDB.tournamentIds)
     let registeredTournament = userInDB.tournamentIds;
     console.log(registeredTournament)
-
-    for(let i =0; i<registeredTournament.length;i++)
-    {console.log(registeredTournament[i])
-        if(registeredTournament[i] == urlParams.tid)
-        {
+    let flag = 1;
+    for (let i = 0; i < registeredTournament.length; i++) {
+        console.log(registeredTournament[i])
+        if (registeredTournament[i] == urlParams.tid) {
             //todo create a new modal for displaying already registered and copy line 113 and 114 to set the attribute of the modal
-            iziToast.warning({
-                message:"already registered"
-            });
-            return;
+            // iziToast.warning({
+            //     message:"already registered"
+            // });
+            // return;
+            flag = 0;
+            alert("already")
         }
     }
-    document.getElementById("join").setAttribute("data-toggle","modal");
-    document.getElementById("join").setAttribute("data-target","#joinTournamentModel");
-    document.getElementById("joinEmail").value = USER_IN_SESSION.email;
-    let number =  USER_IN_SESSION.phoneNumber.toString().split("+91").pop();
-    document.getElementById("joinNumber").value = number;
-    document.getElementById("tournament_id").value=urlParams.tid;
-    document.getElementById("user_id").value=USER_IN_SESSION.uid;
-    document.getElementById("payable_amount").value = TOURNAMENT.amount;
+    if (flag) {
+        document.getElementById("join").setAttribute("data-toggle", "modal");
+        document.getElementById("join").setAttribute("data-target", "#joinTournamentModel");
+        document.getElementById("joinEmail").value = USER_IN_SESSION.email;
+        let number = USER_IN_SESSION.phoneNumber.toString().split("+91").pop();
+        document.getElementById("joinNumber").value = number;
+        document.getElementById("tournament_id").value = urlParams.tid;
+        document.getElementById("user_id").value = USER_IN_SESSION.uid;
+        document.getElementById("payable_amount").value = TOURNAMENT.amount;
+    }
 }
+
+(function () {
+    'use strict';
+    window.addEventListener('load', function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function (form) {
+            form.addEventListener('submit', function (event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+                }, false);
+                });
+                }, false);
+                })();
