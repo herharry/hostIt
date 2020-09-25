@@ -12,11 +12,11 @@
 .img-ban{
     object-fit: cover;
    width: 100%;
-   max-height: 350px;
+   max-height: 380px;
 }
 @media only screen and (max-width:800px){
     .img-ban{
-        max-height: 200px;
+        height: 240px;
     }
 }
 

@@ -68,20 +68,89 @@
     <div class="container my-1 ">
         <!-- tournaments section  -->
 
-
         <div class="row mt-5 px-0">
-            <div class="filter col-md-3 rounded-lg">
-                <div class="row">
-                    <div class="col-5">
+            <div class="col-md-3 pr-md-3 px-0">
+                <div class="filter rounded-lg" id="filter">
+                    <h4 class="font-weight-bold w-100 border-bottom px-2 py-1">FILTER</h4>
+                    <!-- <div class="collapse" id="collapseExample">
+                        data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
+                        aria-controls="collapseExample" -->
+                    <div class="row p-2 w-100">
 
-                    </div>
-                    <div class="col-7">
+                        <section class="mb-3 pl-3 col-6 col-md-12">
+                            <p>Date</p>
+                            <div class="custom-control custom-checkbox ml-2 pb-2">
+                                <input type="checkbox" class="custom-control-input filled-in" id="today">
+                                <label
+                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                                    for="today">Today</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2 pb-2">
+                                <input type="checkbox" class="custom-control-input filled-in" id="tomorrow">
+                                <label
+                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                                    for="tomorrow">tomorrow</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2 pb-2">
+                                <input type="checkbox" class="custom-control-input filled-in" id="customDate">
+                                <label
+                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                                    for="customDate">date</label>
+                            </div>
+                        </section>
 
+                        <section class="mb-3 pl-3 col-6 col-md-12">
+                            <p>Status</p>
+                            <div class="custom-control custom-checkbox ml-2 pb-2">
+                                <input type="checkbox" class="custom-control-input filled-in" id="open">
+                                <label
+                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                                    for="open">open</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2 pb-2">
+                                <input type="checkbox" class="custom-control-input filled-in" id="full">
+                                <label
+                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                                    for="full">full</label>
+                            </div>
+                        </section>
+
+                        <section class="mb-3 pl-3 col-6 col-md-12">
+                            <p>Games</p>
+                            <div class="custom-control custom-checkbox ml-2 pb-2">
+                                <input type="checkbox" class="custom-control-input filled-in" id="pubg">
+                                <label
+                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                                    for="pubg">pubg</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2 pb-2">
+                                <input type="checkbox" class="custom-control-input filled-in" id="cod">
+                                <label
+                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                                    for="cod">cod</label>
+                            </div>
+                        </section>
+                        <section class="mb-3 pl-3 col-6 col-md-12">
+                            <p>Game mode</p>
+                            <div class="custom-control custom-checkbox ml-2 pb-2">
+                                <input type="checkbox" class="custom-control-input filled-in" id="tdm">
+                                <label
+                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                                    for="tdm">tdm</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2 pb-2">
+                                <input type="checkbox" class="custom-control-input filled-in" id="br">
+                                <label
+                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                                    for="br">br</label>
+                            </div>
+                        </section>
                     </div>
+                    <!-- </div> -->
                 </div>
-
-
             </div>
+
+
             <div class="tournamentSection col-md-9 px-0">
                 <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
                     <li class="nav-item">
@@ -100,16 +169,15 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="tournament" role="tabpanel"
                         aria-labelledby="tournament-tab">
-
                         <div class="py-4">
-                            <div class="d-flex justify-content-between flex-wrap col-12 py-0 " id="tournamentCards">
+                            <div class="d-flex justify-content-between flex-wrap col-12  " id="tournamentCards">
 
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="py-4">
-                            <div class="d-flex justify-content-center flex-wrap col-12 p-0" id="myTournamentCards">
+                            <div class="d-flex justify-content-center flex-wrap col-12" id="myTournamentCards">
 
                             </div>
                         </div>
@@ -158,12 +226,15 @@
     <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-    <script src="./js/Constants.js"></script>
-    <script src="js/BannerLoader.js"></script>
-    <script src="js/TournamentLoader.js"></script>
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
     </script>
+    <script src="./js/Constants.js"></script>
+    <script src="js/BannerLoader.js"></script>
+    <script src="js/TournamentLoader.js"></script>
+
+
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script>

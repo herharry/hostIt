@@ -217,3 +217,12 @@ function loadSpecificTournament(tid) {
 
 //todo show only unregistered tournaments
 //todo in the live tournament tab rename it as registered tournament and click to view it...
+
+var observer = new IntersectionObserver(function(entries) {
+	// isIntersecting is true when element and viewport are overlapping
+	// isIntersecting is false when element and viewport don't overlap
+	if(entries[0].isIntersecting === true)
+		console.log('Element has just become visible in screen');
+}, { threshold: [0] });
+
+observer.observe(document.querySelector("#footer"));
