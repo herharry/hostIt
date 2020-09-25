@@ -7,17 +7,28 @@
     background: #2f4357;
 }
 
-.carousel-item {
-    text-align: center;
-    max-height: 350px;
+
+
+.img-ban{
     object-fit: cover;
-    /* Prevent carousel from being distorted if for some reason image doesn't load */
+   width: 100%;
+   max-height: 350px;
+}
+@media only screen and (max-width:800px){
+    .img-ban{
+        max-height: 200px;
+    }
 }
 
 .progress-gradient {
     background: #36D1DC;
     background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);
     background: linear-gradient(to right, #5B86E5, #36D1DC);
+}
+
+.filter{
+    background-color: var(--main-bg-color);
+
 }
 
 .tournamentSection{
