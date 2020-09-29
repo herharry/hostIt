@@ -137,6 +137,11 @@ html {
 
 /* games section end */
 
+.content-section{
+    font-size: 1.1rem;
+    color: #a3a3a3;
+}
+
 /* download section */
 .content-heading {
     font-size: 1.9rem;
