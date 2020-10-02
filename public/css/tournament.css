@@ -42,7 +42,7 @@
 .prize{
     background-color:var(--main-bg-color);
     border-radius: 20px;
-    width: 35%;
+    width: 50%;
 }
 @media only screen and (max-width:800px){
     .prize{
