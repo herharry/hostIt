@@ -99,8 +99,15 @@ function loadTournamentInHTML(res) {
     });
     document.getElementById("date").innerHTML = tournamentDate + "<br>" + tournamentTime;
     let total = 0;
+    
+    for(i=0;i<res.prizePool.length;i++){
+        total += res.prizePool[i];
+
+    }
+    renderProducts(res.prizePool,1)
     res.prizePool.forEach(element => {
-        total += element;
+        
+        // total += element;
     });
     document.getElementById("prize").innerHTML = total;
 
@@ -116,6 +123,21 @@ function loadTournamentInHTML(res) {
     document.getElementById("overlay").classList.add("d-none")
     document.getElementById("rules").innerHTML = res.rules;
 
+}
+
+function createTemplate(data, id) {
+    return `<tr>
+    <th class="text-center" scope="row"><small>${id}</small></th>
+    <th class="text-center"><small>${data}</small></th>
+  </tr>`
+}
+
+function renderProducts(products, id) {
+    const template =
+        products.length === 0 ? `
+    <p class="mx-auto">No Data Found.</p>
+    ` : products.map((product) => createTemplate(product, id++)).join("\n");
+    $("#prizeTable").html(template);
 }
 
 getGame = (data) => {
@@ -155,12 +177,12 @@ function joinConfirm() {
         console.log(registeredTournament[i])
         if (registeredTournament[i] == urlParams.tid) {
             //todo create a new modal for displaying already registered and copy line 113 and 114 to set the attribute of the modal
-            // iziToast.warning({
-            //     message:"already registered"
-            // });
-            // return;
+            iziToast.warning({
+                message: "already registered",
+                position: "topCenter"
+            });
             flag = 0;
-            alert("already")
+            // alert("already")
         }
     }
     if (flag) {
@@ -188,7 +210,7 @@ function joinConfirm() {
                     event.stopPropagation();
                 }
                 form.classList.add('was-validated');
-                }, false);
-                });
-                }, false);
-                })();
+            }, false);
+        });
+    }, false);
+})();
