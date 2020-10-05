@@ -104,10 +104,10 @@
                                         <div class="col-8">
                                             <input type="text" class="form-control text-white bg-dark" id="gameID"
                                                 placeholder="game ID" value="" name="inGameID" required>
-                                                <div class="invalid-feedback">
-                                                   <small> Field empty </small></div>
+                                            <div class="invalid-feedback">
+                                                <small> Field empty </small></div>
                                         </div>
-                                        
+
                                     </div>
 
 
@@ -118,8 +118,8 @@
                                         <div class="col-8">
                                             <input type="text" class="form-control text-white bg-dark" id="gameName"
                                                 placeholder="game Name" value="" name="inGameName" required>
-                                                <div class="invalid-feedback">
-                                                    <small> Field empty </small></div>
+                                            <div class="invalid-feedback">
+                                                <small> Field empty </small></div>
                                         </div>
                                     </div>
 
@@ -144,10 +144,26 @@
         </div>
     </div>
 
+    <div class="container prize mt-4 py-3">
+        <h4 class="text-warning text-center">WINNINGS</h4>
+        <!--Table-->
+        <table id="tablePreview" class="table table-bordered table-striped mx-auto">
+            <!--Table head-->
+            <thead>
+                <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-center w-75">Prize</th>
+                </tr>
+            </thead>
+            <tbody id="prizeTable">
+
+            </tbody>
+        </table>
+    </div>
 
 
     <div class="container">
-        <div class="rules my-3 rounded-lg">
+        <div class="rules my-4 rounded-lg">
             <h3 class="text-center border-bottom pt-4 pb-2">RULES</h3>
             <div class="rules-body">
                 <p class="p-3" id="rules"> </p>
@@ -191,8 +207,11 @@
     <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
     <script src="./js/Constants.js"></script>
     <script src="./js/SpecificTournamentLoader.js"></script>
+    <script src="js/iziToast.min.js" type="text/javascript"></script>
+
 
     <script>
         loadSpecificTournamentJS();
