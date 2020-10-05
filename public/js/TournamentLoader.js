@@ -99,7 +99,7 @@ function loadTournamentInNewCard(tournament, ids) {
     });
     tournamentprize.innerText = "prize pool" + '\n' + total;
     let amount = document.createElement("div");
-    amount.id = ids + "AMOUNT " + tournament.id;
+    amount.id = ids + "AMOUNT" + tournament.id;
     amount.className = "col-3 text-center p-1 border-right";
     amount.innerText = "Amount " + '\n' + tournament.amount;
     let time = document.createElement("div");
@@ -177,7 +177,7 @@ function loadTournamentInExistingCard(tournament, ids) {
     });
     tournamentprize.innerText = "prize pool" + '\n' + total;
     let amount = document.getElementById(ids + "AMOUNT" + tournament.id);
-    amount.innerText = tournament.amount;
+    amount.innerText = "Amount " + '\n' + tournament.amount;
     let time = document.getElementById(ids + "TIME" + tournament.id);
     let timestamp = tournament.time.seconds * 1000;
     let tournamentDate = new Date(timestamp).toLocaleString(undefined, {
@@ -192,7 +192,7 @@ function loadTournamentInExistingCard(tournament, ids) {
     });
     time.innerHTML = tournamentDate + "<br>" + tournamentTime;
     let players = document.getElementById(ids + "PLAYERS" + tournament.id);
-    players.innerHTML = (tournament.totalSeats - tournament.vacantSeats) + "/" + tournament.totalSeats;
+    players.innerHTML ="seats <br>" +  (tournament.totalSeats - tournament.vacantSeats) + "/" + tournament.totalSeats;
     let progressBar = document.getElementById(ids + "PROGRESS_BAR" + tournament.id);
     let percent = ((tournament.totalSeats - tournament.vacantSeats) / tournament.totalSeats) * 100;
     progressBar.setAttribute("style", "width :" + percent + "%");

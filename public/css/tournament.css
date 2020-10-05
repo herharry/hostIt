@@ -31,7 +31,6 @@
     }
 
 
-
 }
 
 .progress-gradient {
@@ -40,6 +39,16 @@
     background: linear-gradient(to right, #5B86E5, #36D1DC);
 }
 
+.prize{
+    background-color:var(--main-bg-color);
+    border-radius: 20px;
+    width: 50%;
+}
+@media only screen and (max-width:800px){
+    .prize{
+        width: 75%;
+    }
+}
 .rules {
     background-color: var(--main-bg-color);
 }
@@ -52,4 +61,8 @@ h3 {
 .rules-body {
     padding: 20px;
     line-height: 1.4;
+}
+
+th{
+    color: lightgray ; 
 }
