@@ -29,4 +29,10 @@ img:hover {
     .modal-dialog {
         margin-top: 50%;
     }
+    .video-header{
+        justify-content: center;       
+    }
+    .g-ytsubscribe{
+        justify-content: center;       
+    }
 }

@@ -1,24 +1,3 @@
-var text = '[' +
-    '{"src":"https://www.youtube.com/embed/wTcNtgA6gHs?enablejsapi=1&version=3&playerapiid=ytplayer","title":"abc"},' +
-    '{"src":"https://www.youtube.com/embed/wTcNtgA6gHs?enablejsapi=1&version=3&playerapiid=ytplayer","title":"abc"},' +
-    '{"src":"https://www.youtube.com/embed/wTcNtgA6gHs?enablejsapi=1&version=3&playerapiid=ytplayer","title":"abc"},' +
-    '{"src":"https://www.youtube.com/embed/wTcNtgA6gHs?enablejsapi=1&version=3&playerapiid=ytplayer","title":"abc" }]';
-
-obj = JSON.parse(text);
-
-idd = 0;
-renderProducts(obj, idd);
-
-
-$('.clse').on('click', function (event) {
-    console.log($(this).attr('id'));
-    var i = $(this).attr('id');
-    $('#frame' + i).attr('src', '');
-
-    console.log(obj[0].src);
-    $('#frame' + i).attr('src', obj[0].src);
-});
-
 function createTemplate(data, id) {
     console.log(id);
     return `
@@ -53,3 +32,37 @@ function renderProducts(products, id) {
     ` : products.map((product) => createTemplate(product, id++)).join("\n");
     $("#video").html(template);
 }
+
+
+var videosData = DB.collection("Videos").doc("HostItGaming").get()
+    .then(function (doc) {
+        if (doc.exists) {
+            var texts = '['
+            doc.data().urls.forEach(element => {
+                texts += '{"src":"' + element.replace("watch?v=","embed/") + '","title":"abc"},'
+            });
+            texts = texts.slice(0, -1)
+            texts += ']'
+            // console.log(texts);
+            obj = JSON.parse(texts)
+            idd = 0;
+            renderProducts(obj, idd);
+
+            $(".modal").on('hide.bs.modal', function () {
+                // alert($(this).attr('id').replace("modal",""))
+                
+                var i = $(this).attr('id').replace("modal","");
+                $('#frame' + i).attr('src', '');
+            
+                console.log(obj[0].src);
+                $('#frame' + i).attr('src', obj[i].src);
+            });
+        
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    })
+    .catch(function (error) {
+        console.log("Error getting documents: ", error);
+    });
