@@ -10,7 +10,7 @@
 }
 
 .container-fluid{
-    height: 50vh;
+   min-height: 60vh;
 }
 a {
     cursor: pointer;
