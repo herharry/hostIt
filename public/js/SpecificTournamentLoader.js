@@ -44,7 +44,7 @@ function specificTournamentListener() {
     });
 
     DB.collection("Tournaments").doc(urlParams.tid).onSnapshot(function (doc) {
-        console.log(doc.data())
+        // console.log(doc.data())
         loadTournamentInHTML(doc.data())
     });
 }
@@ -74,7 +74,7 @@ function formatResponse(res) {
 
 function loadTournamentInHTML(res) {
     TOURNAMENT = res;
-    console.log(res)
+    // console.log(res)
     document.getElementById("name").innerHTML = res.name;
     if (!res.isFinished) {
         document.getElementById("status").innerHTML = "registration open";
@@ -149,21 +149,33 @@ getGame = (data) => {
 
 loadGameDetails = (data, tournamentData) => {
     data.forEach(element => {
+        // console.log(element);    
+
         if (tournamentData.gameID == element.gameID) {
+
             document.getElementById("tournamentImage").setAttribute("src", element.gameImage)
             if ("gameMode" in tournamentData) {
-                console.log(element.gameModes[tournamentData.gameMode]);
-
-                // console.log(tournamentData.gameMode);
-
+                // console.log(element.gameModes[tournamentData.gameMode]);
                 // tournamentData.gameMode.forEach(hahe = ()=>{
                 // })
-
                 let span = document.createElement("span");
-                span.className = "badge badge-pill px-3 badge-danger";
+                span.className = "badge badge-pill px-3 mx-1 badge-danger";
                 span.innerHTML = element.gameModes[tournamentData.gameMode];
                 document.getElementById("gameTags").appendChild(span);
             }
+            if ("teamSize" in tournamentData) {
+                let span = document.createElement("span");
+                span.className = "badge badge-pill px-3 badge-danger";
+                span.innerHTML = element.teamSize[tournamentData.teamSize];
+                document.getElementById("gameTags").appendChild(span);            
+            }
+            if ("tags" in tournamentData) {
+                let span = document.createElement("span");
+                span.className = "badge badge-pill px-3 mx-1 badge-danger";
+                span.innerHTML = element.tags[tournamentData.tags[0]];
+                document.getElementById("gameTags").appendChild(span);            
+            }
+            
         }
     });
 }
