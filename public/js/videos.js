@@ -86,10 +86,10 @@ async function getYouTubeInfo(url, i) {
     let data = await response.json();
     console.log(data.items[0].snippet.thumbnails)
 
-    thumbnail = data.items[0].snippet.thumbnails.high.url
-    console.log(thumbnail)
+    thumbnail = data.items[0].snippet.thumbnails.maxres.url
+    // console.log(thumbnail)
     title = data.items[0].snippet.title;
-    console.log(data.items[0].snippet.thumbnails)
+    // console.log(data.items[0].snippet.thumbnails)
 
     // console.log(obj[i].title)
     obj[i].title = title
