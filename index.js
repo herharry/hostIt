@@ -154,8 +154,18 @@ app.get("/tournaments", function (req, res) {
     });
 });
 
-app.get("/videos",(req,res)=>{
-    res.sendFile(path.join(__dirname+'/views/videos.html'));    
+app.get('/videos', function (req, res) {
+    checkIfValidUser(req,function (callback)
+    {
+        if (callback == true)
+        {
+            res.sendFile(path.join(__dirname+'/views/videos.html'));
+        }
+        else
+        {
+            res.redirect("/register");
+        }
+    });
 })
 
 //*********************************************************************************************************************************************//
