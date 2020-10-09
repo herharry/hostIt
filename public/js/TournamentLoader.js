@@ -1,4 +1,6 @@
 // FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
+let GAMES ;
+let TID_LIST = [];
 async function loadTournamentJS() {
     let uid = USER_IN_SESSION.uid;
     await fetch("/user?uid=" + uid)
@@ -9,6 +11,8 @@ async function loadTournamentJS() {
             }
         });
 
+    getGame();
+    
     if (getCookie("SU_SY") == "") {
         await fetch("/createToken", {
             method: "POST",
@@ -27,7 +31,7 @@ async function loadTournamentJS() {
         });
     } else {
         firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {
-            console.log("hey")
+            // console.log("hey")
             tournamentListener();
         }).catch(reason => {
             console.log(reason);
@@ -37,14 +41,32 @@ async function loadTournamentJS() {
     }
 }
 
+getGame = (data) => {
+    fetch("/games")
+        .then(res => res.json())
+        .then(res => setGames(this.formatResponse(res), data))
+        .catch(err => err);
+}
+
+function setGames(data)
+{
+    GAMES = data;
+    console.log(GAMES)
+}
+
+
+
 function tournamentListener() {
     DB.collection("Tournaments").where("isFinished", "==", false)
         .onSnapshot(function (snapshot) {
+            tournamentHolder = [];
             snapshot.forEach(function (doc) {
                 let tournament = {};
                 tournament = doc.data();
                 tournament.id = doc.id;
-                console.log(tournament.id)
+                TID_LIST.push(doc.id)
+                tournamentHolder.push(tournament)
+                // console.log(tournament.id)
                 let flag = document.getElementById("tournamentCards" + "CARD" + tournament.id);
                 if (typeof (flag) != 'undefined' && flag != null) {
                     loadTournamentInExistingCard(tournament, "tournamentCards");
@@ -54,7 +76,7 @@ function tournamentListener() {
                 let myTournaments = userInDB.tournamentIds;
 
                 for (let i = 0; i < myTournaments.length; i++) {
-                    console.log(myTournaments[i])
+                    // console.log(myTournaments[i])
                     if (tournament.id == myTournaments[i]) {
                         let flag = document.getElementById("myTournamentCards" + "CARD" + tournament.id);
                         if (typeof (flag) != 'undefined' && flag != null) {
@@ -67,13 +89,13 @@ function tournamentListener() {
                 }
             })
         });
-    console.log("helos")
+    // console.log("helos")
 }
 //FIREBASE AUTHENTICATION FOR THE CURRENT USER ENDS *****************************************************************************
 
 
 function loadTournamentInNewCard(tournament, ids) {
-    console.log(tournament)
+    // console.log(tournament)
     const cardParent = document.getElementById(ids)
     let card = document.createElement("div");
     card.className = "card col-12 col-lg-6 p-0 my-2 px-1";
@@ -211,7 +233,7 @@ function formatResponse(res) {
 }
 
 function loadSpecificTournament(tid) {
-    console.log(tid)
+    // console.log(tid)
     window.location.assign("/tournaments?tid=" + tid);
 }
 
@@ -226,3 +248,94 @@ var observer = new IntersectionObserver(function(entries) {
 }, { threshold: [0] });
 
 observer.observe(document.querySelector("#footer"));
+
+function gatherFilterElements()
+{    console.log("adf")
+
+    let filterList = [];
+   let x;
+   x= document.getElementById("pubg").checked ? filterList.push("pubg") : '' ;
+   x= document.getElementById("cod").checked ? filterList.push("cod") : '' ;
+   x= document.getElementById("open").checked ? filterList.push("open") : '' ;
+   x= document.getElementById("full").checked ? filterList.push("full") : '' ;
+   x=  document.getElementById("today").checked ? filterList.push("today") : '' ;
+   x= document.getElementById("tomorrow").checked ? filterList.push("tomorrow") : '' ;
+    //yet to do
+   x= document.getElementById("customDate").checked ? filterList.push("customDate") : '' ;
+
+    applyFilter(filterList)
+}
+
+function applyFilter(filterIDs)
+{
+    console.log(filterIDs)
+    let tidList = [];
+    for(let i=0;i<filterIDs.length; i++)
+    {
+        switch (filterIDs[i])
+        {
+            case "pubg" :  tidList = getRequiredTournamentList("gameName","Pubg"); break;
+            case "cod" :  tidList = getRequiredTournamentList("gameName","Call of Duty"); break;
+            case "open" :  tidList = getRequiredTournamentList("gameStatus","open"); break;
+            case "full" :  tidList = getRequiredTournamentList("gameStatus","full"); break;
+        }
+    }
+    let reqList =  [...new Set(tidList)];
+    console.log(reqList)
+    deleteAllCards();
+
+    for(let i=0;i<reqList.length;i++)
+    {
+        for(let j=0;j<tournamentHolder.length;j++)
+        {
+            if (reqList[i] == tournamentHolder[j].id) {
+                console.log(i, tournamentHolder[j])
+                loadTournamentInNewCard(tournamentHolder[j], "tournamentCards")
+                break;
+            }
+        }
+    }
+}
+
+
+function getRequiredTournamentList(filterType, filterID)
+{
+    let tidList = [];
+    tournamentHolder.forEach(function (tournament)
+    {
+        for(let i =0;i<GAMES.length;i++)
+        {
+            if(GAMES[i].gameID == tournament.gameID)
+            {
+                switch (filterType)
+                {
+                    case "gameName" :
+                        if(GAMES[i].name == filterID)
+                        {
+                            tidList.push(tournament.id)
+                        }
+                    case "gameStatus" :
+                        if(tournament.vacantSeats != 0 && filterID == "open")
+                        {
+                            tidList.push(tournament.id)
+                        }
+                        if(tournament.vacantSeats == 0 && filterID == "full")
+                        {
+                            tidList.push(tournament.id)
+                        }
+
+                }
+                break;
+            }
+        }
+    });
+    return tidList;
+}
+
+function deleteAllCards()
+{
+    document.getElementById("tournamentCards").remove();
+    let newParent = document.createElement("div");
+    newParent.id = "tournamentCards";
+    document.getElementById("tournament").appendChild(newParent);
+}
