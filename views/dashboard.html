@@ -11,11 +11,11 @@
 </head>
 
 <body class="custom">
-    <div id="overlay">
+    <!-- <div id="overlay">
         <div class="spinner"></div>
         <br />
         Loading...
-    </div>
+    </div> -->
     <nav class="navbar navbar-expand-lg navbar-dark py-0 static-top">
         <div class="container-fluid iii">
             <a class="navbar-brand" href="/dashboard">
@@ -148,7 +148,8 @@
                                     for="br">br</label>
                             </div>
                         </section>
-                        <button type="button" class="btn btn-outline-info waves-effect btn-sm w-100 ml-4" onclick="gatherFilterElements()">apply</button>
+                        <button type="button" class="btn btn-outline-info waves-effect btn-sm w-100 ml-4"
+                            onclick="gatherFilterElements()">apply</button>
                     </div>
                     <!-- </div> -->
                 </div>
@@ -174,6 +175,12 @@
                     <div class="tab-pane fade show active" id="tournament" role="tabpanel"
                         aria-labelledby="tournament-tab">
                         <div class="py-4" id="tournamentBody">
+                            <div class="text-center" id="tournamentLoader">
+                                <div class="spinner-border" role="status">
+                                  <span class="sr-only">Loading...</span>
+                                </div>
+                              </div>
+
                             <div class="d-flex justify-content-between flex-wrap col-12" id="tournamentCards">
 
                             </div>

@@ -96,6 +96,7 @@ function tournamentListener() {
 
 
 function loadTournamentInNewCard(tournament, ids) {
+    $("#tournamentLoader").addClass("d-none");
     // console.log(tournament)
     const cardParent = document.getElementById(ids)
     let card = document.createElement("div");
@@ -184,8 +185,6 @@ function loadTournamentInNewCard(tournament, ids) {
         cardBody.appendChild(button);
     }
     cardParent.appendChild(card);
-    $("#overlay").fadeOut('slow');
-
 }
 
 
