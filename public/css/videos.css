@@ -1,0 +1,52 @@
+@import url("headerfooter.css");
+
+.video-header {
+    height: 100%;
+    min-height: 200px;
+    background: #36D1DC;
+    background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);
+    background: linear-gradient(to right, #5B86E5, #36D1DC);
+
+}
+
+.navbar {
+    background: #36D1DC;
+    background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);
+    background: linear-gradient(to right, #5B86E5, #36D1DC);
+}
+
+#navbarResponsive ul li a{
+    font-weight: 600;
+    color: black;
+}
+
+.video-container {
+    min-height: 60vh;
+}
+
+a {
+    cursor: pointer;
+}
+
+img {
+    transition: 0.5s all ease-in-out;
+
+}
+
+img:hover {
+    transform: scale(1.03);
+}
+
+@media only screen and (max-width: 800px) {
+    .modal-dialog {
+        margin-top: 50%;
+    }
+
+    .video-header {
+        justify-content: center;
+    }
+
+    .g-ytsubscribe {
+        justify-content: center;
+    }
+}
