@@ -1,5 +1,5 @@
 // FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
-let GAMES ;
+let GAMES;
 let TID_LIST = [];
 async function loadTournamentJS() {
     let uid = USER_IN_SESSION.uid;
@@ -12,7 +12,7 @@ async function loadTournamentJS() {
         });
 
     getGame();
-    
+
     if (getCookie("SU_SY") == "") {
         await fetch("/createToken", {
             method: "POST",
@@ -48,8 +48,7 @@ getGame = (data) => {
         .catch(err => err);
 }
 
-function setGames(data)
-{
+function setGames(data) {
     GAMES = data;
     console.log(GAMES)
 }
@@ -61,20 +60,22 @@ function tournamentListener() {
         .onSnapshot(function (snapshot) {
             tournamentHolder = [];
             snapshot.forEach(function (doc) {
-                let tournament = {};
-                tournament = doc.data();
-                tournament.id = doc.id;
-                TID_LIST.push(doc.id)
-                tournamentHolder.push(tournament)
-                // console.log(tournament.id)
-                let flag = document.getElementById("tournamentCards" + "CARD" + tournament.id);
-                if (typeof (flag) != 'undefined' && flag != null) {
-                    loadTournamentInExistingCard(tournament, "tournamentCards");
-                } else {
-                    loadTournamentInNewCard(tournament, "tournamentCards")
+                if (doc.data().requestStatus == 1) {
+                    let tournament = {};
+                    tournament = doc.data();
+                    tournament.id = doc.id;
+                    TID_LIST.push(doc.id)
+                    tournamentHolder.push(tournament)
+                    // console.log(tournament.id)
+                    let flag = document.getElementById("tournamentCards" + "CARD" + tournament.id);
+                    if (typeof (flag) != 'undefined' && flag != null) {
+                        loadTournamentInExistingCard(tournament, "tournamentCards");
+                    } else {
+                        loadTournamentInNewCard(tournament, "tournamentCards")
+                    }
                 }
-                let myTournaments = userInDB.tournamentIds;
 
+                let myTournaments = userInDB.tournamentIds;
                 for (let i = 0; i < myTournaments.length; i++) {
                     // console.log(myTournaments[i])
                     if (tournament.id == myTournaments[i]) {
@@ -176,7 +177,7 @@ function loadTournamentInNewCard(tournament, ids) {
     if (ids != "myTournamentCards") {
         let button = document.createElement("a");
         button.className = "btn btn-sm btn-primary px-4 py-1 mt-3 mx-3 float-right";
-        (percent==100)? button.classList.add("active"):button.classList.add("btn-primary") 
+        (percent == 100) ? button.classList.add("active"): button.classList.add("btn-primary")
         button.text = "Join"
         button.id = tournament.id;
         button.setAttribute("onClick", "loadSpecificTournament(this.id)");
@@ -214,7 +215,7 @@ function loadTournamentInExistingCard(tournament, ids) {
     });
     time.innerHTML = tournamentDate + "<br>" + tournamentTime;
     let players = document.getElementById(ids + "PLAYERS" + tournament.id);
-    players.innerHTML ="seats <br>" +  (tournament.totalSeats - tournament.vacantSeats) + "/" + tournament.totalSeats;
+    players.innerHTML = "seats <br>" + (tournament.totalSeats - tournament.vacantSeats) + "/" + tournament.totalSeats;
     let progressBar = document.getElementById(ids + "PROGRESS_BAR" + tournament.id);
     let percent = ((tournament.totalSeats - tournament.vacantSeats) / tournament.totalSeats) * 100;
     progressBar.setAttribute("style", "width :" + percent + "%");
@@ -240,90 +241,90 @@ function loadSpecificTournament(tid) {
 //todo show only unregistered tournaments
 //todo in the live tournament tab rename it as registered tournament and click to view it...
 
-var observer = new IntersectionObserver(function(entries) {
-	// isIntersecting is true when element and viewport are overlapping
-	// isIntersecting is false when element and viewport don't overlap
-	if(entries[0].isIntersecting === true)
-		console.log('Element has just become visible in screen');
-}, { threshold: [0] });
+var observer = new IntersectionObserver(function (entries) {
+    // isIntersecting is true when element and viewport are overlapping
+    // isIntersecting is false when element and viewport don't overlap
+    if (entries[0].isIntersecting === true)
+        console.log('Element has just become visible in screen');
+}, {
+    threshold: [0]
+});
 
 observer.observe(document.querySelector("#footer"));
 
-function gatherFilterElements()
-{    console.log("adf")
+function gatherFilterElements() {
+    console.log("adf")
 
     let filterList = [];
-   let x;
-   x= document.getElementById("pubg").checked ? filterList.push("pubg") : '' ;
-   x= document.getElementById("cod").checked ? filterList.push("cod") : '' ;
-   x= document.getElementById("open").checked ? filterList.push("open") : '' ;
-   x= document.getElementById("full").checked ? filterList.push("full") : '' ;
-   x=  document.getElementById("today").checked ? filterList.push("today") : '' ;
-   x= document.getElementById("tomorrow").checked ? filterList.push("tomorrow") : '' ;
+    let x;
+    x = document.getElementById("pubg").checked ? filterList.push("pubg") : '';
+    x = document.getElementById("cod").checked ? filterList.push("cod") : '';
+    x = document.getElementById("open").checked ? filterList.push("open") : '';
+    x = document.getElementById("full").checked ? filterList.push("full") : '';
+    x = document.getElementById("today").checked ? filterList.push("today") : '';
+    x = document.getElementById("tomorrow").checked ? filterList.push("tomorrow") : '';
     //yet to do
-   x= document.getElementById("customDate").checked ? filterList.push("customDate") : '' ;
+    x = document.getElementById("customDate").checked ? filterList.push("customDate") : '';
 
     applyFilter(filterList)
 }
 
-function applyFilter(filterIDs)
-{
-    console.log(filterIDs)
+function applyFilter(filterIDs) {
     let tidList = [];
-    for(let i=0;i<filterIDs.length; i++)
-    {
-        switch (filterIDs[i])
-        {
-            case "pubg" :  tidList = getRequiredTournamentList("gameName","Pubg"); break;
-            case "cod" :  tidList = getRequiredTournamentList("gameName","Call of Duty"); break;
-            case "open" :  tidList = getRequiredTournamentList("gameStatus","open"); break;
-            case "full" :  tidList = getRequiredTournamentList("gameStatus","full"); break;
+    for (let i = 0; i < filterIDs.length; i++) {
+        // console.log(filterIDs[i])
+
+        if (filterIDs[i] == "pubg") {
+            tidList = getRequiredTournamentList("gameName", "Pubg");
+            // console.log(tidList);
+        }
+        if (filterIDs[i] == "cod") {
+            tidList = getRequiredTournamentList("gameName", "Call of Duty");
+            // console.log(tidList);
+        }
+        if (filterIDs[i] == "open") {
+            tidList = getRequiredTournamentList("gameStatus", "open");
+            // console.log(tidList);
+        }
+        if (filterIDs[i] == "full") {
+            tidList = getRequiredTournamentList("gameStatus", "full");
+            // console.log(tidList);
         }
     }
-    let reqList =  [...new Set(tidList)];
+    let reqList = [...new Set(tidList)];
     console.log(reqList)
     deleteAllCards();
-
-    for(let i=0;i<reqList.length;i++)
-    {
-        for(let j=0;j<tournamentHolder.length;j++)
-        {
-            if (reqList[i] == tournamentHolder[j].id) {
-                console.log(i, tournamentHolder[j])
-                loadTournamentInNewCard(tournamentHolder[j], "tournamentCards")
-                break;
+    if (reqList.length != 0) {
+        for (let i = 0; i < reqList.length; i++) {
+            for (let j = 0; j < tournamentHolder.length; j++) {
+                if (reqList[i] == tournamentHolder[j].id) {
+                    console.log(i, tournamentHolder[j])
+                    loadTournamentInNewCard(tournamentHolder[j], "tournamentCards")
+                    break;
+                }
             }
         }
-    }
+    } else tournamentListener()
 }
 
+let tidList = [];
 
-function getRequiredTournamentList(filterType, filterID)
-{
-    let tidList = [];
-    tournamentHolder.forEach(function (tournament)
-    {
-        for(let i =0;i<GAMES.length;i++)
-        {
-            if(GAMES[i].gameID == tournament.gameID)
-            {
-                switch (filterType)
-                {
-                    case "gameName" :
-                        if(GAMES[i].name == filterID)
-                        {
+function getRequiredTournamentList(filterType, filterID) {
+    tournamentHolder.forEach(function (tournament) {
+        for (let i = 0; i < GAMES.length; i++) {
+            if (GAMES[i].gameID == tournament.gameID) {
+                switch (filterType) {
+                    case "gameName":
+                        if (GAMES[i].name == filterID) {
                             tidList.push(tournament.id)
                         }
-                    case "gameStatus" :
-                        if(tournament.vacantSeats != 0 && filterID == "open")
-                        {
-                            tidList.push(tournament.id)
-                        }
-                        if(tournament.vacantSeats == 0 && filterID == "full")
-                        {
-                            tidList.push(tournament.id)
-                        }
-
+                        case "gameStatus":
+                            if (tournament.vacantSeats != 0 && filterID == "open") {
+                                tidList.push(tournament.id)
+                            }
+                            if (tournament.vacantSeats == 0 && filterID == "full") {
+                                tidList.push(tournament.id)
+                            }
                 }
                 break;
             }
@@ -332,10 +333,10 @@ function getRequiredTournamentList(filterType, filterID)
     return tidList;
 }
 
-function deleteAllCards()
-{
+function deleteAllCards() {
     document.getElementById("tournamentCards").remove();
     let newParent = document.createElement("div");
+    newParent.className = "d-flex justify-content-between flex-wrap col-12"
     newParent.id = "tournamentCards";
-    document.getElementById("tournament").appendChild(newParent);
+    document.getElementById("tournamentBody").appendChild(newParent);
 }
