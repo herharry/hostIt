@@ -13,6 +13,7 @@ function loadBannerInCarousel(banners) {
         let itemss = document.createElement("div");
         let img = document.createElement("img");
         img.src = banners[i].imageUrl;
+        img.className = "img-ban"
         let att = document.createAttribute("class");
         
         i ? att.value = "carousel-item " : att.value = "carousel-item active" ;
