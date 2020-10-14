@@ -50,7 +50,29 @@ getGame = (data) => {
 
 function setGames(data) {
     GAMES = data;
-    console.log(GAMES)
+    renderGames(data)
+}
+
+function createTemplate(data) {
+    // console.log(id);
+    return `
+    <div class="custom-control custom-checkbox ml-2 pb-2">
+        <input type="checkbox" class="custom-control-input filled-in" id="${data.name.toLowerCase()}">
+            <label
+                class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                for="${data.name.toLowerCase()}">${data.name}
+            </label>
+    </div>
+            `
+}
+
+function renderGames(game, id) {
+    const template =
+        game.length === 0 ? `
+    <p class="mx-auto">No matching results found.</p>
+    ` : game.map((product) => createTemplate(product)).join("\n");
+    $("#gameFilter").html("<p>Games</p>"+template);
+    
 }
 
 
@@ -247,7 +269,7 @@ function gatherFilterElements() {
     let filterList = [];
     let x;
     x = document.getElementById("pubg").checked ? filterList.push("pubg") : '';
-    x = document.getElementById("cod").checked ? filterList.push("cod") : '';
+    x = document.getElementById("call of duty").checked ? filterList.push("cod") : '';
     x = document.getElementById("open").checked ? filterList.push("open") : '';
     x = document.getElementById("full").checked ? filterList.push("full") : '';
     x = document.getElementById("today").checked ? filterList.push("today") : '';
@@ -308,6 +330,10 @@ function applyFilter(filterIDs) {
         }
     } else {
         // if no filters are selected
+        if ($("#noData").length != 0){
+            $("#noData").remove()
+        }
+
         tournamentListener()
     }
 }
