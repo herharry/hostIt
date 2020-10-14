@@ -240,16 +240,6 @@ function loadSpecificTournament(tid) {
 //todo show only unregistered tournaments
 //todo in the live tournament tab rename it as registered tournament and click to view it...
 
-var observer = new IntersectionObserver(function (entries) {
-    // isIntersecting is true when element and viewport are overlapping
-    // isIntersecting is false when element and viewport don't overlap
-    if (entries[0].isIntersecting === true)
-        console.log('Element has just become visible in screen');
-}, {
-    threshold: [0]
-});
-
-observer.observe(document.querySelector("#footer"));
 
 function gatherFilterElements() {
 
@@ -263,50 +253,68 @@ function gatherFilterElements() {
     x = document.getElementById("today").checked ? filterList.push("today") : '';
     x = document.getElementById("tomorrow").checked ? filterList.push("tomorrow") : '';
     //yet to do
-    x = document.getElementById("customDate").checked ? filterList.push("customDate") : '';
-    console.log(filterList)
+    if (document.getElementById("customDates").value)
+        x = document.getElementById("customDate").checked ? filterList.push("customDate") : '';
+    // console.log(filterList)
     applyFilter(filterList)
 }
 
 function applyFilter(filterIDs) {
-    let tidList = [];
-    for (let i = 0; i < filterIDs.length; i++) {
-        // console.log(filterIDs[i])
+    if (filterIDs.length != 0) {
+        let tidList = [];
+        for (let i = 0; i < filterIDs.length; i++) {
+            // console.log(filterIDs[i])
 
-        if (filterIDs[i] == "pubg") {
-            tidList = tidList.concat(getRequiredTournamentList("gameName", "Pubg"));
-            // console.log(tidList);
+            if (filterIDs[i] == "pubg") {
+                tidList = tidList.concat(getRequiredTournamentList("gameName", "Pubg"));
+                // console.log(tidList);
+            }
+            if (filterIDs[i] == "cod") {
+                tidList = tidList.concat(getRequiredTournamentList("gameName", "Call of Duty"));
+                // console.log(tidList);
+            }
+            if (filterIDs[i] == "open") {
+                tidList = tidList.concat(getRequiredTournamentList("gameStatus", "open"));
+                // console.log(tidList);
+            }
+            if (filterIDs[i] == "full") {
+                tidList = tidList.concat(getRequiredTournamentList("gameStatus", "full"));
+                // console.log(tidList);
+            }
+            if (filterIDs[i] == "today") {
+                tidList = tidList.concat(getRequiredTournamentList("date", "today"));
+            }
+            if (filterIDs[i] == "tomorrow") {
+                tidList = tidList.concat(getRequiredTournamentList("date", "tomorrow"));
+            }
+            if (filterIDs[i] == "customDate") {
+                console.log(GAMES[0]);
+                tidList = tidList.concat(getRequiredTournamentList("customDate", document.getElementById("customDates").value));
+            }
+
         }
-        if (filterIDs[i] == "cod") {
-            tidList = tidList.concat( getRequiredTournamentList("gameName", "Call of Duty"));
-            // console.log(tidList);
-        }
-        if (filterIDs[i] == "open") {
-            tidList = tidList.concat(getRequiredTournamentList("gameStatus", "open"));
-            // console.log(tidList);
-        }
-        if (filterIDs[i] == "full") {
-            tidList = tidList.concat(getRequiredTournamentList("gameStatus", "full"));
-            // console.log(tidList);
-        }
-    }
-    let reqList = [...new Set(tidList)];
-    console.log(reqList)
-    deleteAllCards();
-    if (reqList.length != 0) {
-        for (let i = 0; i < reqList.length; i++) {
-            for (let j = 0; j < tournamentHolder.length; j++) {
-                if (reqList[i] == tournamentHolder[j].id) {
-                    loadTournamentInNewCard(tournamentHolder[j], "tournamentCards")
-                    break;
+        let reqList = [...new Set(tidList)];
+        // console.log(reqList)
+        deleteAllCards();
+        if (reqList.length != 0) {
+            for (let i = 0; i < reqList.length; i++) {
+                for (let j = 0; j < tournamentHolder.length; j++) {
+                    if (reqList[i] == tournamentHolder[j].id) {
+                        loadTournamentInNewCard(tournamentHolder[j], "tournamentCards")
+                        break;
+                    }
                 }
             }
         }
-    } else tournamentListener()
+    } else {
+        // if no filters are selected
+        tournamentListener()
+    }
 }
 
 
 function getRequiredTournamentList(filterType, filterID) {
+
     let tidList = [];
     tournamentHolder.forEach(function (tournament) {
         for (let i = 0; i < GAMES.length; i++) {
@@ -323,12 +331,26 @@ function getRequiredTournamentList(filterType, filterID) {
                             if (tournament.vacantSeats == 0 && filterID == "full") {
                                 tidList.push(tournament.id)
                             }
+                            case "date":
+                                if (filterID == "today" && new Date(Date.now()).toDateString() == new Date(tournament.time.seconds * 1000).toDateString()) {
+                                    tidList.push(tournament.id)
+                                }
+                                const tomorrow = new Date(new Date)
+                                tomorrow.setDate(tomorrow.getDate() + 1)
+                                if (filterID == "tomorrow" && tomorrow.toDateString() == new Date(tournament.time.seconds * 1000).toDateString()) {
+                                    tidList.push(tournament.id)
+                                }
+                            case "customDate":
+                                if(new Date(filterID).toDateString() == new Date(tournament.time.seconds * 1000).toDateString()){
+                                    tidList.push(tournament.id)
+                                }
+                                
                 }
                 break;
             }
         }
     });
-    console.log(tidList)
+    // console.log(tidList)
     return tidList;
 }
 

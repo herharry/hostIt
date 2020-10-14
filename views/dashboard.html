@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
     <link rel="stylesheet" type="text/css" href="css/dashboard.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 
 <body class="custom">
@@ -100,6 +100,7 @@
                                     class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
                                     for="customDate">date</label>
                             </div>
+                            <input type="checkbox" class="selector form-control d-none form-control-sm ml-4 w-75" id="customDates" placeholder="Select date">
                         </section>
 
                         <section class="mb-3 pl-3 col-6 col-md-12">
@@ -132,22 +133,20 @@
                                     class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
                                     for="cod">cod</label>
                             </div>
-                        </section>
-                        <section class="mb-3 pl-3 col-6 col-md-12">
-                            <p>Game mode</p>
                             <div class="custom-control custom-checkbox ml-2 pb-2">
-                                <input type="checkbox" class="custom-control-input filled-in" id="tdm">
+                                <input type="checkbox" class="custom-control-input filled-in" id="cr">
                                 <label
                                     class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
-                                    for="tdm">tdm</label>
+                                    for="cod">clash Royale</label>
                             </div>
                             <div class="custom-control custom-checkbox ml-2 pb-2">
-                                <input type="checkbox" class="custom-control-input filled-in" id="br">
+                                <input type="checkbox" class="custom-control-input filled-in" id="ff">
                                 <label
                                     class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
-                                    for="br">br</label>
+                                    for="cod">free fire</label>
                             </div>
                         </section>
+
                         <button type="button" class="btn btn-outline-info waves-effect btn-sm w-100 ml-4"
                             onclick="gatherFilterElements()">apply</button>
                     </div>
@@ -177,9 +176,9 @@
                         <div class="py-4" id="tournamentBody">
                             <div class="text-center" id="tournamentLoader">
                                 <div class="spinner-border" role="status">
-                                  <span class="sr-only">Loading...</span>
+                                    <span class="sr-only">Loading...</span>
                                 </div>
-                              </div>
+                            </div>
 
                             <div class="d-flex justify-content-between flex-wrap col-12" id="tournamentCards">
 
@@ -248,10 +247,26 @@
 
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <script>
         fetchBanners();
         loadTournamentJS();
+        $(".selector").flatpickr();
+        $("#customDate").change(function () {
+            if (this.checked) {
+                //Do stuff
+                // console.log($("#customDates").val());
+                $("#customDates").removeClass("d-none")
+            }else{
+                $("#customDates").addClass("d-none")
+                $("#customDates").val("")
+            }
+            
+        });
+        
     </script>
+
 </body>
 
 </html>
