@@ -5,39 +5,39 @@ document.getElementById("signinlog").addEventListener("click", function loginWit
     if ((email != "") && (password != "")) {
         if (validateEmail(email)) {
 
-            console.log(validateEmail(email));
+            // console.log(validateEmail(email));
 
             firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
             firebase.auth().signInWithEmailAndPassword(email, password).then(function (result) {
                 iziToast.info({
                     title: "signing in",
-                    position: "bottomRight"
+                    position: "topRight"
                 })
                 let user = result.user;
                 console.log(user)
                 isEmailVerified(result)
                 return false;
             }).catch(function (error) {
-                iziToast.success({
+                iziToast.error({
                     message: error.message,
-                    position: "bottomRight"
+                    position: "topRight"
                 })
             });
         } else {
             iziToast.error({
                 message: "Enter valid email",
-                position: "bottomRight"
+                position: "topRight"
             })
         }
     } else {
         var msg = "";
         if (email == "")
             msg += "Email "
-        if (password =="")
+        if (password == "")
             (msg == "") ? msg += "password " : msg += "& password "
         iziToast.error({
-            message: msg+" field empty",
-            position: "bottomRight"
+            message: msg + " field empty",
+            position: "topRight"
         })
     }
 })
@@ -72,10 +72,10 @@ document.getElementById("signuplog").addEventListener("click", function signupWi
                         //todo yet to handle errors and exceptions
                         // An error happened.
                     });
-                })
+                }).catch(function (error) {});
             }).catch(function (error) {
                 iziToast.error({
-                    message:error.message,
+                    message: error.message,
                     position: "bottomLeft"
                 })
                 //todo yet to handle errors and exceptions
@@ -88,14 +88,14 @@ document.getElementById("signuplog").addEventListener("click", function signupWi
         }
     } else {
         var msg = "";
-        if(uname == "")
-        msg += "username "
+        if (uname == "")
+            msg += "username "
         if (email == "")
-        (msg == "") ? msg += "Email " : msg += "& E-Mail "
-        if (password =="")
+            (msg == "") ? msg += "Email " : msg += "& E-Mail "
+        if (password == "")
             (msg == "") ? msg += "password " : msg += "& password "
         iziToast.error({
-            message: msg+" field empty",
+            message: msg + " field empty",
             position: "bottomLeft"
         })
     }
@@ -115,10 +115,10 @@ function isEmailVerified(result) {
         firebase.auth().currentUser.reload();
         if (firebase.auth().currentUser.emailVerified) {
             console.log("Email Verified!", firebase.auth().currentUser.emailVerified);
-            iziToast.success({
-                message: "Email verified!!!!",
-                position: "topCenter"
-            })
+            // iziToast.success({
+            //     message: "Email verified!!!!",
+            //     position: "topCenter"
+            // })
             clearInterval(timer);
             sessionLoginHandler(result.user)
         }

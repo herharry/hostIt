@@ -80,16 +80,22 @@ function renderGames(game, id) {
 function tournamentListener() {
     DB.collection("Tournaments").where("isFinished", "==", false)
         .onSnapshot(function (snapshot) {
+            if (snapshot.empty) {
+                $("#tournamentLoader").fadeOut()
+                if ($("#noData").length == 0)
+                    $("#tournamentCards").append("<p class=\"mx-auto my-5\" id=\"noData\">No data found</p>")
+                $("#myTournamentCards").append("<p class=\"mx-auto my-5\">No data found</p>")
+            }
             tournamentHolder = [];
             snapshot.forEach(function (doc) {
+                let tournament = {};
+                tournament = doc.data();
+                tournament.id = doc.id;
+                TID_LIST.push(doc.id)
+                tournamentHolder.push(tournament)
+                // console.log(tournament.id)
+                let flag = document.getElementById("tournamentCards" + "CARD" + tournament.id);
                 if (doc.data().requestStatus == 1) {
-                    let tournament = {};
-                    tournament = doc.data();
-                    tournament.id = doc.id;
-                    TID_LIST.push(doc.id)
-                    tournamentHolder.push(tournament)
-                    // console.log(tournament.id)
-                    let flag = document.getElementById("tournamentCards" + "CARD" + tournament.id);
                     if (typeof (flag) != 'undefined' && flag != null) {
                         loadTournamentInExistingCard(tournament, "tournamentCards");
                     } else {
@@ -118,12 +124,14 @@ function tournamentListener() {
 
 
 function loadTournamentInNewCard(tournament, ids) {
-    $("#tournamentLoader").addClass("d-none");
+    $("#tournamentLoader").fadeOut();
     // console.log(tournament)
     const cardParent = document.getElementById(ids)
     let card = document.createElement("div");
     card.className = "card col-12 col-lg-6 p-0 my-2 px-1";
     card.id = ids + "CARD" + tournament.id;
+    card.setAttribute("onClick", "loadSpecificTournament(this.id)");
+
     // let img = document.createElement("img");
     // img.src = getGameImage(tournaments[i].gameID)
     // img.className = "card-img-top";
@@ -256,6 +264,7 @@ function formatResponse(res) {
 
 function loadSpecificTournament(tid) {
     // console.log(tid)
+    tid.split("CARD")[1] != undefined ? tid = tid.split("CARD")[1] : tid = tid
     window.location.assign("/tournaments?tid=" + tid);
 }
 
@@ -318,6 +327,7 @@ function applyFilter(filterIDs) {
         let reqList = [...new Set(tidList)];
         // console.log(reqList)
         deleteAllCards();
+        $("#tournamentLoader").fadeIn()
         if (reqList.length != 0) {
             for (let i = 0; i < reqList.length; i++) {
                 for (let j = 0; j < tournamentHolder.length; j++) {
@@ -327,6 +337,10 @@ function applyFilter(filterIDs) {
                     }
                 }
             }
+        } else {
+            $("#tournamentLoader").fadeOut()
+            if ($("#noData").length == 0)
+                $("#tournamentCards").append("<p class=\"mx-auto my-5\" id=\"noData\">No data found</p>")
         }
     } else {
         // if no filters are selected
@@ -366,11 +380,11 @@ function getRequiredTournamentList(filterType, filterID) {
                                 if (filterID == "tomorrow" && tomorrow.toDateString() == new Date(tournament.time.seconds * 1000).toDateString()) {
                                     tidList.push(tournament.id)
                                 }
-                            case "customDate":
-                                if(new Date(filterID).toDateString() == new Date(tournament.time.seconds * 1000).toDateString()){
-                                    tidList.push(tournament.id)
-                                }
-                                
+                                case "customDate":
+                                    if (new Date(filterID).toDateString() == new Date(tournament.time.seconds * 1000).toDateString()) {
+                                        tidList.push(tournament.id)
+                                    }
+
                 }
                 break;
             }
