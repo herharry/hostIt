@@ -252,7 +252,7 @@ var observer = new IntersectionObserver(function (entries) {
 observer.observe(document.querySelector("#footer"));
 
 function gatherFilterElements() {
-    console.log("adf")
+
 
     let filterList = [];
     let x;
@@ -264,7 +264,7 @@ function gatherFilterElements() {
     x = document.getElementById("tomorrow").checked ? filterList.push("tomorrow") : '';
     //yet to do
     x = document.getElementById("customDate").checked ? filterList.push("customDate") : '';
-
+    console.log(filterList)
     applyFilter(filterList)
 }
 
@@ -274,19 +274,19 @@ function applyFilter(filterIDs) {
         // console.log(filterIDs[i])
 
         if (filterIDs[i] == "pubg") {
-            tidList = getRequiredTournamentList("gameName", "Pubg");
+            tidList = tidList.concat(getRequiredTournamentList("gameName", "Pubg"));
             // console.log(tidList);
         }
         if (filterIDs[i] == "cod") {
-            tidList = getRequiredTournamentList("gameName", "Call of Duty");
+            tidList = tidList.concat( getRequiredTournamentList("gameName", "Call of Duty"));
             // console.log(tidList);
         }
         if (filterIDs[i] == "open") {
-            tidList = getRequiredTournamentList("gameStatus", "open");
+            tidList = tidList.concat(getRequiredTournamentList("gameStatus", "open"));
             // console.log(tidList);
         }
         if (filterIDs[i] == "full") {
-            tidList = getRequiredTournamentList("gameStatus", "full");
+            tidList = tidList.concat(getRequiredTournamentList("gameStatus", "full"));
             // console.log(tidList);
         }
     }
@@ -297,7 +297,6 @@ function applyFilter(filterIDs) {
         for (let i = 0; i < reqList.length; i++) {
             for (let j = 0; j < tournamentHolder.length; j++) {
                 if (reqList[i] == tournamentHolder[j].id) {
-                    console.log(i, tournamentHolder[j])
                     loadTournamentInNewCard(tournamentHolder[j], "tournamentCards")
                     break;
                 }
@@ -306,9 +305,9 @@ function applyFilter(filterIDs) {
     } else tournamentListener()
 }
 
-let tidList = [];
 
 function getRequiredTournamentList(filterType, filterID) {
+    let tidList = [];
     tournamentHolder.forEach(function (tournament) {
         for (let i = 0; i < GAMES.length; i++) {
             if (GAMES[i].gameID == tournament.gameID) {
@@ -329,6 +328,7 @@ function getRequiredTournamentList(filterType, filterID) {
             }
         }
     });
+    console.log(tidList)
     return tidList;
 }
 
