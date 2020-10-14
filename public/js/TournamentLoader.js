@@ -50,7 +50,29 @@ getGame = (data) => {
 
 function setGames(data) {
     GAMES = data;
-    console.log(GAMES)
+    renderGames(data)
+}
+
+function createTemplate(data) {
+    // console.log(id);
+    return `
+    <div class="custom-control custom-checkbox ml-2 pb-2">
+        <input type="checkbox" class="custom-control-input filled-in" id="${data.name.toLowerCase()}">
+            <label
+                class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                for="${data.name.toLowerCase()}">${data.name}
+            </label>
+    </div>
+            `
+}
+
+function renderGames(game, id) {
+    const template =
+        game.length === 0 ? `
+    <p class="mx-auto">No matching results found.</p>
+    ` : game.map((product) => createTemplate(product)).join("\n");
+    $("#gameFilter").html("<p>Games</p>" + template);
+
 }
 
 
@@ -255,8 +277,10 @@ function gatherFilterElements() {
 
     let filterList = [];
     let x;
-    x = document.getElementById("pubg").checked ? filterList.push("pubg") : '';
-    x = document.getElementById("cod").checked ? filterList.push("cod") : '';
+    GAMES.forEach(element => {
+        x = document.getElementById(element.name.toLowerCase()).checked ? filterList.push(element.name.toLowerCase()) : '';
+    });
+
     x = document.getElementById("open").checked ? filterList.push("open") : '';
     x = document.getElementById("full").checked ? filterList.push("full") : '';
     x = document.getElementById("today").checked ? filterList.push("today") : '';
@@ -272,23 +296,19 @@ function applyFilter(filterIDs) {
     if (filterIDs.length != 0) {
         let tidList = [];
         for (let i = 0; i < filterIDs.length; i++) {
-            // console.log(filterIDs[i])
 
-            if (filterIDs[i] == "pubg") {
-                tidList = tidList.concat(getRequiredTournamentList("gameName", "Pubg"));
-                // console.log(tidList);
-            }
-            if (filterIDs[i] == "cod") {
-                tidList = tidList.concat(getRequiredTournamentList("gameName", "Call of Duty"));
-                // console.log(tidList);
-            }
+            GAMES.forEach(element => {
+                if (filterIDs[i] == element.name.toLowerCase()) {
+                    tidList = tidList.concat(getRequiredTournamentList("gameName", element.name));
+                }
+
+            });
+
             if (filterIDs[i] == "open") {
                 tidList = tidList.concat(getRequiredTournamentList("gameStatus", "open"));
-                // console.log(tidList);
             }
             if (filterIDs[i] == "full") {
                 tidList = tidList.concat(getRequiredTournamentList("gameStatus", "full"));
-                // console.log(tidList);
             }
             if (filterIDs[i] == "today") {
                 tidList = tidList.concat(getRequiredTournamentList("date", "today"));
@@ -297,7 +317,6 @@ function applyFilter(filterIDs) {
                 tidList = tidList.concat(getRequiredTournamentList("date", "tomorrow"));
             }
             if (filterIDs[i] == "customDate") {
-                console.log(GAMES[0]);
                 tidList = tidList.concat(getRequiredTournamentList("customDate", document.getElementById("customDates").value));
             }
 
@@ -322,6 +341,10 @@ function applyFilter(filterIDs) {
         }
     } else {
         // if no filters are selected
+        if ($("#noData").length != 0) {
+            $("#noData").remove()
+        }
+
         tournamentListener()
     }
 }
