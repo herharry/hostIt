@@ -102,6 +102,8 @@ function loadTournamentInNewCard(tournament, ids) {
     let card = document.createElement("div");
     card.className = "card col-12 col-lg-6 p-0 my-2 px-1";
     card.id = ids + "CARD" + tournament.id;
+    card.setAttribute("onClick", "loadSpecificTournament(this.id)");
+
     // let img = document.createElement("img");
     // img.src = getGameImage(tournaments[i].gameID)
     // img.className = "card-img-top";
@@ -234,6 +236,7 @@ function formatResponse(res) {
 
 function loadSpecificTournament(tid) {
     // console.log(tid)
+    tid.split("CARD")[1]!=undefined ? tid = tid.split("CARD")[1] : tid = tid
     window.location.assign("/tournaments?tid=" + tid);
 }
 
