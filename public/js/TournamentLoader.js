@@ -60,14 +60,14 @@ function tournamentListener() {
         .onSnapshot(function (snapshot) {
             tournamentHolder = [];
             snapshot.forEach(function (doc) {
+                let tournament = {};
+                tournament = doc.data();
+                tournament.id = doc.id;
+                TID_LIST.push(doc.id)
+                tournamentHolder.push(tournament)
+                // console.log(tournament.id)
+                let flag = document.getElementById("tournamentCards" + "CARD" + tournament.id);
                 if (doc.data().requestStatus == 1) {
-                    let tournament = {};
-                    tournament = doc.data();
-                    tournament.id = doc.id;
-                    TID_LIST.push(doc.id)
-                    tournamentHolder.push(tournament)
-                    // console.log(tournament.id)
-                    let flag = document.getElementById("tournamentCards" + "CARD" + tournament.id);
                     if (typeof (flag) != 'undefined' && flag != null) {
                         loadTournamentInExistingCard(tournament, "tournamentCards");
                     } else {
@@ -340,11 +340,11 @@ function getRequiredTournamentList(filterType, filterID) {
                                 if (filterID == "tomorrow" && tomorrow.toDateString() == new Date(tournament.time.seconds * 1000).toDateString()) {
                                     tidList.push(tournament.id)
                                 }
-                            case "customDate":
-                                if(new Date(filterID).toDateString() == new Date(tournament.time.seconds * 1000).toDateString()){
-                                    tidList.push(tournament.id)
-                                }
-                                
+                                case "customDate":
+                                    if (new Date(filterID).toDateString() == new Date(tournament.time.seconds * 1000).toDateString()) {
+                                        tidList.push(tournament.id)
+                                    }
+
                 }
                 break;
             }
