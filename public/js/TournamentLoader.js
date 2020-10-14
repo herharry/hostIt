@@ -58,6 +58,12 @@ function setGames(data) {
 function tournamentListener() {
     DB.collection("Tournaments").where("isFinished", "==", false)
         .onSnapshot(function (snapshot) {
+            if (snapshot.empty) {
+                $("#tournamentLoader").fadeOut()
+                if ($("#noData").length == 0)
+                    $("#tournamentCards").append("<p class=\"mx-auto my-5\" id=\"noData\">No data found</p>")
+                $("#myTournamentCards").append("<p class=\"mx-auto my-5\">No data found</p>")
+            }
             tournamentHolder = [];
             snapshot.forEach(function (doc) {
                 let tournament = {};
@@ -96,7 +102,7 @@ function tournamentListener() {
 
 
 function loadTournamentInNewCard(tournament, ids) {
-    $("#tournamentLoader").addClass("d-none");
+    $("#tournamentLoader").fadeOut();
     // console.log(tournament)
     const cardParent = document.getElementById(ids)
     let card = document.createElement("div");
@@ -236,7 +242,7 @@ function formatResponse(res) {
 
 function loadSpecificTournament(tid) {
     // console.log(tid)
-    tid.split("CARD")[1]!=undefined ? tid = tid.split("CARD")[1] : tid = tid
+    tid.split("CARD")[1] != undefined ? tid = tid.split("CARD")[1] : tid = tid
     window.location.assign("/tournaments?tid=" + tid);
 }
 
@@ -299,6 +305,7 @@ function applyFilter(filterIDs) {
         let reqList = [...new Set(tidList)];
         // console.log(reqList)
         deleteAllCards();
+        $("#tournamentLoader").fadeIn()
         if (reqList.length != 0) {
             for (let i = 0; i < reqList.length; i++) {
                 for (let j = 0; j < tournamentHolder.length; j++) {
@@ -308,6 +315,10 @@ function applyFilter(filterIDs) {
                     }
                 }
             }
+        } else {
+            $("#tournamentLoader").fadeOut()
+            if ($("#noData").length == 0)
+                $("#tournamentCards").append("<p class=\"mx-auto my-5\" id=\"noData\">No data found</p>")
         }
     } else {
         // if no filters are selected
