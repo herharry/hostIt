@@ -253,8 +253,9 @@ function gatherFilterElements() {
     x = document.getElementById("today").checked ? filterList.push("today") : '';
     x = document.getElementById("tomorrow").checked ? filterList.push("tomorrow") : '';
     //yet to do
-    x = document.getElementById("customDate").checked ? filterList.push("customDate") : '';
-    console.log(filterList)
+    if (document.getElementById("customDates").value)
+        x = document.getElementById("customDate").checked ? filterList.push("customDate") : '';
+    // console.log(filterList)
     applyFilter(filterList)
 }
 
@@ -262,7 +263,7 @@ function applyFilter(filterIDs) {
     if (filterIDs.length != 0) {
         let tidList = [];
         for (let i = 0; i < filterIDs.length; i++) {
-            console.log(filterIDs[i])
+            // console.log(filterIDs[i])
 
             if (filterIDs[i] == "pubg") {
                 tidList = tidList.concat(getRequiredTournamentList("gameName", "Pubg"));
@@ -287,12 +288,13 @@ function applyFilter(filterIDs) {
                 tidList = tidList.concat(getRequiredTournamentList("date", "tomorrow"));
             }
             if (filterIDs[i] == "customDate") {
-                // tidList = tidList.concat(getRequiredTournamentList("customDate", ));
+                console.log(GAMES[0]);
+                tidList = tidList.concat(getRequiredTournamentList("customDate", document.getElementById("customDates").value));
             }
-            
+
         }
         let reqList = [...new Set(tidList)];
-        console.log(reqList)
+        // console.log(reqList)
         deleteAllCards();
         if (reqList.length != 0) {
             for (let i = 0; i < reqList.length; i++) {
@@ -305,7 +307,7 @@ function applyFilter(filterIDs) {
             }
         }
     } else {
-        console.log("empty");
+        // if no filters are selected
         tournamentListener()
     }
 }
@@ -338,12 +340,17 @@ function getRequiredTournamentList(filterType, filterID) {
                                 if (filterID == "tomorrow" && tomorrow.toDateString() == new Date(tournament.time.seconds * 1000).toDateString()) {
                                     tidList.push(tournament.id)
                                 }
+                            case "customDate":
+                                if(new Date(filterID).toDateString() == new Date(tournament.time.seconds * 1000).toDateString()){
+                                    tidList.push(tournament.id)
+                                }
+                                
                 }
                 break;
             }
         }
     });
-    console.log(tidList)
+    // console.log(tidList)
     return tidList;
 }
 
