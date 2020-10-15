@@ -441,6 +441,7 @@ app.post('/createUser', (req, res) => {
                     userEmailID:u.userEmailID,
                     walletAmount:0,
                     role:u.role,
+                    token:u.token,
                     profileImageURL:u.profileImageURL,
                     vpa:u.vpa,
                     tournamentIds:u.tournamentIDs
@@ -471,6 +472,7 @@ app.post('/updateUser', (req, res) => {
                     userName:    u.userName ,
                     userEmailID:u.userEmailID,
                     walletAmount:u.walletAmount,
+                    token : u.token,
                     role:u.role,
                     profileImageURL:u.profileImageURL,
                     vpa:u.vpa,

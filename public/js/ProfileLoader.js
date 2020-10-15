@@ -107,7 +107,7 @@ function loadProfileForExistingUser(user) {
     setProfileImage(user.profileImageURL)
     setMobileNumber(user.mobileNo)
     setEmail(user.userEmailID)
-    setUpiId(user.vpa)
+    setUpiId(user.vpa.vpa)
     setBankDetails(user.bankDetail)
     setWalletAmt(user.walletAmount)
 }
@@ -295,7 +295,7 @@ function createUserInCollection() {
             user.walletAmount = document.getElementById("winnings").innerHTML;
             user.role = 0;
             user.profileImageURL = document.getElementById("profileImage").getAttribute("src");
-            user.mobileNo = getElementValue("editMobileNumber").toNumber();
+            user.mobileNo = parseInt(getElementValue("editMobileNumber"));
             let vpa = {};
             vpa.vpa = getElementValue("editUpiID");
             user.vpa = vpa;
