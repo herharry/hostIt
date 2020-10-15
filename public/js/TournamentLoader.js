@@ -50,7 +50,29 @@ getGame = (data) => {
 
 function setGames(data) {
     GAMES = data;
-    console.log(GAMES)
+    renderGames(data)
+}
+
+function createTemplate(data) {
+    // console.log(id);
+    return `
+    <div class="custom-control custom-checkbox ml-2 pb-2">
+        <input type="checkbox" class="custom-control-input filled-in" id="${data.name.toLowerCase()}">
+            <label
+                class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                for="${data.name.toLowerCase()}">${data.name}
+            </label>
+    </div>
+            `
+}
+
+function renderGames(game, id) {
+    const template =
+        game.length === 0 ? `
+    <p class="mx-auto">No matching results found.</p>
+    ` : game.map((product) => createTemplate(product)).join("\n");
+    $("#gameFilter").html("<p>Games</p>" + template);
+
 }
 
 
@@ -59,10 +81,9 @@ function tournamentListener() {
     DB.collection("Tournaments").where("isFinished", "==", false)
         .onSnapshot(function (snapshot) {
             if (snapshot.empty) {
-                $("#tournamentLoader").fadeOut()
+                $("#tournamentLoader").hide()
                 if ($("#noData").length == 0)
                     $("#tournamentCards").append("<p class=\"mx-auto my-5\" id=\"noData\">No data found</p>")
-                $("#myTournamentCards").append("<p class=\"mx-auto my-5\">No data found</p>")
             }
             tournamentHolder = [];
             snapshot.forEach(function (doc) {
@@ -82,17 +103,22 @@ function tournamentListener() {
                 }
 
                 let myTournaments = userInDB.tournamentIds;
-                for (let i = 0; i < myTournaments.length; i++) {
-                    // console.log(myTournaments[i])
-                    if (tournament.id == myTournaments[i]) {
-                        let flag = document.getElementById("myTournamentCards" + "CARD" + tournament.id);
-                        if (typeof (flag) != 'undefined' && flag != null) {
-                            loadTournamentInExistingCard(tournament, "myTournamentCards");
-                        } else {
-                            loadTournamentInNewCard(tournament, "myTournamentCards")
-                        }
+                if (myTournaments.length != 0) {
+                    for (let i = 0; i < myTournaments.length; i++) {
+                        // console.log(myTournaments[i])
+                        if (tournament.id == myTournaments[i]) {
+                            let flag = document.getElementById("myTournamentCards" + "CARD" + tournament.id);
+                            if (typeof (flag) != 'undefined' && flag != null) {
+                                loadTournamentInExistingCard(tournament, "myTournamentCards");
+                            } else {
+                                loadTournamentInNewCard(tournament, "myTournamentCards")
+                            }
 
+                        }
                     }
+                } else {
+                    if ($("#myNoData").length == 0)
+                        $("#myTournamentCards").append("<p class=\"mx-auto my-5\" id=\"myNoData\">No data found</p>")
                 }
             })
         });
@@ -102,7 +128,7 @@ function tournamentListener() {
 
 
 function loadTournamentInNewCard(tournament, ids) {
-    $("#tournamentLoader").fadeOut();
+    $("#tournamentLoader").hide();
     // console.log(tournament)
     const cardParent = document.getElementById(ids)
     let card = document.createElement("div");
@@ -162,7 +188,7 @@ function loadTournamentInNewCard(tournament, ids) {
     let percent = ((tournament.totalSeats - tournament.vacantSeats) / tournament.totalSeats) * 100;
     progressBar.setAttribute("style", "width :" + percent + "%");
     progressBar.setAttribute("role", "progressbar");
-    progressBar.innerHTML = percent + "% full";
+    progressBar.innerHTML = parseInt(percent) + "% full";
     let remainig = document.createElement("p");
     remainig.id = ids + "REMAINING" + tournament.id;
     remainig.className = "float-left text-small"
@@ -226,7 +252,7 @@ function loadTournamentInExistingCard(tournament, ids) {
     let progressBar = document.getElementById(ids + "PROGRESS_BAR" + tournament.id);
     let percent = ((tournament.totalSeats - tournament.vacantSeats) / tournament.totalSeats) * 100;
     progressBar.setAttribute("style", "width :" + percent + "%");
-    progressBar.innerHTML = percent + "% full";
+    progressBar.innerHTML = parseInt(percent) + "% full";
     let remainig = document.getElementById(ids + "REMAINING" + tournament.id);
     remainig.innerHTML = tournament.vacantSeats + " remaining";
 }
@@ -255,8 +281,10 @@ function gatherFilterElements() {
 
     let filterList = [];
     let x;
-    x = document.getElementById("pubg").checked ? filterList.push("pubg") : '';
-    x = document.getElementById("cod").checked ? filterList.push("cod") : '';
+    GAMES.forEach(element => {
+        x = document.getElementById(element.name.toLowerCase()).checked ? filterList.push(element.name.toLowerCase()) : '';
+    });
+
     x = document.getElementById("open").checked ? filterList.push("open") : '';
     x = document.getElementById("full").checked ? filterList.push("full") : '';
     x = document.getElementById("today").checked ? filterList.push("today") : '';
@@ -272,23 +300,19 @@ function applyFilter(filterIDs) {
     if (filterIDs.length != 0) {
         let tidList = [];
         for (let i = 0; i < filterIDs.length; i++) {
-            // console.log(filterIDs[i])
 
-            if (filterIDs[i] == "pubg") {
-                tidList = tidList.concat(getRequiredTournamentList("gameName", "Pubg"));
-                // console.log(tidList);
-            }
-            if (filterIDs[i] == "cod") {
-                tidList = tidList.concat(getRequiredTournamentList("gameName", "Call of Duty"));
-                // console.log(tidList);
-            }
+            GAMES.forEach(element => {
+                if (filterIDs[i] == element.name.toLowerCase()) {
+                    tidList = tidList.concat(getRequiredTournamentList("gameName", element.name));
+                }
+
+            });
+
             if (filterIDs[i] == "open") {
                 tidList = tidList.concat(getRequiredTournamentList("gameStatus", "open"));
-                // console.log(tidList);
             }
             if (filterIDs[i] == "full") {
                 tidList = tidList.concat(getRequiredTournamentList("gameStatus", "full"));
-                // console.log(tidList);
             }
             if (filterIDs[i] == "today") {
                 tidList = tidList.concat(getRequiredTournamentList("date", "today"));
@@ -297,7 +321,6 @@ function applyFilter(filterIDs) {
                 tidList = tidList.concat(getRequiredTournamentList("date", "tomorrow"));
             }
             if (filterIDs[i] == "customDate") {
-                console.log(GAMES[0]);
                 tidList = tidList.concat(getRequiredTournamentList("customDate", document.getElementById("customDates").value));
             }
 
@@ -305,7 +328,7 @@ function applyFilter(filterIDs) {
         let reqList = [...new Set(tidList)];
         // console.log(reqList)
         deleteAllCards();
-        $("#tournamentLoader").fadeIn()
+        $("#tournamentLoader").show()
         if (reqList.length != 0) {
             for (let i = 0; i < reqList.length; i++) {
                 for (let j = 0; j < tournamentHolder.length; j++) {
@@ -316,12 +339,16 @@ function applyFilter(filterIDs) {
                 }
             }
         } else {
-            $("#tournamentLoader").fadeOut()
+            $("#tournamentLoader").hide()
             if ($("#noData").length == 0)
                 $("#tournamentCards").append("<p class=\"mx-auto my-5\" id=\"noData\">No data found</p>")
         }
     } else {
         // if no filters are selected
+        if ($("#noData").length != 0) {
+            $("#noData").remove()
+        }
+
         tournamentListener()
     }
 }
@@ -374,4 +401,9 @@ function deleteAllCards() {
     newParent.className = "d-flex justify-content-between flex-wrap col-12"
     newParent.id = "tournamentCards";
     document.getElementById("tournamentBody").appendChild(newParent);
+}
+
+
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    document.getElementById("filter").remove();
 }
