@@ -59,7 +59,7 @@ let registerTournament = 'http://host-it-test.herokuapp.com/registerTournament';
 let addTransaction = 'http://host-it-test.herokuapp.com/addTransaction';
 let addTournament = 'http://host-it-test.herokuapp.com/addTournamentToUser';
 let reduceVacantSeat = 'http://host-it-test.herokuapp.com/reduceVacantSeat';
-if(process.argv[0] == "local")
+if(process.argv[2] == "local")
 {
     callBack = 'http://localhost:3000/callback';
     registerTournament= 'http://localhost:3000/registerTournament';
@@ -441,6 +441,7 @@ app.post('/createUser', (req, res) => {
                     userEmailID:u.userEmailID,
                     walletAmount:0,
                     role:u.role,
+                    token:u.token,
                     profileImageURL:u.profileImageURL,
                     vpa:u.vpa,
                     tournamentIds:u.tournamentIDs
@@ -471,6 +472,7 @@ app.post('/updateUser', (req, res) => {
                     userName:    u.userName ,
                     userEmailID:u.userEmailID,
                     walletAmount:u.walletAmount,
+                    token : u.token,
                     role:u.role,
                     profileImageURL:u.profileImageURL,
                     vpa:u.vpa,
@@ -716,7 +718,7 @@ app.post('/callback', (req, responser) => {
         transactionDetails.api ="callback";
 
 
-        if(result == true) {
+        if(result == true && transactionDetails.status != "TXN_FAILURE") {
             return fetch(registerTournament, {
                 method: "POST",
                 headers: {
@@ -737,6 +739,19 @@ app.post('/callback', (req, responser) => {
             });
         }
         else {
+            let flag=false;
+            for(let i =0; i<REGISTERED_USER_FOR_TRANSACTION.length; i++) {
+                if (REGISTERED_USER_FOR_TRANSACTION[i].ORDER_ID == transactionDetails.orderid) {
+                    transactionDetails.tournamentID = REGISTERED_USER_FOR_TRANSACTION[i].TID;
+                    transactionDetails.userID = REGISTERED_USER_FOR_TRANSACTION[i].UID;
+                    transactionDetails.inGameID = REGISTERED_USER_FOR_TRANSACTION[i].IN_GAME_ID;
+                    transactionDetails.inGameName = REGISTERED_USER_FOR_TRANSACTION[i].IN_GAME_NAME;
+
+                    REGISTERED_USER_FOR_TRANSACTION.splice(i, 1);
+                    flag = true;
+                    break;
+                }
+            }
             return fetch(addTransaction, {
                 method: "POST",
                 headers: {
@@ -758,7 +773,7 @@ app.post("/addTransaction", (req, res) => {
     (async () => {
         try {
             let transDetails = req.body.transactionDetails;
-
+            console.log(transDetails)
             await db.collection('Transactions').doc()
                 .create({
                     tournamentID : transDetails.tournamentID,
