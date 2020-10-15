@@ -81,10 +81,9 @@ function tournamentListener() {
     DB.collection("Tournaments").where("isFinished", "==", false)
         .onSnapshot(function (snapshot) {
             if (snapshot.empty) {
-                $("#tournamentLoader").fadeOut()
+                $("#tournamentLoader").hide()
                 if ($("#noData").length == 0)
                     $("#tournamentCards").append("<p class=\"mx-auto my-5\" id=\"noData\">No data found</p>")
-                $("#myTournamentCards").append("<p class=\"mx-auto my-5\">No data found</p>")
             }
             tournamentHolder = [];
             snapshot.forEach(function (doc) {
@@ -104,17 +103,21 @@ function tournamentListener() {
                 }
 
                 let myTournaments = userInDB.tournamentIds;
-                for (let i = 0; i < myTournaments.length; i++) {
-                    // console.log(myTournaments[i])
-                    if (tournament.id == myTournaments[i]) {
-                        let flag = document.getElementById("myTournamentCards" + "CARD" + tournament.id);
-                        if (typeof (flag) != 'undefined' && flag != null) {
-                            loadTournamentInExistingCard(tournament, "myTournamentCards");
-                        } else {
-                            loadTournamentInNewCard(tournament, "myTournamentCards")
-                        }
+                if (myTournaments.length != 0) {
+                    for (let i = 0; i < myTournaments.length; i++) {
+                        // console.log(myTournaments[i])
+                        if (tournament.id == myTournaments[i]) {
+                            let flag = document.getElementById("myTournamentCards" + "CARD" + tournament.id);
+                            if (typeof (flag) != 'undefined' && flag != null) {
+                                loadTournamentInExistingCard(tournament, "myTournamentCards");
+                            } else {
+                                loadTournamentInNewCard(tournament, "myTournamentCards")
+                            }
 
+                        }
                     }
+                }else {
+                $("#myTournamentCards").append("<p class=\"mx-auto my-5\">No data found</p>")
                 }
             })
         });
@@ -124,7 +127,7 @@ function tournamentListener() {
 
 
 function loadTournamentInNewCard(tournament, ids) {
-    $("#tournamentLoader").fadeOut();
+    $("#tournamentLoader").hide();
     // console.log(tournament)
     const cardParent = document.getElementById(ids)
     let card = document.createElement("div");
@@ -184,7 +187,7 @@ function loadTournamentInNewCard(tournament, ids) {
     let percent = ((tournament.totalSeats - tournament.vacantSeats) / tournament.totalSeats) * 100;
     progressBar.setAttribute("style", "width :" + percent + "%");
     progressBar.setAttribute("role", "progressbar");
-    progressBar.innerHTML = percent + "% full";
+    progressBar.innerHTML = parseInt(percent) + "% full";
     let remainig = document.createElement("p");
     remainig.id = ids + "REMAINING" + tournament.id;
     remainig.className = "float-left text-small"
@@ -324,7 +327,7 @@ function applyFilter(filterIDs) {
         let reqList = [...new Set(tidList)];
         // console.log(reqList)
         deleteAllCards();
-        $("#tournamentLoader").fadeIn()
+        $("#tournamentLoader").show()
         if (reqList.length != 0) {
             for (let i = 0; i < reqList.length; i++) {
                 for (let j = 0; j < tournamentHolder.length; j++) {
@@ -335,7 +338,7 @@ function applyFilter(filterIDs) {
                 }
             }
         } else {
-            $("#tournamentLoader").fadeOut()
+            $("#tournamentLoader").hide()
             if ($("#noData").length == 0)
                 $("#tournamentCards").append("<p class=\"mx-auto my-5\" id=\"noData\">No data found</p>")
         }

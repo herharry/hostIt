@@ -75,47 +75,40 @@
             <div class="col-md-3 pr-md-3 px-0">
                 <div class="filter rounded-lg" id="filter">
                     <h4 class="font-weight-bold w-100 border-bottom px-2 py-1">FILTER</h4>
-                    <!-- <div class="collapse" id="collapseExample">
-                        data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
-                        aria-controls="collapseExample" -->
                     <div class="row p-2 w-100">
 
                         <section class="mb-3 pl-3 col-6 col-md-12">
                             <p>Date</p>
                             <div class="custom-control custom-checkbox ml-2 pb-2">
                                 <input type="checkbox" class="custom-control-input filled-in" id="today">
-                                <label
-                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
+                                <label class="custom-control-label small w-100 card-link-secondary px-2 py-1"
                                     for="today">Today</label>
                             </div>
                             <div class="custom-control custom-checkbox ml-2 pb-2">
                                 <input type="checkbox" class="custom-control-input filled-in" id="tomorrow">
-                                <label
-                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
-                                    for="tomorrow">tomorrow</label>
+                                <label class="custom-control-label small w-100 card-link-secondary px-2 py-1"
+                                    for="tomorrow">Tomorrow</label>
                             </div>
                             <div class="custom-control custom-checkbox ml-2 pb-2">
                                 <input type="checkbox" class="custom-control-input filled-in" id="customDate">
-                                <label
-                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
-                                    for="customDate">date</label>
+                                <label class="custom-control-label small w-100 card-link-secondary px-2 py-1"
+                                    for="customDate">Date</label>
                             </div>
-                            <input type="checkbox" class="selector form-control d-none form-control-sm ml-4 w-75" id="customDates" placeholder="Select date">
+                            <input type="checkbox" class="selector form-control form-control-sm ml-4 w-75"
+                                id="customDates" placeholder="Select date">
                         </section>
 
                         <section class="mb-3 pl-3 col-6 col-md-12">
                             <p>Status</p>
                             <div class="custom-control custom-checkbox ml-2 pb-2">
                                 <input type="checkbox" class="custom-control-input filled-in" id="open">
-                                <label
-                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
-                                    for="open">open</label>
+                                <label class="custom-control-label small w-100 card-link-secondary px-2 py-1"
+                                    for="open">Open</label>
                             </div>
                             <div class="custom-control custom-checkbox ml-2 pb-2">
                                 <input type="checkbox" class="custom-control-input filled-in" id="full">
-                                <label
-                                    class="custom-control-label small w-100 text-uppercase card-link-secondary px-2 py-1"
-                                    for="full">full</label>
+                                <label class="custom-control-label small w-100 card-link-secondary px-2 py-1"
+                                    for="full">Full</label>
                             </div>
                         </section>
 
@@ -150,7 +143,6 @@
                         <button type="button" class="btn btn-outline-info waves-effect btn-sm w-100 ml-4"
                             onclick="gatherFilterElements()">apply</button>
                     </div>
-                    <!-- </div> -->
                 </div>
             </div>
 
@@ -165,11 +157,8 @@
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                             aria-controls="profile" aria-selected="false">My tournaments</a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                            aria-controls="contact" aria-selected="false">Contact</a>
-                    </li> -->
                 </ul>
+
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="tournament" role="tabpanel"
                         aria-labelledby="tournament-tab">
@@ -179,10 +168,9 @@
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
-
                             <div class="d-flex justify-content-between flex-wrap col-12" id="tournamentCards">
-
                             </div>
+
                         </div>
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
@@ -192,8 +180,8 @@
                             </div>
                         </div>
                     </div>
-                    
                 </div>
+
             </div>
         </div>
 
@@ -254,14 +242,13 @@
             if (this.checked) {
                 //Do stuff
                 // console.log($("#customDates").val());
-                $("#customDates").removeClass("d-none")
-            }else{
-                $("#customDates").addClass("d-none")
+                $("#customDates").show()
+            } else {
+                $("#customDates").hide()
                 $("#customDates").val("")
             }
-            
+
         });
-        
     </script>
 
 </body>
