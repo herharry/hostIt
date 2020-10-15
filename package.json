@@ -4,7 +4,8 @@
   "description": "All in one gaming tournament platform",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start local": "node index.js --local",
+    "start" : "node index.js"
   },
   "keywords": [
     "gaming",
