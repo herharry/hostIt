@@ -116,8 +116,8 @@ function tournamentListener() {
 
                         }
                     }
-                }else {
-                $("#myTournamentCards").append("<p class=\"mx-auto my-5\">No data found</p>")
+                } else {
+                    $("#myTournamentCards").append("<p class=\"mx-auto my-5\">No data found</p>")
                 }
             })
         });
@@ -251,7 +251,7 @@ function loadTournamentInExistingCard(tournament, ids) {
     let progressBar = document.getElementById(ids + "PROGRESS_BAR" + tournament.id);
     let percent = ((tournament.totalSeats - tournament.vacantSeats) / tournament.totalSeats) * 100;
     progressBar.setAttribute("style", "width :" + percent + "%");
-    progressBar.innerHTML = percent + "% full";
+    progressBar.innerHTML = parseInt(percent) + "% full";
     let remainig = document.getElementById(ids + "REMAINING" + tournament.id);
     remainig.innerHTML = tournament.vacantSeats + " remaining";
 }
@@ -400,4 +400,9 @@ function deleteAllCards() {
     newParent.className = "d-flex justify-content-between flex-wrap col-12"
     newParent.id = "tournamentCards";
     document.getElementById("tournamentBody").appendChild(newParent);
+}
+
+
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    document.getElementById("filter").remove();
 }
