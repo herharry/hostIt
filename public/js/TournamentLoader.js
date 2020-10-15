@@ -117,7 +117,8 @@ function tournamentListener() {
                         }
                     }
                 } else {
-                    $("#myTournamentCards").append("<p class=\"mx-auto my-5\">No data found</p>")
+                    if ($("#myNoData").length == 0)
+                        $("#myTournamentCards").append("<p class=\"mx-auto my-5\" id=\"myNoData\">No data found</p>")
                 }
             })
         });
