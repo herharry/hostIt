@@ -54,11 +54,11 @@ app.use(express.static(__dirname + '/public'));
 //*********************************************************************************************************************************************//
 //******************************************** LOCAL CREDENTIALS *************************************************************************************//
 //***************************************************************************************************************************************
-let callBack = 'http://host-it-test.cleverapps.io/callback';
-let registerTournament = 'http://host-it-test.cleverapps.io/registerTournament';
-let addTransaction = 'http://host-it-test.cleverapps.io/addTransaction';
-let addTournament = 'http://host-it-test.cleverapps.io/addTournamentToUser';
-let reduceVacantSeat = 'http://host-it-test.cleverapps.io/reduceVacantSeat';
+let callBack = 'http://host-it-test.herokuapp.com/callback';
+let registerTournament = 'http://host-it-test.herokuapp.com/registerTournament';
+let addTransaction = 'http://host-it-test.herokuapp.com/addTransaction';
+let addTournament = 'http://host-it-test.herokuapp.com/addTournamentToUser';
+let reduceVacantSeat = 'http://host-it-test.herokuapp.com/reduceVacantSeat';
 if(process.argv[2] == "local")
 {
     callBack = 'http://localhost:3000/callback';
