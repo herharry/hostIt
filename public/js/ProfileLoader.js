@@ -1,3 +1,9 @@
+flatpickr("#requestTournamentTime", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+});
+
+
 let API;
 let PHONE_VERIFICATION_FLAG = false;
 let applicationVerifier = null;
@@ -32,47 +38,37 @@ async function loadProfileJS() {
     }
 }
 
-function profileListener()
-{
+function profileListener() {
     DB.collection("Users").doc(firebase.auth().currentUser.uid)
-        .onSnapshot(function(doc) {
-            let newUser= doc.data();
-             if(newUser == undefined)
-             {
-                 API = "CREATE_API";
-                 localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
-                 USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
-                 loadProfileForNewUser(USER_IN_SESSION);
-             }
-             else
-             {
-                 API = "UPDATE_API";
-                 userInDB = newUser;
-                 loadProfileForExistingUser(newUser)
-             }
+        .onSnapshot(function (doc) {
+            let newUser = doc.data();
+            if (newUser == undefined) {
+                API = "CREATE_API";
+                localStorage.setItem("userInfo", JSON.stringify(firebase.auth().currentUser))
+                USER_IN_SESSION = JSON.parse(localStorage.getItem("userInfo"));
+                loadProfileForNewUser(USER_IN_SESSION);
+            } else {
+                API = "UPDATE_API";
+                userInDB = newUser;
+                loadProfileForExistingUser(newUser)
+            }
 
         })
 
     DB.collection("UserAuthRequest").doc(firebase.auth().currentUser.uid)
-        .onSnapshot(function (doc)
-        {
+        .onSnapshot(function (doc) {
             let data = doc.data();
-            if(data == undefined)
-            {
+            if (data == undefined) {
                 //normal user
                 document.getElementById("req_pending").classList.add("d-none")
                 document.getElementById("requestTournament").classList.add("d-none")
                 document.getElementById("normal_user").classList.remove("d-none")
-            }
-            else if(data.status == true)
-            {
+            } else if (data.status == true) {
                 //super user
                 document.getElementById("normal_user").classList.add("d-none")
                 document.getElementById("req_pending").classList.add("d-none")
                 document.getElementById("requestTournament").classList.remove("d-none")
-            }
-            else
-            {
+            } else {
                 //req pending user
                 document.getElementById("requestTournament").classList.add("d-none")
                 document.getElementById("normal_user").classList.add("d-none")
@@ -85,7 +81,7 @@ function profileListener()
 //todo set all details
 
 function loadProfileForNewUser(user) {
-    console.log("firebase auth sesssion",user)
+    console.log("firebase auth sesssion", user)
     renderForNewUser();
     setProfileName(user.displayName)
     setProfileImage(user.photoURL)
@@ -102,7 +98,7 @@ function renderForNewUser() {
 }
 
 function loadProfileForExistingUser(user) {
-    console.log("db Details",user)
+    console.log("db Details", user)
     setProfileName(user.userName)
     setProfileImage(user.profileImageURL)
     setMobileNumber(user.mobileNo)
@@ -136,22 +132,18 @@ setMobileNumber = (number) => {
         console.log(number)
         document.getElementById("mobileNumber").innerHTML = number;
         document.getElementById("editMobileNumber").setAttribute("value", number);
-        verifyOrVerified("+91"+number);
+        verifyOrVerified("+91" + number);
     }
 }
 
-function verifyOrVerified(num)
-{
-    let verifyButton =document.getElementById("button-addon2");
-    if(num == firebase.auth().currentUser.phoneNumber)
-    {
-        verifyButton.innerHTML="verified!";
+function verifyOrVerified(num) {
+    let verifyButton = document.getElementById("button-addon2");
+    if (num == firebase.auth().currentUser.phoneNumber) {
+        verifyButton.innerHTML = "verified!";
         verifyButton.disabled = true;
-        PHONE_VERIFICATION_FLAG =true;
-    }
-    else
-    {
-        verifyButton.innerHTML="verify";
+        PHONE_VERIFICATION_FLAG = true;
+    } else {
+        verifyButton.innerHTML = "verify";
         verifyButton.disabled = false;
         PHONE_VERIFICATION_FLAG = false;
     }
@@ -164,7 +156,7 @@ setEmail = (email) => {
 
 setWalletAmt = (amt) => {
     console.log("heyo")
-    document.getElementById("winnings").innerHTML =  amt;
+    document.getElementById("winnings").innerHTML = amt;
 }
 
 
@@ -242,11 +234,10 @@ ValidateProfile = () => {
 
 }
 
-document.getElementById("editMobileNumber").addEventListener("input",checker)
+document.getElementById("editMobileNumber").addEventListener("input", checker)
 
-function checker()
-{
-    verifyOrVerified("+91"+document.getElementById("editMobileNumber").value);
+function checker() {
+    verifyOrVerified("+91" + document.getElementById("editMobileNumber").value);
 }
 
 function isNumberKey(evt) {
@@ -369,13 +360,10 @@ function phoneChecker() {
                 console.log(firebase.auth().currentUser.providerData);
                 firebase.auth().currentUser.unlink("phone").then(function (res) {
                     verifyPhoneNumber(phone)
-                }).then(function ()
-                {
-                    firebase.firestore().collection("Users").doc(firebase.auth().currentUser.uid).update(
-                        {
-                            mobileNo : null
-                        }
-                    ).catch(reason => {})
+                }).then(function () {
+                    firebase.firestore().collection("Users").doc(firebase.auth().currentUser.uid).update({
+                        mobileNo: null
+                    }).catch(reason => {})
                 });
             }
         }
@@ -391,8 +379,7 @@ function phoneChecker() {
 }
 
 function verifyPhoneNumber(phone) {
-    if(applicationVerifier !=null)
-    {
+    if (applicationVerifier != null) {
         applicationVerifier.clear();
         document.getElementById("recaptcha_parent").removeChild(document.getElementById("recaptcha"));
         let recaptcha = document.createElement("div");
@@ -418,14 +405,11 @@ function verifyPhoneNumber(phone) {
                     message: "number verified successfully",
                     position: 'topRight'
                 });
-            }).then(function ()
-            {
-                firebase.firestore().collection("Users").doc(firebase.auth().currentUser.uid).update(
-                    {
-                        mobileNo : phone.toString().split("+91").pop()
-                    }
-                ).catch(reason => {})
-            }).catch(function (error){
+            }).then(function () {
+                firebase.firestore().collection("Users").doc(firebase.auth().currentUser.uid).update({
+                    mobileNo: phone.toString().split("+91").pop()
+                }).catch(reason => {})
+            }).catch(function (error) {
                 $("#modalRegisterForm").modal('toggle');
                 iziToast.error({
                     title: 'Caution',
@@ -435,7 +419,7 @@ function verifyPhoneNumber(phone) {
             });
         })
         OTP = null;
-        document.getElementById("otp").value=null;
+        document.getElementById("otp").value = null;
     }).catch(function (error) {
         $("#modalRegisterForm").modal('toggle');
         iziToast.error({

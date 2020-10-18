@@ -8,6 +8,7 @@
     <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
     <link rel="stylesheet" type="text/css" href="css/profile.css">
     <link rel="stylesheet" type="text/css" href="css/iziToast.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 </head>
 
@@ -48,7 +49,7 @@
         Loading...
     </div>
 
-    <div id = recaptcha_parent>
+    <div id=recaptcha_parent>
         <div id="recaptcha"></div>
 
     </div>
@@ -76,9 +77,8 @@
                         </div>
                     </div>
                     <div class="progress mx-5 d-none" id="uploadProgress">
-                        <div id="dynamic" class="progress-bar bg-success progress-bar-striped active"
-                            role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-                            style="width: 0%">
+                        <div id="dynamic" class="progress-bar bg-success progress-bar-striped active" role="progressbar"
+                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
                             <span id="current-progress"></span>
                         </div>
                     </div>
@@ -222,7 +222,7 @@
                 <!-- Admin access tabs -->
                 <div class="adminSection p-4 rounded-lg" id="myTournament" style="height:100%">
                     <h2>ADMIN Panel</h2>
-                    <div class="p-1" id="normal_user">
+                    <div class="p-1 d-none" id="normal_user">
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-3 col-form-label">id</label>
                             <div class="col-sm-9">
@@ -254,12 +254,111 @@
                     </div>
 
                     <div class="waiting text-center d-none y-3" id="req_pending">
-                        <i class="fas fa-user-clock fa-3x m-3" ></i>
-                        <P class="h4"><span>ADMIN STATUS :</span> <small class="text-warning"> Applied and waiting for approval</small></P>
+                        <i class="fas fa-user-clock fa-3x m-3"></i>
+                        <P class="h4"><span>ADMIN STATUS :</span> <small class="text-warning"> Applied and waiting for
+                                approval</small></P>
                     </div>
                     <div class="tournament d-none p-2" id="requestTournament">
                         <div id="requestTournamentList"></div>
-                        <button type="button" class="btn btn-outline-info waves-effect">Request Tournament</button>
+                        <button type="button" class="btn btn-outline-info waves-effect" data-toggle="modal"
+                            data-target="#requestModal">Request Tournament</button>
+
+                        <!-- Modal -->
+                        <div class="modal fade right" id="requestModal" tabindex="-1" role="dialog"
+                            aria-labelledby="requestModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-dark">
+                                        <h5 class="modal-title" id="requestModalLabel">Request for tournamnet
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                                <input type="text" id="requestTournamentName"
+                                                    placeholder="Tournament Name" class="form-control my-2">
+
+                                                <input type="number" id="requestTotalseats" placeholder="Total Seats"
+                                                    class="form-control my-2">
+
+                                                <input type="text" id="requestEntryFee" placeholder="Entry Fee"
+                                                    class="form-control my-2">
+
+                                                <input type="text" id="requestPrizePool" placeholder="Prize Pool"
+                                                    class="form-control my-2">
+
+                                                <div class="form-group shadow-textarea">
+                                                    <label for="requestRules" class="text-dark">Rules</label>
+                                                    <textarea class="form-control z-depth-1" id="requestRules"
+                                                        rows="3"></textarea>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <label class="input-group-text" for="requestGame">Game</label>
+                                                    </div>
+                                                    <select class="browser-default custom-select" id="requestGame">
+                                                        <option selected>Choose...</option>
+                                                        <option value="1">Pubg</option>
+                                                        <option value="2">cod</option>
+                                                        <option value="3">Three</option>
+                                                    </select>
+                                                </div>
+
+                                                <input type="text" id="requestTournamentTime" placeholder="Pick a Time"
+                                                    data-id="datetime" class="form-control my-2 w-md-50 mx-auto"
+                                                    readonly="readonly">
+
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <label class="input-group-text pr-4" for="requestGame">Team size</label>
+                                                    </div>
+                                                    <select class="browser-default custom-select" id="requestTeamSize">
+                                                        <option selected>solo</option>
+                                                        <option value="1">duo</option>
+                                                        <option value="2">squad</option>
+                                                    </select>
+                                                </div>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <label class="input-group-text" for="requestGame">Game mode</label>
+                                                    </div>
+                                                    <select class="browser-default custom-select" id="requestGameMode">
+                                                        <option selected>TDM</option>
+                                                        <option value="1">BR</option>
+                                                    </select>
+                                                </div>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <label class="input-group-text pr-4" for="requestGameTag">Game tag</label>
+                                                    </div>
+                                                    <select class="browser-default custom-select" id="requestGame">
+                                                        <option selected>Shanok</option>
+                                                        <option value="1">Shanok</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal -->
                     </div>
                 </div>
             </div>
@@ -305,6 +404,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 
     <script src="js/iziToast.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script src="./js/Constants.js"></script>
     <script src="./js/ProfileLoader.js"></script>
