@@ -292,7 +292,7 @@ function createUserInCollection() {
             user.uid = USER_IN_SESSION.uid;
             user.userName = getElementValue("editProfileName");
             user.userEmailID = getElementValue("editEmail");
-            user.walletAmount = document.getElementById("winnings").innerHTML;
+            user.walletAmount = parseInt(document.getElementById("winnings").innerHTML);
             user.role = 0;
             user.profileImageURL = document.getElementById("profileImage").getAttribute("src");
             user.mobileNo = parseInt(getElementValue("editMobileNumber"));
