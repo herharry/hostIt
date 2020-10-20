@@ -31,7 +31,7 @@ function sessionLoginHandler(firebaseUser)
             console.log("existing user")
             sessionLogin(firebaseUser).then(function (res)
             {
-                window.location.assign("/profile");
+                window.location.assign("/dashboard");
             })
         }
         else
