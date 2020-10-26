@@ -765,3 +765,27 @@ function removeOptions(selectElement) {
         selectElement.remove(i);
     }
 }
+
+function requestTournament()
+{
+    let newTournament = {};
+    newTournament.amount = parseInt(document.getElementById("requestEntryFee").value);
+    newTournament.createdBy = firebase.auth().currentUser.uid;
+    newTournament.gameID = '';
+    newTournament.gameMode = parseInt(document.getElementById("requestGameMode").value);
+    newTournament.isFinished = false;
+    newTournament.name = document.getElementById("requestTournamentName").value;
+    newTournament.prizePool = '';
+        let registeredUserDetails = {};
+        registeredUserDetails.inGameID='';
+        registeredUserDetails.inGameName='';
+    newTournament.registeredUserDetails = registeredUserDetails;
+    newTournament.rules= document.getElementById("requestRules").value;
+    newTournament.tags='';
+    newTournament.teamSize = parseInt(document.getElementById("requestTeamSize").value);
+    newTournament.totalSeats = parseInt(document.getElementById("requestTotalseats").value);
+    newTournament.vacantSeats = parseInt(document.getElementById("requestTotalseats").value);
+    newTournament.winnerID='';
+    console.log(newTournament)
+
+}
