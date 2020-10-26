@@ -305,11 +305,8 @@
                                                     <div class="input-group-prepend">
                                                         <label class="input-group-text" for="requestGame">Game</label>
                                                     </div>
-                                                    <select class="browser-default custom-select" id="requestGame">
+                                                    <select class="browser-default custom-select" id="requestGame" onchange="gameEditPageAction()">
                                                         <option selected>Choose...</option>
-                                                        <option value="1">Pubg</option>
-                                                        <option value="2">cod</option>
-                                                        <option value="3">Three</option>
                                                     </select>
                                                 </div>
 
@@ -319,30 +316,23 @@
 
                                                 <div class="input-group mb-3">
                                                     <div class="input-group-prepend">
-                                                        <label class="input-group-text pr-4" for="requestGame">Team size</label>
+                                                        <label class="input-group-text pr-4" for="requestTeamSize">Team size</label>
                                                     </div>
                                                     <select class="browser-default custom-select" id="requestTeamSize">
-                                                        <option selected>solo</option>
-                                                        <option value="1">duo</option>
-                                                        <option value="2">squad</option>
                                                     </select>
                                                 </div>
                                                 <div class="input-group mb-3">
                                                     <div class="input-group-prepend">
-                                                        <label class="input-group-text" for="requestGame">Game mode</label>
+                                                        <label class="input-group-text" for="requestGameMode">Game mode</label>
                                                     </div>
                                                     <select class="browser-default custom-select" id="requestGameMode">
-                                                        <option selected>TDM</option>
-                                                        <option value="1">BR</option>
                                                     </select>
                                                 </div>
                                                 <div class="input-group mb-3">
                                                     <div class="input-group-prepend">
                                                         <label class="input-group-text pr-4" for="requestGameTag">Game tag</label>
                                                     </div>
-                                                    <select class="browser-default custom-select" id="requestGame">
-                                                        <option selected>Shanok</option>
-                                                        <option value="1">Shanok</option>
+                                                    <select class="browser-default custom-select" id="requestGameTag">
                                                     </select>
                                                 </div>
                                             </div>

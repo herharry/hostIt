@@ -5,12 +5,14 @@ flatpickr("#requestTournamentTime", {
 
 
 let API;
+let GAMES;
 let PHONE_VERIFICATION_FLAG = false;
 let applicationVerifier = null;
 // FIREBASE AUTHENTICATION FOR THE CURRENT USER STARTS*****************************************************************************
 
 async function loadProfileJS() {
     let uid = USER_IN_SESSION.uid;
+    getGame();
     if (getCookie("SU_SY") == "") {
         await fetch("/createToken", {
             method: "POST",
@@ -78,7 +80,33 @@ function profileListener() {
 }
 
 //FIREBASE AUTHENTICATION FOR THE CURRENT USER ENDS *****************************************************************************
-//todo set all details
+
+getGame = (data) => {
+    fetch("/games")
+        .then(res => res.json())
+        .then(res => setGames(this.formatResponse(res), data))
+        .catch(err => err);
+}
+
+function formatResponse(res) {
+    const ta = Object.keys(res).map(key => ({
+        ...res[key],
+        tournamentID: key
+    }));
+    return ta;
+}
+
+function setGames(data) {
+    GAMES = data;
+    let gameBar = document.getElementById("requestGame");
+    for(let i=0;i<GAMES.length;i++)
+    {
+        let newGameOption = document.createElement("option");
+        newGameOption.text=GAMES[i].name;
+        newGameOption.value=i+'';
+        gameBar.appendChild(newGameOption);
+    }
+}
 
 function loadProfileForNewUser(user) {
     console.log("firebase auth sesssion", user)
@@ -689,5 +717,51 @@ function changeRole() {
                 position: 'topRight'
             });
         });
+    }
+}
+
+function gameEditPageAction()
+{
+    clearAllOtherOptions();
+   let gameSelector = document.getElementById("requestGame");
+   let gameTeamSizeSelector = document.getElementById("requestTeamSize");
+   let gameModeSelector = document.getElementById("requestGameMode");
+   let gameTagSelector = document.getElementById("requestGameTag");
+    for(let i=0;i<GAMES.length;i++)
+    {
+        if(gameSelector.selectedIndex-1 == i)
+        {
+            createOption(GAMES[i].teamSize,gameTeamSizeSelector);
+            createOption(GAMES[i].gameModes,gameModeSelector);
+            createOption(GAMES[i].tags,gameTagSelector);
+            break;
+        }
+    }
+}
+
+function createOption(iterator, appender)
+{
+    for(let j=0;j<iterator.length;j++)
+    {
+        let newGameTag = document.createElement("option");
+        newGameTag.text=iterator[j].toString();
+        newGameTag.value=j+'';
+        appender.appendChild(newGameTag);
+    }
+}
+
+function clearAllOtherOptions()
+{
+    //todo clear all option every time the game label changes
+    removeOptions(document.getElementById("requestTeamSize"));
+    removeOptions(document.getElementById("requestGameMode"));
+    removeOptions(document.getElementById("requestGameTag"));
+
+}
+
+function removeOptions(selectElement) {
+    let i, L = selectElement.options.length - 1;
+    for(i = L; i >= 0; i--) {
+        selectElement.remove(i);
     }
 }
