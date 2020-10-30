@@ -1,0 +1,336 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin panel _ Host-it</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="Your all in one gaming platform. Engage in tournaments and conquer">
+    <link rel="stylesheet" type="text/css" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+</head>
+
+<body class="custom">
+    <nav class="navbar navbar-expand-lg navbar-dark py-0 static-top">
+        <div class="container-fluid iii" id="tot_navbar">
+            <a class="navbar-brand" href="/dashboard">
+                <img src="https://placehold.it/150x50?text=Logo" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" id="">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav p-2 ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link middle" href="/dashboard">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" href="/videos">Videos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" href="/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" href="#footer">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link middle" onclick="logout()">logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container p-0 mt-3">
+
+        <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="games-tab" data-toggle="tab" href="#games" role="tab"
+                    aria-controls="games" aria-selected="true">Games</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user"
+                    aria-selected="false">User Request</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="wallet-tab" data-toggle="tab" href="#wallet" role="tab" aria-controls="wallet"
+                    aria-selected="false">Wallet </a>
+            </li>
+        </ul>
+
+
+        <div class="tab-content" id="myTabContent">
+
+            <div class="tab-pane fade show active" id="games" role="tabpanel" aria-labelledby="games-tab">
+                <div class="p-3" id="">
+
+                    <h4 class="text-warning mb-3">Add Banner</h4>
+                    <form class="needs-validation px-2" novalidate>
+                        <div class="img_section">
+                            <img class="mx-auto w-100 img-responsive" id="bannerimg">
+                        </div>
+                        <input type="file" accept="image/*" name="image" id="bannerImgFile" onchange="loadFile(event)"
+                            style="display: none;" required>
+                        <label for="bannerImgFile" style="cursor: pointer;"
+                            class="border px-5 py-2 rounded"><small>Upload banner Image</small></label>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="description"><small>Description</small></label>
+                                <input type="text" id="description" class="form-control bg-dark text-white" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="bannerTournamentList"><small>Tournament</small></label>
+                                <select class="browser-default custom-select bg-dark text-white" required
+                                    id="bannerTournamentList">
+                                    <option value="" disabled selected>Choose option</option>
+                                    <option value="1">tid</option>
+                                    <option value="2">tid</option>
+                                </select> </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">create banner</button>
+                        <button class="btn btn-success btn-sm mt-3 float-right" type="reset"> reset</button>
+                    </form>
+                    <hr class="bg-primary">
+
+
+                    <h4 class="text-warning mt-5">Add games</h4>
+                    <form class="needs-validation px-2 mb-4" novalidate>
+
+                        <div class="img_section">
+                            <img class="mx-auto img-responsive" id="gameimg">
+                        </div>
+                        <input type="file" accept="image/*" name="image" id="gameImgFile" onchange="loadFile(event)"
+                            style="display: none;" required>
+                        <label for="gameImgFile" style="cursor: pointer;" class="border px-5 py-2 rounded"><small>Upload
+                                Game Image</small></label>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="gameTitle"><small>Game Name</small></label>
+                                <input type="text" id="gameTitle" class="form-control bg-dark text-white" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gameMode"><small> Game Mode</small></label>
+                                <input type="text" id="gameMode" class="form-control bg-dark text-white" required>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6 py-2">
+                                <label for="gameTeamSize"><small>Team Size</small></label>
+                                <input type="text" id="gameTeamSize" class="form-control bg-dark text-white" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gameTags"><small>Enter tags</small></label>
+                                <input type="text" id="gameTags" class="form-control bg-dark text-white" required>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">create banner</button>
+                        <button class="btn btn-success btn-sm mt-3 float-right" type="reset"> reset</button>
+
+                    </form>
+                    <hr class="bg-primary">
+                    <form class="needs-validation" novalidate>
+                        <h4 class="text-warning mt-5">Add tournaments</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small>Tournamet Name</small>
+                                <input type="text" id="requestTournamentName" placeholder="Tournament Name"
+                                    class="form-control bg-dark text-white my-2" required>
+
+                                <small>Total Seats</small>
+                                <input type="number" id="requestTotalseats" placeholder="Total Seats"
+                                    class="form-control bg-dark text-white my-2" required>
+
+                                <small>Entry Fee</small>
+                                <input type="number" id="requestEntryFee" placeholder="Entry Fee"
+                                    class="form-control bg-dark text-white my-2" required>
+
+                                <small>Prize Pool</small>
+                                <input type="text" id="requestPrizePool" placeholder="Prize Pool"
+                                    class="form-control bg-dark text-white my-2" required>
+
+                                <div class="form-group shadow-textarea">
+                                    <label for="requestRules"><small> Rules</small></label>
+                                    <textarea class="form-control bg-dark text-white z-depth-1" id="requestRules"
+                                        rows="3" required></textarea>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+
+                                <small>Select time</small>
+                                <input type="text" id="requestTournamentTime" placeholder="Pick a Time"
+                                    data-id="datetime" class="form-control bg-dark text-white my-2 w-md-50 mx-auto"
+                                    readonly="readonly" required>
+
+                                <small>Tournamet Name</small>
+                                <select class="browser-default custom-select bg-dark text-white my-2 mb-4"
+                                    id="requestGame" placeholder="sdbk" onchange="gameEditPageAction()" required>
+                                    <option disabled selected>Choose...</option>
+                                </select>
+
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend ">
+                                        <label class="input-group-text bg-dark text-white my-2 pr-4"
+                                            for="requestTeamSize">Team
+                                            size</label>
+                                    </div>
+                                    <select class="browser-default custom-select bg-dark text-white my-2"
+                                        id="requestTeamSize" required>
+                                    </select>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text bg-dark text-white my-2"
+                                            for="requestGameMode">Game
+                                            mode</label>
+                                    </div>
+                                    <select class="browser-default custom-select bg-dark text-white my-2"
+                                        id="requestGameMode" required>
+                                    </select>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text pr-4 bg-dark text-white my-2"
+                                            for="requestGameTag">Game
+                                            tag</label>
+                                    </div>
+                                    <select class="browser-default custom-select bg-dark text-white my-2"
+                                        id="requestGameTag" required>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">create Tournament</button>
+                        <button class="btn btn-success btn-sm mt-3 float-right" type="reset"> reset</button>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
+                <div class="py-4">
+
+                    <div class="d-flex justify-content-between col-12" id="userRequestTab">
+                        <!-- user request list -->
+                        <div class=" col-12 col-md-6 my-2 px-1 ">
+                            <div class="bg-dark rounded-lg p-2">
+                                <div class="row">
+
+                                    <div class="col-7 d-flex flex-column justify-content-center">
+                                        <p id="userRequestName">Name</p>
+                                        <p id="userRequestMail">Mail</p>
+                                        <p id="userRequestPhn">Phone number</p>
+
+                                        <p type="button" data-toggle="collapse" data-target="#collapseExample"
+                                            aria-expanded="false" aria-controls="collapseExample">
+                                            <small>Details <span class="fas fa-chevron-circle-down"></span></small>
+                                        </p>
+                                        <div class="collapse fade" id="collapseExample">
+                                            <div class="mt-3">
+                                                <p>Address : <small>city road 12</small></p>
+                                                <p>Social Url : <small>hsbhgafk</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-5 d-flex flex-column justify-content-end">
+                                        <div class="d-flex flex-column justify-content-end">
+                                            <button class="btn btn-danger btn-sm px-2 m-1"> Reject </button>
+                                            <button class="btn btn-success btn-sm px-2 m-1"> Accept </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                        <!-- user request list end -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
+                <div class="p-3">
+                    <div>
+                        <h4 class="text-warning">Wallet Requests</h4>
+                        <div class="custom-control custom-checkbox custom-control-inline ml-3">
+                            <input type="checkbox" class="custom-control-input" id="defaultInline1">
+                            <label class="custom-control-label" for="defaultInline1">Pending</label>
+                        </div>
+
+                        <div class="custom-control custom-checkbox custom-control-inline ml-3">
+                            <input type="checkbox" class="custom-control-input" id="defaultInline2">
+                            <label class="custom-control-label" for="defaultInline2">Approved</label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between flex-wrap col-12 p-1 py-3" id="walletRequest">
+
+                        <!-- dynamic wallet list -->
+                        <div class=" col-12 col-md-6 my-2 px-1 ">
+                            <div class="bg-dark rounded-lg p-2">
+
+                                <div class="row">
+
+                                    <div class="col-5">
+                                        <p class="mx-auto mb-3" id="walletRequestName">Name</p>
+                                        <p type="button" data-toggle="collapse" data-target="#collapseExample"
+                                            aria-expanded="false" aria-controls="collapseExample">
+                                            <small>Details <span class="fas fa-chevron-circle-down"></span></small>
+                                        </p>
+                                        <div class="collapse fade" id="collapseExample">
+                                            <div class="mt-3">
+                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
+                                                terry
+                                                richardson ad squid. Nihil anim
+                                                keffiyeh helvetica,
+                                                craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <p><span class="fas fa-rupee-sign p-2"></span>123 </p>
+                                    </div>
+
+                                    <div class="col-5 d-flex justify-content-end">
+                                        <div class="my-auto">
+                                            <button class="btn btn-danger btn-sm px-2 m-1 float-right"> Reject </button>
+                                            <button class="btn btn-success btn-sm px-2 m-1 float-right"> Accept </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- dynamic wallet list end -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
+    </script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script src="./js/Constants.js"></script>
+    <script src="./js/admin.js"></script>
+
+</body>
+
+</html>
