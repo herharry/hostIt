@@ -359,6 +359,25 @@ app.get('/banners', (req, res) => {
     })();
 });
 
+app.post('/addBanner', (req, res) => {
+    (async () => {
+        try {
+            let payload = req.body.payLoad;
+
+            await db.collection('Banners').doc()
+                .create({
+                    description : payload.description,
+                    imageUrl :payload.url,
+                    tournamentId :payload.tid
+                });
+            return res.status(200).send("success");
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
 //*********************************************************************************************************************************************//
 //******************************************** BANNER API ENDS *************************************************************************************//
 //*******************************************************************************************************************************************
