@@ -776,6 +776,7 @@ function getGameID(selector)
     }
 }
 
+//todo error in time pciker
 function requestTournament()
 {
     let newTournament = {};
@@ -785,6 +786,7 @@ function requestTournament()
     newTournament.gameMode = parseInt(document.getElementById("requestGameMode").value);
     newTournament.isFinished = false;
     newTournament.name = document.getElementById("requestTournamentName").value;
+    //todo convert the split value to number
     newTournament.prizePool = document.getElementById("requestPrizePool").value.split(" ");
     let registeredUserDetails = {};
     registeredUserDetails.inGameID='';
