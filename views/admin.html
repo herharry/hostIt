@@ -63,34 +63,33 @@
         <div class="tab-content" id="myTabContent">
 
             <div class="tab-pane fade show active" id="games" role="tabpanel" aria-labelledby="games-tab">
-                <div class="p-3" id="">
+                <div class="p-3" >
 
                     <h4 class="text-warning mb-3">Add Banner</h4>
                     <form class="needs-validation px-2" novalidate>
                         <div class="img_section">
                             <img class="mx-auto w-100 img-responsive" id="bannerimg">
                         </div>
-                        <input type="file" accept="image/*" name="image" id="bannerImgFile" onchange="loadFile(event)"
+                        <input type="file" accept="image/*" name="image" id="bannerImgFile" onchange="readURL(this)"
                             style="display: none;" required>
                         <label for="bannerImgFile" style="cursor: pointer;"
                             class="border px-5 py-2 rounded"><small>Upload banner Image</small></label>
                         <div class="row mb-4">
                             <div class="col-md-6">
-                                <label for="description"><small>Description</small></label>
-                                <input type="text" id="description" class="form-control bg-dark text-white" required>
+                                <label for="bannerDesc"><small>Description</small></label>
+                                <input type="text" id="bannerDesc" class="form-control bg-dark text-white" required >
                             </div>
                             <div class="col-md-6">
                                 <label for="bannerTournamentList"><small>Tournament</small></label>
                                 <select class="browser-default custom-select bg-dark text-white" required
                                     id="bannerTournamentList">
                                     <option value="" disabled selected>Choose option</option>
-                                    <option value="1">tid</option>
-                                    <option value="2">tid</option>
                                 </select> </div>
                         </div>
-                        <button class="btn btn-primary" type="submit">create banner</button>
                         <button class="btn btn-success btn-sm mt-3 float-right" type="reset"> reset</button>
                     </form>
+                    <button class="btn btn-primary" onclick="addBanner()" id="create_banner">create banner</button>
+
                     <hr class="bg-primary">
 
 
@@ -100,7 +99,7 @@
                         <div class="img_section">
                             <img class="mx-auto img-responsive" id="gameimg">
                         </div>
-                        <input type="file" accept="image/*" name="image" id="gameImgFile" onchange="loadFile(event)"
+                        <input type="file" accept="image/*" name="image" id="gameImgFile"
                             style="display: none;" required>
                         <label for="gameImgFile" style="cursor: pointer;" class="border px-5 py-2 rounded"><small>Upload
                                 Game Image</small></label>
@@ -317,6 +316,7 @@
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
@@ -332,5 +332,9 @@
     <script src="./js/admin.js"></script>
 
 </body>
+
+<script>
+    loadAdminJS()
+</script>
 
 </html>

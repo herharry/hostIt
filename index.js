@@ -363,6 +363,7 @@ app.post('/addBanner', (req, res) => {
     (async () => {
         try {
             let payload = req.body.payLoad;
+            console.log(payload)
 
             await db.collection('Banners').doc()
                 .create({
