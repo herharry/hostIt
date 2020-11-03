@@ -47,7 +47,7 @@ flatpickr("#requestTournamentTime", {
 
 // image tag
 let bannerImg = "undefined";
-
+let gameImg = "undefined"
 function readURL(input) {
     if (input.files[0]) {
         let reader = new FileReader();
@@ -58,6 +58,10 @@ function readURL(input) {
         if(input.id == "bannerImgFile")
         {
             bannerImg = input.files[0];
+        }
+        else if(input.id == "gameImgFile")
+        {
+            gameImg = input.files[0];
         }
     }
 }
@@ -98,17 +102,71 @@ function callBannerApi(downloadUrl)
         },
         body: JSON.stringify({payLoad}),
     });
+
+}
+
+function addGame()
+{
+    let gameTitle = document.getElementById("gameTitle").value;
+
+    if(gameImg!="undefined")
+    {
+        storeImage(gameImg,"Games/",gameTitle)
+    }
+    else
+    {
+        alert("upload Game image")
+    }
+
+}
+
+function callGameApi(downloadUrl)
+{
+    let gameTitle = document.getElementById("gameTitle").value;
+    let gameMode = document.getElementById("gameMode").value;
+    let gameTeamSize = document.getElementById("gameTeamSize").value.split(" ");
+    let gameTags = document.getElementById("gameTags").value.split(" ");
+
+    let payLoad = {};
+    payLoad.gameTitle = gameTitle;
+    payLoad.gameMode = gameMode;
+    payLoad.gameTeamSize = gameTeamSize;
+    payLoad.gameTags = gameTags;
+    payLoad.gameImage = downloadUrl;
+
+
+    fetch("/addGames", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({payLoad}),
+    });
+
 }
 
 function storeImage(img,ref,imgName) {
     if (typeof (img) != "undefined") {
         let uploadTask = firebase.app().storage("gs://hostitgaming-36a6b.appspot.com")
             .ref(ref).child(imgName+".jpg").put(img);
-        alert("fdsf")
         uploadTask.on('state_changed', function (snapshot) {
-            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            //todo create front end for showing the progress
-            // console.log('Upload is ' + progress + '% done');
+            //todo check this part and make it visibile in front end.. NOTE I changed that part in html added a div
+            // let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            // let progbar ;
+            // if(ref=="Banners/")
+            // {
+            //     progbar = "#dynamic-1"
+            // }
+            // else if(ref == "Games/")
+            // {
+            //     progbar = "#dynamic-2"
+            // }
+            // $(progbar)
+            //     .css("width", progress + "%")
+            //     .attr("aria-valuenow", progress)
+            //     .text(Math.floor(progress) + "% Complete");
+
         }, function (error) {
             iziToast.error({
                 message: "we are little depressed for the time being, try again later!",
@@ -120,6 +178,10 @@ function storeImage(img,ref,imgName) {
                 if(ref=="Banners/")
                 {
                     callBannerApi(downloadURL);
+                }
+                else if(ref == "Games/")
+                {
+                    callGameApi(downloadURL)
                 }
             }).catch(reason => {
                 // alert(reason)

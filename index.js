@@ -333,6 +333,33 @@ app.get('/games', (req, res) => {
     })();
 });
 
+app.post('/addGames', (req, res) => {
+    (async () => {
+        try {
+            let payLoad = req.body.payLoad;
+
+          await db.collection('Games')
+                .add({
+                    gameTitle : payLoad.gameTitle,
+                    gameMode :payLoad.gameMode,
+                    gameTeamSize :payLoad.gameTeamSize,
+                    gameTags :payLoad.gameTags,
+                    gameImage : payLoad.gameImage
+                })
+            .then(function(docRef) {
+                    db.collection('Games').doc(docRef.id)
+                        .update({
+                            id : docRef.id
+                        })
+                });
+            return res.status(200).send("success");
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
 //*********************************************************************************************************************************************//
 //******************************************** GAME API ENDS *************************************************************************************//
 //*******************************************************************************************************************************************
