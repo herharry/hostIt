@@ -766,26 +766,42 @@ function removeOptions(selectElement) {
     }
 }
 
+function getGameID(selector)
+{
+    for (let i = 0; i < GAMES.length; i++) {
+        if(i==selector-1)
+        {
+            return GAMES[i].gameID;
+        }
+    }
+}
+
 function requestTournament()
 {
     let newTournament = {};
     newTournament.amount = parseInt(document.getElementById("requestEntryFee").value);
     newTournament.createdBy = firebase.auth().currentUser.uid;
-    newTournament.gameID = '';
+    newTournament.gameID = getGameID(document.getElementById("requestGame").selectedIndex);
     newTournament.gameMode = parseInt(document.getElementById("requestGameMode").value);
     newTournament.isFinished = false;
     newTournament.name = document.getElementById("requestTournamentName").value;
-    newTournament.prizePool = '';
-        let registeredUserDetails = {};
-        registeredUserDetails.inGameID='';
-        registeredUserDetails.inGameName='';
+    newTournament.prizePool = document.getElementById("requestPrizePool").value.split(" ");
+    let registeredUserDetails = {};
+    registeredUserDetails.inGameID='';
+    registeredUserDetails.inGameName='';
+    let registeredUsers = [];
+    newTournament.registeredUsers = registeredUsers;
     newTournament.registeredUserDetails = registeredUserDetails;
     newTournament.rules= document.getElementById("requestRules").value;
-    newTournament.tags='';
+    newTournament.tags=parseInt(document.getElementById("requestGameTag").value);
+    newTournament.requestStatus = 1;
     newTournament.teamSize = parseInt(document.getElementById("requestTeamSize").value);
     newTournament.totalSeats = parseInt(document.getElementById("requestTotalseats").value);
     newTournament.vacantSeats = parseInt(document.getElementById("requestTotalseats").value);
     newTournament.winnerID='';
+    //todo create a time stamp and store
+    newTournament.time = document.getElementById("requestTournamentTime").value;;
     console.log(newTournament)
 
+    //TODO call create tournament api
 }
