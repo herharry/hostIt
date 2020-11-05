@@ -63,7 +63,7 @@
         <div class="tab-content" id="myTabContent">
 
             <div class="tab-pane fade show active" id="games" role="tabpanel" aria-labelledby="games-tab">
-                <div class="p-3" >
+                <div class="p-3">
 
                     <h4 class="text-warning mb-3">Add Banner</h4>
                     <form class="needs-validation px-2" novalidate>
@@ -72,19 +72,16 @@
                         </div>
                         <input type="file" accept="image/*" name="image" id="bannerImgFile" onchange="readURL(this)"
                             style="display: none;" required>
-                        <div class="progress mx-5 d-none" id="uploadProgress">
-                            <div id="dynamic-1" class="progress-bar bg-success progress-bar-striped active"
-                                 role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-                                 style="width: 0%">
-                                <span id="current-progress"></span>
-                            </div>
+                        <div class="invalid-feedback">
+                            <p>image is empty</p>
                         </div>
                         <label for="bannerImgFile" style="cursor: pointer;"
                             class="border px-5 py-2 rounded"><small>Upload banner Image</small></label>
+
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="bannerDesc"><small>Description</small></label>
-                                <input type="text" id="bannerDesc" class="form-control bg-dark text-white" required >
+                                <input type="text" id="bannerDesc" class="form-control bg-dark text-white" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="bannerTournamentList"><small>Tournament</small></label>
@@ -93,9 +90,16 @@
                                     <option value="" disabled selected>Choose option</option>
                                 </select> </div>
                         </div>
+                        <div class="progress mx-5 d-none" id="uploadProgress-1">
+                            <div id="dynamic-1" class="progress-bar bg-success progress-bar-striped active"
+                                role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                                style="width: 0%">
+                                <span id="current-progress"></span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="addBanner()" id="create_banner">create banner</button>
                         <button class="btn btn-success btn-sm mt-3 float-right" type="reset"> reset</button>
                     </form>
-                    <button class="btn btn-primary" onclick="addBanner()" id="create_banner">create banner</button>
 
                     <hr class="bg-primary">
 
@@ -108,40 +112,41 @@
                         </div>
                         <input type="file" accept="image/*" name="image" id="gameImgFile" onchange="readURL(this)"
                             style="display: none;" required>
+                        <div class="invalid-feedback">
+                            <p>image is empty</p>
+                        </div>
                         <label for="gameImgFile" style="cursor: pointer;" class="border px-5 py-2 rounded"><small>Upload
                                 Game Image</small></label>
                         <div class="progress mx-5 d-none" id="uploadProgress-2">
                             <div id="dynamic-2" class="progress-bar bg-success progress-bar-striped active"
-                                 role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-                                 style="width: 0%">
+                                role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                                style="width: 0%">
                                 <span id="current-progress-2"></span>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6 pb-1">
                                 <label for="gameTitle"><small>Game Name</small></label>
                                 <input type="text" id="gameTitle" class="form-control bg-dark text-white" required>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 pb-1">
                                 <label for="gameMode"><small> Game Mode</small></label>
                                 <input type="text" id="gameMode" class="form-control bg-dark text-white" required>
                             </div>
                         </div>
                         <div class="row mb-4">
-                            <div class="col-md-6 py-2">
+                            <div class="col-md-6 pb-1">
                                 <label for="gameTeamSize"><small>Team Size</small></label>
                                 <input type="text" id="gameTeamSize" class="form-control bg-dark text-white" required>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 pb-1">
                                 <label for="gameTags"><small>Enter tags</small></label>
                                 <input type="text" id="gameTags" class="form-control bg-dark text-white" required>
                             </div>
                         </div>
-
+                        <button class="btn btn-primary" onclick="addGame()">create game</button>
                         <button class="btn btn-success btn-sm mt-3 float-right" type="reset"> reset</button>
-
                     </form>
-                    <button class="btn btn-primary" onclick="addGame()">create game</button>
 
                     <hr class="bg-primary">
                     <form class="needs-validation" novalidate>
@@ -181,7 +186,7 @@
                                 <small>Tournamet Name</small>
                                 <select class="browser-default custom-select bg-dark text-white my-2 mb-4"
                                     id="requestGame" placeholder="sdbk" onchange="gameEditPageAction()" required>
-                                    <option disabled selected>Choose...</option>
+                                    <option value="" disabled selected>Choose...</option>
                                 </select>
 
 
@@ -218,9 +223,9 @@
 
                             </div>
                         </div>
+                        <button class="btn btn-primary" onclick="requestTournament()">create Tournament</button>
                         <button class="btn btn-success btn-sm mt-3 float-right" type="reset"> reset</button>
                     </form>
-                    <button class="btn btn-primary" onclick="requestTournament()">create Tournament</button>
 
                 </div>
             </div>
@@ -260,7 +265,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <!-- user request list end -->
                     </div>
                 </div>
@@ -313,7 +318,8 @@
                                     <div class="col-5 d-flex justify-content-end">
                                         <div class="my-auto">
                                             <button class="btn btn-danger btn-sm px-2 m-1 float-right"> Reject </button>
-                                            <button class="btn btn-success btn-sm px-2 m-1 float-right"> Accept </button>
+                                            <button class="btn btn-success btn-sm px-2 m-1 float-right"> Accept
+                                            </button>
                                         </div>
                                     </div>
 

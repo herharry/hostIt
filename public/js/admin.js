@@ -1,6 +1,8 @@
 let GAMES;
 let TOURNAMENTS;
 
+// $(":reset").click(()=>{$(".img-responsive").each(()=>{$(this).attr("src","")})})
+
 async function loadAdminJS() {
     let uid = USER_IN_SESSION.uid;
     fetch("/games")
@@ -29,8 +31,7 @@ async function loadAdminJS() {
             })
         });
     } else {
-        firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {
-        }).catch(reason => {
+        firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {}).catch(reason => {
             console.log(reason);
             delete_cookie("SU_SY");
             loadAdminJS();
@@ -48,46 +49,45 @@ flatpickr("#requestTournamentTime", {
 // image tag
 let bannerImg = "undefined";
 let gameImg = "undefined"
+
 function readURL(input) {
     if (input.files[0]) {
+        var imgid;
         let reader = new FileReader();
 
-        reader.onload = function (e) {
-        };
+        reader.onload = function (e) {};
         // reader.readAsDataURL(input.files[0]);
-        if(input.id == "bannerImgFile")
-        {
+        if (input.id == "bannerImgFile") {
+            imgid = "bannerimg"
             bannerImg = input.files[0];
-        }
-        else if(input.id == "gameImgFile")
-        {
+        } else if (input.id == "gameImgFile") {
+            imgid = "gameimg"
             gameImg = input.files[0];
         }
+        var image = document.getElementById(imgid);
+        image.src = URL.createObjectURL(input.files[0]);
     }
 }
 
-function addBanner()
-{
+function addBanner() {
     let tournament = document.getElementById("bannerTournamentList").value;
-
-    if(bannerImg!="undefined")
-    {
-        storeImage(bannerImg,"Banners/",tournament)
-    }
-    else
-    {
-        alert("upload banner image")
-    }
-
-}
-
-function callBannerApi(downloadUrl)
-{
     let desc = document.getElementById("bannerDesc").value;
 
-    let tournament = document.getElementById("bannerTournamentList").value;
+    if (bannerImg != "undefined" && tournament && desc) {
+        storeImage(bannerImg, "Banners/", tournament)
+    }
+}
 
-    console.log(desc,tournament)
+function callBannerApi(downloadUrl) {
+    let desc = document.getElementById("bannerDesc").value;
+    let tournament = document.getElementById("bannerTournamentList").value;
+    console.log(progbarh);
+    $(progbarh).addClass("d-none")
+    $(progbar)
+        .css("width", 0 + "%")
+        .attr("aria-valuenow", 0)
+        .text(0 + "% Complete");
+    console.log(desc, tournament)
 
     let payLoad = {};
     payLoad.description = desc;
@@ -100,28 +100,24 @@ function callBannerApi(downloadUrl)
             Accept: "application/json",
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({payLoad}),
+        body: JSON.stringify({
+            payLoad
+        }),
     });
 
 }
 
-function addGame()
-{
+function addGame() {
     let gameTitle = document.getElementById("gameTitle").value;
-
-    if(gameImg!="undefined")
-    {
-        storeImage(gameImg,"Games/",gameTitle)
+    let gameMode = document.getElementById("gameMode").value;
+    let gameTeamSize = document.getElementById("gameTeamSize").value.split(" ");
+    let gameTags = document.getElementById("gameTags").value.split(" ");
+    if (gameImg != "undefined" && gameTitle && gameMode && gameTeamSize && gameTags) {
+        storeImage(gameImg, "Games/", gameTitle)
     }
-    else
-    {
-        alert("upload Game image")
-    }
-
 }
 
-function callGameApi(downloadUrl)
-{
+function callGameApi(downloadUrl) {
     let gameTitle = document.getElementById("gameTitle").value;
     let gameMode = document.getElementById("gameMode").value;
     let gameTeamSize = document.getElementById("gameTeamSize").value.split(" ");
@@ -134,6 +130,11 @@ function callGameApi(downloadUrl)
     payLoad.gameTags = gameTags;
     payLoad.gameImage = downloadUrl;
 
+    $(progbarh).addClass("d-none")
+    $(progbar)
+        .css("width", 0 + "%")
+        .attr("aria-valuenow", 0)
+        .text(0 + "% Complete");
 
     fetch("/addGames", {
         method: "POST",
@@ -141,54 +142,58 @@ function callGameApi(downloadUrl)
             Accept: "application/json",
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({payLoad}),
+        body: JSON.stringify({
+            payLoad
+        }),
     });
 
 }
+let progbar;
+let progbarh;
 
-function storeImage(img,ref,imgName) {
+function storeImage(img, ref, imgName) {
     if (typeof (img) != "undefined") {
+
+        if (ref == "Banners/") {
+            progbarh = "#uploadProgress-1"
+        } else if (ref == "Games/") {
+            progbarh = "#uploadProgress-2"
+        }
+        $(progbarh).removeClass("d-none")
         let uploadTask = firebase.app().storage("gs://hostitgaming-36a6b.appspot.com")
-            .ref(ref).child(imgName+".jpg").put(img);
+            .ref(ref).child(imgName + ".jpg").put(img);
         uploadTask.on('state_changed', function (snapshot) {
             //todo check this part and make it visibile in front end.. NOTE I changed that part in html added a div
-            // let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            // let progbar ;
-            // if(ref=="Banners/")
-            // {
-            //     progbar = "#dynamic-1"
-            // }
-            // else if(ref == "Games/")
-            // {
-            //     progbar = "#dynamic-2"
-            // }
-            // $(progbar)
-            //     .css("width", progress + "%")
-            //     .attr("aria-valuenow", progress)
-            //     .text(Math.floor(progress) + "% Complete");
-
+            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            if (ref == "Banners/") {
+                progbar = "#dynamic-1"
+            } else if (ref == "Games/") {
+                progbar = "#dynamic-2"
+            }
+            $(progbar)
+                .css("width", progress + "%")
+                .attr("aria-valuenow", progress)
+                .text(Math.floor(progress) + "% Complete");
+            console.log(snapshot.bytesTransferred);
         }, function (error) {
-            iziToast.error({
-                message: "we are little depressed for the time being, try again later!",
-                position: 'topRight'
-            });
+            // iziToast.error({
+            //     message: "we are little depressed for the time being, try again later!",
+            //     position: 'topRight'
+            // });
         }, function () {
             uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
                 console.log('File available at', downloadURL);
-                if(ref=="Banners/")
-                {
+                if (ref == "Banners/") {
                     callBannerApi(downloadURL);
-                }
-                else if(ref == "Games/")
-                {
+                } else if (ref == "Games/") {
                     callGameApi(downloadURL)
                 }
             }).catch(reason => {
                 // alert(reason)
-                iziToast.error({
-                    message: "Something went wrong",
-                    position: 'topRight'
-                });
+                // iziToast.error({
+                //     message: "Something went wrong",
+                //     position: 'topRight'
+                // });
             });
         });
     }
@@ -208,6 +213,8 @@ function storeImage(img,ref,imgName) {
                     event.stopPropagation();
                 }
                 form.classList.add('was-validated');
+                event.preventDefault();
+                event.stopPropagation();
             }, false);
         });
     }, false);
@@ -285,18 +292,15 @@ function removeOptions(selectElement) {
     }
 }
 
-function getGameID(selector)
-{
+function getGameID(selector) {
     for (let i = 0; i < GAMES.length; i++) {
-        if(i==selector-1)
-        {
+        if (i == selector - 1) {
             return GAMES[i].gameID;
         }
     }
 }
 
-function requestTournament()
-{
+function requestTournament() {
     let newTournament = {};
     newTournament.amount = parseInt(document.getElementById("requestEntryFee").value);
     newTournament.createdBy = firebase.auth().currentUser.uid;
@@ -305,22 +309,26 @@ function requestTournament()
     newTournament.isFinished = false;
     newTournament.name = document.getElementById("requestTournamentName").value;
     newTournament.prizePool = document.getElementById("requestPrizePool").value.split(" ");
-        let registeredUserDetails = {};
-        registeredUserDetails.inGameID='';
-        registeredUserDetails.inGameName='';
-        let registeredUsers = [];
+    let registeredUserDetails = {};
+    registeredUserDetails.inGameID = '';
+    registeredUserDetails.inGameName = '';
+    let registeredUsers = [];
     newTournament.registeredUsers = registeredUsers;
     newTournament.registeredUserDetails = registeredUserDetails;
-    newTournament.rules= document.getElementById("requestRules").value;
-    newTournament.tags=parseInt(document.getElementById("requestGameTag").value);
+    newTournament.rules = document.getElementById("requestRules").value;
+    newTournament.tags = parseInt(document.getElementById("requestGameTag").value);
     newTournament.requestStatus = 1;
     newTournament.teamSize = parseInt(document.getElementById("requestTeamSize").value);
     newTournament.totalSeats = parseInt(document.getElementById("requestTotalseats").value);
     newTournament.vacantSeats = parseInt(document.getElementById("requestTotalseats").value);
-    newTournament.winnerID='';
-    //todo create a time stamp and store
-    newTournament.time = document.getElementById("requestTournamentTime").value;;
+    newTournament.winnerID = '';
+    newTournament.time = toTimestamp(document.getElementById("requestTournamentTime").value);
     console.log(newTournament)
 
     //TODO call create tournament api
+}
+
+function toTimestamp(strDate) {
+    var datum = Date.parse(strDate);
+    return datum / 1000;
 }
