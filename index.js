@@ -333,32 +333,6 @@ app.get('/games', (req, res) => {
     })();
 });
 
-app.post('/addGames', (req, res) => {
-    (async () => {
-        try {
-            let payLoad = req.body.payLoad;
-
-          await db.collection('Games')
-                .add({
-                    gameTitle : payLoad.gameTitle,
-                    gameMode :payLoad.gameMode,
-                    gameTeamSize :payLoad.gameTeamSize,
-                    gameTags :payLoad.gameTags,
-                    gameImage : payLoad.gameImage
-                })
-            .then(function(docRef) {
-                    db.collection('Games').doc(docRef.id)
-                        .update({
-                            id : docRef.id
-                        })
-                });
-            return res.status(200).send("success");
-        } catch (error) {
-            console.log(error);
-            return res.status(500).send(error);
-        }
-    })();
-});
 
 //*********************************************************************************************************************************************//
 //******************************************** GAME API ENDS *************************************************************************************//
@@ -386,25 +360,6 @@ app.get('/banners', (req, res) => {
     })();
 });
 
-app.post('/addBanner', (req, res) => {
-    (async () => {
-        try {
-            let payload = req.body.payLoad;
-            console.log(payload)
-
-            await db.collection('Banners').doc()
-                .create({
-                    description : payload.description,
-                    imageUrl :payload.url,
-                    tournamentId :payload.tid
-                });
-            return res.status(200).send("success");
-        } catch (error) {
-            console.log(error);
-            return res.status(500).send(error);
-        }
-    })();
-});
 
 //*********************************************************************************************************************************************//
 //******************************************** BANNER API ENDS *************************************************************************************//
@@ -655,6 +610,24 @@ app.post('/requestRoleChange', (req, res) => {
         return res.status(200).send("success");
     })();
 });
+
+//
+// app.get('/userRequests', (req, res) => {
+//     (async () => {
+//         let response = [];
+//         try {
+//             let request = db.collection('UserAuthRequest');
+//             const snapshot = await request.get();
+//             snapshot.forEach(doc => {
+//                 response.push(doc.data())
+//             });
+//         } catch
+//             (error) {
+//             return res.status(500).send(error);
+//         }
+//         return res.status(200).json(response);
+//     })();
+// });
 
 
 //*********************************************************************************************************************************************//
@@ -942,6 +915,93 @@ app.post("/registerTournament",(req, response) => {
 //********************************************* PAYTM API ENDS ******************************************************************************//
 //********************************************************************************************************************************************//
 
+
+//*******************************************************************************************************************************************//
+//********************************************* ADMIN API STARTS *********************************************************************************//
+//*******************************************************************************************************************************************//
+
+app.post('/admin/banner', (req, res) => {
+    (async () => {
+        try {
+            let payload = req.body.payLoad;
+            console.log(payload)
+
+            await db.collection('Banners').doc()
+                .create({
+                    description : payload.description,
+                    imageUrl :payload.url,
+                    tournamentId :payload.tid
+                });
+            return res.status(200).send("success");
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
+app.post('/admin/games', (req, res) => {
+    (async () => {
+        try {
+            let payLoad = req.body.payLoad;
+
+            await db.collection('Games')
+                .add({
+                    name : payLoad.gameTitle,
+                    gameMode :payLoad.gameMode,
+                    gameTeamSize :payLoad.gameTeamSize,
+                    gameTags :payLoad.gameTags,
+                    gameImage : payLoad.gameImage
+                })
+                .then(function(docRef) {
+                    db.collection('Games').doc(docRef.id)
+                        .update({
+                            id : docRef.id
+                        })
+                });
+            return res.status(200).send("success");
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
+
+app.post('/admin/tournament', (req, res) => {
+    (async () => {
+        let payLoad = req.body.newTournament;
+        try {
+            await db.collection('Tournaments')
+                .add({
+                    amount : payLoad.amount,
+                    createdBy :payLoad.createdBy,
+                    gameID :payLoad.gameID,
+                    gameMode :payLoad.gameMode,
+                    isFinished :payLoad.isFinished,
+                    name :payLoad.name,
+                    prizePool :payLoad.prizePool,
+                    registeredUsers :payLoad.registeredUsers,
+                    registeredUserDetails :payLoad.registeredUserDetails,
+                    tags :payLoad.tags,
+                    requestStatus :payLoad.requestStatus,
+                    teamSize :payLoad.teamSize,
+                    totalSeats :payLoad.totalSeats,
+                    vacantSeats :payLoad.vacantSeats,
+                    winnerID :payLoad.winnerID,
+                    time :payLoad.timer,
+                    rules : payLoad.rules
+                });
+            return res.status(200).send("success");
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+//*******************************************************************************************************************************************//
+//********************************************* ADMIN API ENDS *********************************************************************************//
+//*******************************************************************************************************************************************//
 
 
 //*******************************************************************************************************************************************//

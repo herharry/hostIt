@@ -94,7 +94,7 @@ function callBannerApi(downloadUrl) {
     payLoad.tid = tournament;
     payLoad.url = downloadUrl;
 
-    fetch("/addBanner", {
+    fetch("/admin/banner", {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -119,7 +119,7 @@ function addGame() {
 
 function callGameApi(downloadUrl) {
     let gameTitle = document.getElementById("gameTitle").value;
-    let gameMode = document.getElementById("gameMode").value;
+    let gameMode = document.getElementById("gameMode").value.split(" ");
     let gameTeamSize = document.getElementById("gameTeamSize").value.split(" ");
     let gameTags = document.getElementById("gameTags").value.split(" ");
 
@@ -136,7 +136,7 @@ function callGameApi(downloadUrl) {
         .attr("aria-valuenow", 0)
         .text(0 + "% Complete");
 
-    fetch("/addGames", {
+    fetch("/admin/games", {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -308,10 +308,8 @@ function requestTournament() {
     newTournament.gameMode = parseInt(document.getElementById("requestGameMode").value);
     newTournament.isFinished = false;
     newTournament.name = document.getElementById("requestTournamentName").value;
-    newTournament.prizePool = document.getElementById("requestPrizePool").value.split(" ");
-    let registeredUserDetails = {};
-    registeredUserDetails.inGameID = '';
-    registeredUserDetails.inGameName = '';
+    newTournament.prizePool = document.getElementById("requestPrizePool").value.split(" ").map(x=>+x);
+    let registeredUserDetails = [];
     let registeredUsers = [];
     newTournament.registeredUsers = registeredUsers;
     newTournament.registeredUserDetails = registeredUserDetails;
@@ -322,9 +320,19 @@ function requestTournament() {
     newTournament.totalSeats = parseInt(document.getElementById("requestTotalseats").value);
     newTournament.vacantSeats = parseInt(document.getElementById("requestTotalseats").value);
     newTournament.winnerID = '';
-    newTournament.time = toTimestamp(document.getElementById("requestTournamentTime").value);
+    newTournament.timer = toTimestamp(document.getElementById("requestTournamentTime").value);
     console.log(newTournament)
 
+    fetch("/admin/tournament", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            newTournament
+        }),
+    });
     //TODO call create tournament api
 }
 
