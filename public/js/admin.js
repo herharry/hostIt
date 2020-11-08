@@ -1,6 +1,6 @@
 let GAMES;
 let TOURNAMENTS;
-
+let userAuthHolder = [];
 // $(":reset").click(()=>{$(".img-responsive").each(()=>{$(this).attr("src","")})})
 
 async function loadAdminJS() {
@@ -28,10 +28,13 @@ async function loadAdminJS() {
         }).then(res => res.text()).then(function (res) {
             firebase.auth().signInWithCustomToken(res.toString()).then(function (user) {
                 setCookie("SU_SY", res.toString(), 1);
+                userAuthRequestListener();
             })
         });
     } else {
-        firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {}).catch(reason => {
+        firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {
+            userAuthRequestListener();
+        }).catch(reason => {
             console.log(reason);
             delete_cookie("SU_SY");
             loadAdminJS();
@@ -40,6 +43,133 @@ async function loadAdminJS() {
 }
 
 
+function userAuthRequestListener() {
+    DB.collection("UserAuthRequest").where("status", "==", false)
+        .onSnapshot(function (snapshot) {
+            if (snapshot.empty) {
+                // $("#tournamentLoader").hide()
+                // if ($("#noData").length == 0)
+                //     $("#tournamentCards").append("<p class=\"mx-auto my-5\" id=\"noData\">No data found</p>")
+                //todo hide all the cards and say no data available
+            }
+            deleteAllCards();
+            userAuthHolder = [];
+            snapshot.forEach(function (doc) {
+                let request = {};
+                request = doc.data();
+                request.id = doc.id;
+                userAuthHolder.push(request)
+            });
+            let userAuthIds = [];
+            userAuthHolder.forEach(function (auth)
+            {
+                DB.collection("Users").doc(auth.id).get().then(function (res)
+                {
+                    let user = res.data();
+                    loadRequestInCard(auth,user.userEmailID,user.mobileNo);
+                });
+
+            })
+        });
+}
+
+function loadRequestInCard(request,email,phone)
+{
+    const cardParent = document.getElementById("userRequestTab")
+    let card = document.createElement("div");
+    card.className = "col-12 col-md-6 my-2 px-1";
+    let cardBody = document.createElement("div");
+    cardBody.className = "bg-dark rounded-lg p-2";
+    let cardParaRowHolder = document.createElement("div");
+    cardParaRowHolder.className = "row";
+    let cardParaRow = document.createElement("div");
+    cardParaRow.className = "col-7 d-flex flex-column justify-content-center";
+
+    let namePara = document.createElement("p");
+    namePara.innerHTML = request.userName;
+    let emailPara = document.createElement("p");
+    let emailSmall = document.createElement("small");
+    emailSmall.innerHTML = email;
+    let phonePara = document.createElement("p");
+    let phoneSmall = document.createElement("small");
+    phoneSmall.innerHTML = phone;
+
+    let detailToggleButton = document.createElement("p");
+    detailToggleButton.setAttribute("type","button");
+    detailToggleButton.setAttribute("data-toggle","collapse");
+    detailToggleButton.setAttribute("data-target","#collapse"+request.id);
+    detailToggleButton.setAttribute("aria-expanded","false");
+    detailToggleButton.setAttribute("aria-controls","collapseExample");
+    detailToggleButton.setAttribute("aria-expanded","false");
+    let detailSmall = document.createElement("small");
+    detailSmall.innerText = "details  ";
+
+    let detailSpan  = document.createElement("span");
+    detailSpan.className="fas fa-chevron-circle-down";
+
+    let detailBodyHolder = document.createElement("div");
+    detailBodyHolder.className = "collapse fade";
+    detailBodyHolder.id = "collapse"+request.id;
+    let detailBody = document.createElement("div");
+    detailBody.className = "mt-3";
+
+    let addressPara = document.createElement("p");
+    addressPara.innerHTML = "ADDRESS";
+    let addressSmall = document.createElement("small");
+    addressSmall.innerText = "  "+ request.address;
+    let socialUrlPara = document.createElement("p");
+    socialUrlPara.innerHTML = "URL";
+    let socialSmall = document.createElement("small");
+    socialSmall.innerText = "  "+ request.socialUrl;
+    let q1Para = document.createElement("p");
+    q1Para.innerHTML = "Q1";
+    let q1Small = document.createElement("small");
+    q1Small.innerText = "  "+ request.q1;
+    let q2Para = document.createElement("p");
+    q2Para.innerHTML = "Q2";
+    let q2Small = document.createElement("small");
+    q2Small.innerText = "  "+ request.q2;
+
+    let resultButtonHolder = document.createElement("div");
+    resultButtonHolder.className = "col-5 d-flex flex-column justify-content-end";
+    let resultButton = document.createElement("div");
+    resultButton.className = "d-flex flex-column justify-content-end";
+    let reject = document.createElement("button");
+    reject.className = "btn btn-danger btn-sm px-2 m-1";
+    reject.innerText = "Reject";
+    let accept = document.createElement("button");
+    accept.className = "btn btn-success btn-sm px-2 m-1";
+    accept.id = "accept"+request.id;
+    accept.innerText = "Accept";
+    accept.setAttribute("onclick" , "userAccept(this)");
+
+    cardParent.appendChild(card);
+    card.appendChild(cardBody);
+    cardBody.appendChild(cardParaRowHolder);
+    cardParaRowHolder.appendChild(cardParaRow);
+    cardParaRow.appendChild(namePara);
+    cardParaRow.appendChild(emailPara);
+    emailPara.appendChild(emailSmall);
+    cardParaRow.appendChild(phonePara);
+    phonePara.appendChild(phoneSmall);
+    cardParaRow.appendChild(detailToggleButton);
+    detailToggleButton.appendChild(detailSmall);
+    detailSmall.appendChild(detailSpan);
+    cardParaRow.appendChild(detailBodyHolder);
+    detailBodyHolder.appendChild(detailBody);
+    detailBody.appendChild(addressPara);
+    addressPara.appendChild(addressSmall);
+    detailBody.appendChild(socialUrlPara);
+    socialUrlPara.appendChild(socialSmall);
+    detailBody.appendChild(q1Para);
+    q1Para.appendChild(q1Small);
+    detailBody.appendChild(q2Para);
+    q2Para.appendChild(q2Small);
+    cardParaRowHolder.appendChild(resultButtonHolder);
+    resultButtonHolder.appendChild(resultButton);
+    resultButton.appendChild(reject);
+    resultButton.appendChild(accept);
+}
 
 flatpickr("#requestTournamentTime", {
     enableTime: true,
@@ -49,6 +179,35 @@ flatpickr("#requestTournamentTime", {
 // image tag
 let bannerImg = "undefined";
 let gameImg = "undefined"
+
+function deleteAllCards() {
+    document.getElementById("userRequestTab").remove();
+    let newParent = document.createElement("div");
+    newParent.className = "d-flex justify-content-between col-12"
+    newParent.id = "userRequestTab";
+    document.getElementById("userReq").appendChild(newParent);
+}
+function userAccept(input)
+{
+    let id = input.id.split("accept")[1];
+    fetch("/admin/acceptAuthRequest", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            id
+        }),
+    }).then(res => res.text()).then(function (res)
+    {
+        console.log(res)
+        if(res != "success")
+        {
+            console.log("some error please try again later")
+        }
+    });
+}
 
 function readURL(input) {
     if (input.files[0]) {
