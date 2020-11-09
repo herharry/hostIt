@@ -1,5 +1,10 @@
 @import url("headerfooter.css");
 
+#tournamentUpdateName{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 600;
+}
+
 #bannerimg {
     max-height: 300px;
 }

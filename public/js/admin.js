@@ -425,14 +425,14 @@ function setTournamentUpdate(TournamentSeclection) {
 
     tournamentListData.forEach(el => {
         if (el.tid === TournamentSeclection) {
-            document.getElementById("tournamentUpdateName").innerHTML = el.name
+            document.getElementById("tournamentUpdateName").innerHTML = el.name.toUpperCase()
             GAMES.forEach(element => {
                 if (element.gameID === el.gameID)
                     document.getElementById("tournamentUpdateGame").innerHTML = element.name
                 // console.log(element.name);
             });
-            console.log(el.time);
-            let timestamp = el.time.seconds * 1000;
+            console.log(el.time._seconds);
+            let timestamp = el.time._seconds * 1000;
             let tournamentDate = new Date(timestamp).toLocaleString(undefined, {
                 month: 'short',
                 day: '2-digit',
@@ -444,7 +444,7 @@ function setTournamentUpdate(TournamentSeclection) {
                 minute: '2-digit'
             });
             document.getElementById("tournamentUpdateAmount").innerHTML = "Amount <br>" + el.amount
-            document.getElementById("tournamentUpdateTime").innerHTML = timestamp
+            document.getElementById("tournamentUpdateTime").innerHTML = tournamentDate +"<br>"+ tournamentTime
             document.getElementById("tournamentUpdatePlayers").innerHTML = "seats <br>" + (el.totalSeats - el.vacantSeats) + '/' + el.totalSeats
             document.getElementById("tournamentUpdatePrize").innerHTML = "Prize Pool <br>" + el.prizePool
             document.getElementById("tournamentUpdateRules").innerHTML = el.rules
@@ -454,8 +454,8 @@ function setTournamentUpdate(TournamentSeclection) {
 }
 
 function showTournamentEdit() {
-    $("#tournamentUpdateDisplay").fadeToggle()
-    $("#tournamentUpdateEdit").fadeToggle("slow")
+    $("#tournamentUpdateDisplay").toggle()
+    $("#tournamentUpdateEdit").toggle("slow")
 }
 
 
