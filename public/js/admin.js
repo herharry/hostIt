@@ -138,7 +138,7 @@ function loadRequestInCard(request, email, phone) {
     let accept = document.createElement("button");
     accept.className = "btn btn-success btn-sm px-2 m-1";
     accept.id = "accept" + request.id;
-    request.status ? accept.innerText = "Accepted": accept.innerText = "Accept";
+    request.status ? accept.innerText = "Accepted" : accept.innerText = "Accept";
 
     if (!request.status) {
         accept.setAttribute("onclick", "userAccept(this)");
@@ -402,13 +402,66 @@ function setTournaments(data) {
     console.log(data)
     TOURNAMENTS = data;
     let tournamentBar = document.getElementById("bannerTournamentList");
+    let tournamentLis = document.getElementById("TournamentList");
     for (let i = 0; i < TOURNAMENTS.length; i++) {
         let newTournamentOption = document.createElement("option");
         newTournamentOption.text = TOURNAMENTS[i].name;
         newTournamentOption.value = TOURNAMENTS[i].tid;
-        tournamentBar.appendChild(newTournamentOption);
+        tournamentBar.appendChild(newTournamentOption.cloneNode(true));
+        tournamentLis.appendChild(newTournamentOption.cloneNode(true));
     }
+    tournamentListData = data
+    setTournamentUpdate(tournamentLis.value)
 }
+
+// tournament update listener 
+let tournamentLis = document.getElementById("TournamentList");
+tournamentLis.addEventListener("change", function () {
+    console.log(tournamentLis.value)
+    setTournamentUpdate(tournamentLis.value)
+});
+
+function setTournamentUpdate(TournamentSeclection) {
+
+    tournamentListData.forEach(el => {
+        if (el.tid === TournamentSeclection) {
+            document.getElementById("tournamentUpdateName").innerHTML = el.name
+            GAMES.forEach(element => {
+                if (element.gameID === el.gameID)
+                    document.getElementById("tournamentUpdateGame").innerHTML = element.name
+                // console.log(element.name);
+            });
+            console.log(el.time);
+            let timestamp = el.time.seconds * 1000;
+            let tournamentDate = new Date(timestamp).toLocaleString(undefined, {
+                month: 'short',
+                day: '2-digit',
+                year: 'numeric'
+
+            })
+            let tournamentTime = new Date(timestamp).toLocaleTimeString(undefined, {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById("tournamentUpdateAmount").innerHTML = "Amount <br>" + el.amount
+            document.getElementById("tournamentUpdateTime").innerHTML = timestamp
+            document.getElementById("tournamentUpdatePlayers").innerHTML = "seats <br>" + (el.totalSeats - el.vacantSeats) + '/' + el.totalSeats
+            document.getElementById("tournamentUpdatePrize").innerHTML = "Prize Pool <br>" + el.prizePool
+            document.getElementById("tournamentUpdateRules").innerHTML = el.rules
+        }
+    });
+
+}
+
+function showTournamentEdit() {
+    $("#tournamentUpdateDisplay").fadeToggle()
+    $("#tournamentUpdateEdit").fadeToggle("slow")
+}
+
+
+
+// tournament update listener end
+
 
 function gameEditPageAction() {
     clearAllOtherOptions();
@@ -492,9 +545,4 @@ function requestTournament() {
         }),
     });
     //TODO call create tournament api
-}
-
-function toTimestamp(strDate) {
-    var datum = Date.parse(strDate);
-    return datum / 1000;
 }

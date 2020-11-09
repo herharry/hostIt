@@ -50,12 +50,12 @@
                     aria-controls="games" aria-selected="true">Games</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user"
-                    aria-selected="false">Tournament </a>
+                <a class="nav-link" id="tournament-tab" data-toggle="tab" href="#tournament-section" role="tab"
+                    aria-controls="tournament-section" aria-selected="false">Tournament </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="request-tab" data-toggle="tab" href="#request" role="tab" aria-controls="request"
-                    aria-selected="false">Requests </a>
+                <a class="nav-link" id="request-tab" data-toggle="tab" href="#request" role="tab"
+                    aria-controls="request" aria-selected="false">Requests </a>
             </li>
         </ul>
 
@@ -64,7 +64,6 @@
 
             <div class="tab-pane fade show active" id="games" role="tabpanel" aria-labelledby="games-tab">
                 <div class="p-3">
-
                     <h4 class="text-warning mb-3">Add Banner</h4>
                     <form class="needs-validation px-2" novalidate>
                         <div class="img_section">
@@ -149,88 +148,13 @@
                     </form>
 
                     <hr class="bg-primary">
-                    <form class="needs-validation" novalidate>
-                        <h4 class="text-warning mt-5">Add tournaments</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <small>Tournamet Name</small>
-                                <input type="text" id="requestTournamentName" placeholder="Tournament Name"
-                                    class="form-control bg-dark text-white my-2" required>
-
-                                <small>Total Seats</small>
-                                <input type="number" id="requestTotalseats" placeholder="Total Seats"
-                                    class="form-control bg-dark text-white my-2" required>
-
-                                <small>Entry Fee</small>
-                                <input type="number" id="requestEntryFee" placeholder="Entry Fee"
-                                    class="form-control bg-dark text-white my-2" required>
-
-                                <small>Prize Pool</small>
-                                <input type="text" id="requestPrizePool" placeholder="Prize Pool"
-                                    class="form-control bg-dark text-white my-2" required>
-
-                                <div class="form-group shadow-textarea">
-                                    <label for="requestRules"><small> Rules</small></label>
-                                    <textarea class="form-control bg-dark text-white z-depth-1" id="requestRules"
-                                        rows="3" required></textarea>
-                                </div>
-
-                            </div>
-                            <div class="col-md-6">
-
-                                <small>Select time</small>
-                                <input type="text" id="requestTournamentTime" placeholder="Pick a Time"
-                                    data-id="datetime" class="form-control bg-dark text-white my-2 w-md-50 mx-auto"
-                                    readonly="readonly" required>
-
-                                <small>Tournamet Name</small>
-                                <select class="browser-default custom-select bg-dark text-white my-2 mb-4"
-                                    id="requestGame" placeholder="sdbk" onchange="gameEditPageAction()" required>
-                                    <option value="" disabled selected>Choose...</option>
-                                </select>
-
-
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend ">
-                                        <label class="input-group-text bg-dark text-white my-2 pr-4"
-                                            for="requestTeamSize">Team
-                                            size</label>
-                                    </div>
-                                    <select class="browser-default custom-select bg-dark text-white my-2"
-                                        id="requestTeamSize" required>
-                                    </select>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text bg-dark text-white my-2"
-                                            for="requestGameMode">Game
-                                            mode</label>
-                                    </div>
-                                    <select class="browser-default custom-select bg-dark text-white my-2"
-                                        id="requestGameMode" required>
-                                    </select>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text pr-4 bg-dark text-white my-2"
-                                            for="requestGameTag">Game
-                                            tag</label>
-                                    </div>
-                                    <select class="browser-default custom-select bg-dark text-white my-2"
-                                        id="requestGameTag" required>
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" onclick="requestTournament()">create Tournament</button>
-                        <button class="btn btn-success btn-sm mt-3 float-right" type="reset"> reset</button>
-                    </form>
-
+                    <div class="d-flex flex-wrap" id="gameEditList">
+                        <input type="text" name="sfdjjj" id="ndsfkj" class="bg-dark text-white">
+                    </div>
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
+            <div class="tab-pane fade" id="tournament-section" role="tabpanel" aria-labelledby="tournament-section">
 
                 <div class="container-fluid">
                     <div class="row">
@@ -240,11 +164,17 @@
 
                             <ul class="nav nav-pills text-warning d-flex flex-column">
                                 <li class="nav-item mx-2 mb-2">
-                                    <a class="nav-link active" data-toggle="tab" href="#pane1" role="tab">Tournament create
-                                        </a>
+                                    <a class="nav-link active" data-toggle="tab" href="#pane1" role="tab">Tournament
+                                        create
+                                    </a>
                                 </li>
                                 <li class="nav-item mx-2 mb-2">
-                                    <a class="nav-link" data-toggle="tab" href="#pane2" role="tab">Tournament Requests</a>
+                                    <a class="nav-link" data-toggle="tab" href="#pane2" role="tab">Tournament
+                                        Update</a>
+                                </li>
+                                <li class="nav-item mx-2 mb-2">
+                                    <a class="nav-link" data-toggle="tab" href="#pane3" role="tab">Tournament
+                                        Requests</a>
                                 </li>
                             </ul>
 
@@ -252,66 +182,333 @@
 
                         <!--Grid column-->
                         <div class="col-md-9 px-0 mb-4">
-                            <!-- <div class="tab-content pt-0"> -->
-                            <div class="tab-pane fade in show active" id="pane1" role="tabpanel">
+                            <div class="tab-content pt-0">
+                                <div class="tab-pane fade in show active" id="pane1" role="tabpanel">
+                                    <div class="p-3">
+                                        <form class="needs-validation" novalidate>
+                                            <h4 class="text-warning mt-5">Add tournaments</h4>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <small>Tournamet Name</small>
+                                                    <input type="text" id="requestTournamentName"
+                                                        placeholder="Tournament Name"
+                                                        class="form-control bg-dark text-white my-2" required>
 
-                            </div>
-                            <!-- </div> -->
+                                                    <small>Total Seats</small>
+                                                    <input type="number" id="requestTotalseats"
+                                                        placeholder="Total Seats"
+                                                        class="form-control bg-dark text-white my-2" required>
 
-                            <div class="tab-pane fade" id="pane2" role="tabpanel">
-                                <div class="">
-                                    <div class="card">
-                                        <div class="card-body  bg-dark rounded-lg m-4">
-                                            <h3 id="tournamentCardsNAMES" class="card-title text-primary text-upper">
-                                                test</h3>
-                                            <div class="row mb-2 border-bottom">
-                                                <div id="tournamentGameName" class="col-2 text-center p-1 border-right">
-                                                    Pubg
+                                                    <small>Entry Fee</small>
+                                                    <input type="number" id="requestEntryFee" placeholder="Entry Fee"
+                                                        class="form-control bg-dark text-white my-2" required>
+
+                                                    <small>Prize Pool</small>
+                                                    <input type="text" id="requestPrizePool" placeholder="Prize Pool"
+                                                        class="form-control bg-dark text-white my-2" required>
+
+                                                    <div class="form-group shadow-textarea">
+                                                        <label for="requestRules"><small> Rules</small></label>
+                                                        <textarea class="form-control bg-dark text-white z-depth-1"
+                                                            id="requestRules" rows="3" required></textarea>
+                                                    </div>
+
                                                 </div>
-                                                <div id="tournamentCardsAMOUNT"
-                                                    class="col-2 text-center p-1 border-right">Amount <br>1
+                                                <div class="col-md-6">
+
+                                                    <small>Select time</small>
+                                                    <input type="text" id="requestTournamentTime"
+                                                        placeholder="Pick a Time" data-id="datetime"
+                                                        class="form-control bg-dark text-white my-2 w-md-50 mx-auto"
+                                                        readonly="readonly" required>
+
+                                                    <small>Tournamet Name</small>
+                                                    <select
+                                                        class="browser-default custom-select bg-dark text-white my-2 mb-4"
+                                                        id="requestGame" placeholder="sdbk"
+                                                        onchange="gameEditPageAction()" required>
+                                                        <option value="" disabled selected>Choose...</option>
+                                                    </select>
+
+
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend ">
+                                                            <label class="input-group-text bg-dark text-white my-2 pr-4"
+                                                                for="requestTeamSize">Team
+                                                                size</label>
+                                                        </div>
+                                                        <select
+                                                            class="browser-default custom-select bg-dark text-white my-2"
+                                                            id="requestTeamSize" required>
+                                                        </select>
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <label class="input-group-text bg-dark text-white my-2"
+                                                                for="requestGameMode">Game
+                                                                mode</label>
+                                                        </div>
+                                                        <select
+                                                            class="browser-default custom-select bg-dark text-white my-2"
+                                                            id="requestGameMode" required>
+                                                        </select>
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <label class="input-group-text pr-4 bg-dark text-white my-2"
+                                                                for="requestGameTag">Game
+                                                                tag</label>
+                                                        </div>
+                                                        <select
+                                                            class="browser-default custom-select bg-dark text-white my-2"
+                                                            id="requestGameTag" required>
+                                                        </select>
+                                                    </div>
+
                                                 </div>
-                                                <div id="tournamentCardsTIME"
-                                                    class="col-4 text-center border-right p-1">Oct 07,
-                                                    2020<br>11:32 PM</div>
-                                                <div id="tournamentCardsPLAYERS"
-                                                    class="col-2 text-center border-right p-1">seats <br>2/7
-                                                </div>
-                                                <div id="tournamentCardsNAME" class="col-2 p-1 text-center">prize
-                                                    pool<br>45</div>
                                             </div>
-                                            <h4><span class="text-warning ml-2 mt-3"> Created by : </span><span
-                                                    class="">yoeswin</span>
-                                            </h4>
-                                            <h3 id="tournamentGameName" class="ml-2">Rules</h3>
-                                            <div class="ml-4 pl-2 border-left">sbfb yqwgdg qw eiqwiuh qiuwe hiq
-                                                wdiqwgdivqjwvhjqwi qiwge iq
-                                                giw
-                                                iqweiqwi gq weiqiwehiuqwh iqq ewiuqwhie iqweiqwi egqweq wiegqw iuqwiueh
-                                                iuqw iegqiweqwiqw
-                                                iqgweiqiwehwheiu qwigiqwehqwiGYDGbbnmabsdhggwegiqwie qwgq
-                                                wdbhdyIGQWqwbewbeuiahdQE
-                                                ASDBBjjjeiegygedbevoajsdgvuedjjehdjh deygwef wefwef wfe u fe we ff
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center">
-                                        <button type="button" class="btn btn-light btn-sm px-3 mx-2">&lt;&lt;
-                                            prev</button>
-                                        <button type="button" class="btn btn-light btn-sm px-3 mx-2">next
-                                            &gt;&gt;</button>
+                                            <button class="btn btn-primary" onclick="requestTournament()">create
+                                                Tournament</button>
+                                            <button class="btn btn-success btn-sm mt-3 float-right" type="reset">
+                                                reset</button>
+                                        </form>
+
                                     </div>
                                 </div>
+                                <!-- panel 1 tab end -->
+                                <div class="tab-pane fade" id="pane2" role="tabpanel">
+                                    <div class="m-2 mx-4">
+                                        <div class="form-group row">
+                                            <label for="TournamentList" class="col-4 col-form-label my-auto">Choose a
+                                                Tournament:</label>
+                                            <div class="col-8">
+                                                <select name="TournamentList" id="TournamentList"
+                                                    class="browser-default  custom-select">
+
+                                                </select>
+                                            </div>
+
+                                            <div class="container p-3">
+                                                <div class="card">
+                                                    <div class="card-body  w-100 bg-dark rounded-lg">
+
+                                                        <div class="" id="tournamentUpdateDisplay">
+                                                            <h3 id="tournamentUpdateName"
+                                                                class="card-title text-primary text-upper">
+                                                                test</h3>
+                                                            <div class="row mb-2 border-bottom">
+                                                                <div id="tournamentUpdateGame"
+                                                                    class="col-2 text-center p-1 border-right">
+                                                                    Pu
+                                                                </div>
+                                                                <div id="tournamentUpdateAmount"
+                                                                    class="col-2 text-center p-1 border-right">Amount
+                                                                    <br>
+                                                                </div>
+                                                                <div id="tournamentUpdateTime"
+                                                                    class="col-4 text-center border-right p-1"></div>
+                                                                <div id="tournamentUpdatePlayers"
+                                                                    class="col-2 text-center border-right p-1"> <br>2/7
+                                                                </div>
+                                                                <div id="tournamentUpdatePrize"
+                                                                    class="col-2 p-1 text-center">prize
+                                                                    pool<br>45</div>
+                                                            </div>
+
+                                                            <h3 class="ml-2">Rules</h3>
+                                                            <div class="ml-4 pl-2 border-left"
+                                                                id="tournamentUpdateRules">
+                                                            </div>
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-sm mx-2 float-right">delete</button>
+                                                            <button type="button"
+                                                                class="btn btn-success btn-sm float-right"
+                                                                onclick="showTournamentEdit()">update</button>
+                                                        </div>
+
+
+                                                        <!-- tournament update  -->
+                                                        <div class="p-3" id="tournamentUpdateEdit"
+                                                            style="display: none;">
+                                                            <form class="needs-validation" novalidate>
+                                                                <h4 class="text-warning mt-2">Add tournaments</h4>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <small>Tournamet Name</small>
+                                                                        <input type="text" id="updateTournamentName"
+                                                                            placeholder="Tournament Name"
+                                                                            class="form-control bg-dark text-white my-2"
+                                                                            required>
+
+                                                                        <small>Total Seats</small>
+                                                                        <input type="number" id="updateTotalseats"
+                                                                            placeholder="Total Seats"
+                                                                            class="form-control bg-dark text-white my-2"
+                                                                            required>
+
+                                                                        <small>Entry Fee</small>
+                                                                        <input type="number" id="updateEntryFee"
+                                                                            placeholder="Entry Fee"
+                                                                            class="form-control bg-dark text-white my-2"
+                                                                            required>
+
+                                                                        <small>Prize Pool</small>
+                                                                        <input type="text" id="updatePrizePool"
+                                                                            placeholder="Prize Pool"
+                                                                            class="form-control bg-dark text-white my-2"
+                                                                            required>
+
+                                                                        <div class="form-group shadow-textarea">
+                                                                            <label for="updateRules"><small>
+                                                                                    Rules</small></label>
+                                                                            <textarea
+                                                                                class="form-control bg-dark text-white z-depth-1"
+                                                                                id="updateRules" rows="3"
+                                                                                required></textarea>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-6">
+
+                                                                        <small>Select time</small>
+                                                                        <input type="text" id="updateTournamentTime"
+                                                                            placeholder="Pick a Time" data-id="datetime"
+                                                                            class="form-control bg-dark text-white my-2 w-md-50 mx-auto"
+                                                                            readonly="readonly" required>
+
+                                                                        <small>Tournamet Name</small>
+                                                                        <select
+                                                                            class="browser-default custom-select bg-dark text-white my-2 mb-4"
+                                                                            id="updateGame" placeholder="sdbk"
+                                                                            onchange="gameEditPageAction()" required>
+                                                                            <option value="" disabled selected>Choose...
+                                                                            </option>
+                                                                        </select>
+
+
+                                                                        <div class="input-group mb-3">
+                                                                            <div class="input-group-prepend ">
+                                                                                <label
+                                                                                    class="input-group-text bg-dark text-white my-2 pr-4"
+                                                                                    for="updateTeamSize">Team
+                                                                                    size</label>
+                                                                            </div>
+                                                                            <select
+                                                                                class="browser-default custom-select bg-dark text-white my-2"
+                                                                                id="updateTeamSize" required>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="input-group mb-3">
+                                                                            <div class="input-group-prepend">
+                                                                                <label
+                                                                                    class="input-group-text bg-dark text-white my-2"
+                                                                                    for="updateGameMode">Game
+                                                                                    mode</label>
+                                                                            </div>
+                                                                            <select
+                                                                                class="browser-default custom-select bg-dark text-white my-2"
+                                                                                id="updateGameMode" required>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="input-group mb-3">
+                                                                            <div class="input-group-prepend">
+                                                                                <label
+                                                                                    class="input-group-text pr-4 bg-dark text-white my-2"
+                                                                                    for="updateGameTag">Game
+                                                                                    tag</label>
+                                                                            </div>
+                                                                            <select
+                                                                                class="browser-default custom-select bg-dark text-white my-2"
+                                                                                id="updateGameTag" required>
+                                                                            </select>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                                <button class="btn btn-primary float-left" onclick="">create
+                                                                    Tournament</button>
+                                                                <button type="button"
+                                                                    class="btn btn-success btn-sm float-left m-1 mx-2"
+                                                                    onclick="showTournamentEdit()">Cancel</button>
+                                                                <button class="btn btn-success btn-sm float-right"
+                                                                    type="reset">
+                                                                    reset</button>
+                                                            </form>
+                                                        </div>
+                                                        <!-- tournament update end -->
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-center my-2">
+                                                    <button type="button"
+                                                        class="btn btn-light btn-sm px-3 mx-2">&lt;&lt;
+                                                        prev</button>
+                                                    <button type="button" class="btn btn-light btn-sm px-3 mx-2">next
+                                                        &gt;&gt;</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- panel 2 tab end -->
+
+                                <div class="tab-pane fade" id="pane3" role="tabpanel">
+                                    <div class="">
+                                        <div class="card">
+                                            <div class="card-body  bg-dark rounded-lg m-4">
+                                                <h3 id="tournamentCardsNAMES"
+                                                    class="card-title text-primary text-upper">
+                                                    test</h3>
+                                                <div class="row mb-2 border-bottom">
+                                                    <div id="tournamentGameName"
+                                                        class="col-2 text-center p-1 border-right">
+                                                        Pubg
+                                                    </div>
+                                                    <div id="tournamentCardsAMOUNT"
+                                                        class="col-2 text-center p-1 border-right">Amount <br>1
+                                                    </div>
+                                                    <div id="tournamentCardsTIME"
+                                                        class="col-4 text-center border-right p-1">Oct 07,
+                                                        2020<br>11:32 PM</div>
+                                                    <div id="tournamentCardsPLAYERS"
+                                                        class="col-2 text-center border-right p-1">seats <br>2/7
+                                                    </div>
+                                                    <div id="tournamentCardsNAME" class="col-2 p-1 text-center">prize
+                                                        pool<br>45</div>
+                                                </div>
+                                                <h4><span class="text-warning ml-2 mt-3"> Created by : </span><span
+                                                        class="">yoeswin</span>
+                                                </h4>
+                                                <h3 id="tournamentGameName" class="ml-2">Rules</h3>
+                                                <div class="ml-4 pl-2 border-left">sbfb yqwgdg qw eiqwiuh qiuwe hiq
+                                                    wdiqwgdivqjwvhjqwi qiwge iq
+                                                    giw
+                                                    iqweiqwi gq weiqiwehiuqwh iqq ewiuqwhie iqweiqwi egqweq wiegqw
+                                                    iuqwiueh
+                                                    iuqw iegqiweqwiqw
+                                                    iqgweiqiwehwheiu qwigiqwehqwiGYDGbbnmabsdhggwegiqwie qwgq
+                                                    wdbhdyIGQWqwbewbeuiahdQE
+                                                    ASDBBjjjeiegygedbevoajsdgvuedjjehdjh deygwef wefwef wfe u fe we ff
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <button type="button" class="btn btn-light btn-sm px-3 mx-2">&lt;&lt;
+                                                prev</button>
+                                            <button type="button" class="btn btn-light btn-sm px-3 mx-2">next
+                                                &gt;&gt;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- panel 3 tab end -->
+
                             </div>
-                            <!-- panel 2 tab end -->
+                            <!-- tab content end -->
                         </div>
                     </div>
                     <!--Grid column-->
                 </div>
-
-
-
-
 
 
             </div>
@@ -329,7 +526,8 @@
                                         Requests</a>
                                 </li>
                                 <li class="nav-item mx-2 mb-2">
-                                    <a class="nav-link" data-toggle="tab" href="#panel12" role="tab">Wallet Requests</a>
+                                    <a class="nav-link" data-toggle="tab" href="#panel12" role="tab">Wallet
+                                        Requests</a>
                                 </li>
                             </ul>
 
