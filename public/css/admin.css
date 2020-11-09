@@ -1,17 +1,20 @@
 @import url("headerfooter.css");
 
-#bannerimg{
+#bannerimg {
     max-height: 300px;
 }
-#gameimg{
+
+#gameimg {
     width: 200px;
     max-height: 500px;
     object-fit: cover;
 }
+
 #upload {
     opacity: 0;
 }
-p{
+
+p {
     margin: 2px;
     margin-bottom: 4px;
 }
@@ -22,16 +25,30 @@ p{
     left: 1rem;
     transform: translateY(-50%);
 }
+
 /* tabs  */
 
 /* wallet card style */
-.walletRequestList{
+.walletRequestList {
     background-color: rgb(59, 59, 59);
 }
+
 .card {
     font-size: medium;
     background-color: var(--main-bg-color);
 }
+
+.nav-link {
+    color: rgb(131, 129, 129);
+}
+
+@media only screen and (min-width:800px){
+    .request-tab-list {
+        padding: 0px;
+        min-height: 50vh;
+    }
+} 
+
 
 .nav-tabs .nav-link.active {
     color: #f1f1f1;

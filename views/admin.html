@@ -51,11 +51,11 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user"
-                    aria-selected="false">User Request</a>
+                    aria-selected="false">Tournament </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="wallet-tab" data-toggle="tab" href="#wallet" role="tab" aria-controls="wallet"
-                    aria-selected="false">Wallet </a>
+                <a class="nav-link" id="request-tab" data-toggle="tab" href="#request" role="tab" aria-controls="request"
+                    aria-selected="false">Requests </a>
             </li>
         </ul>
 
@@ -231,103 +231,198 @@
             </div>
 
             <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
-                <div class="py-4" id="userReq">
 
-                    <div class="d-flex justify-content-between col-12" id="userRequestTab">
-                        <!-- user request list -->
-<!--                        <div class=" col-12 col-md-6 my-2 px-1" id="userReqLists">-->
-<!--                            <div class="bg-dark rounded-lg p-2" >-->
-<!--                                <div class="row" id="userReqList">-->
-<!--                                    <div class="col-7 d-flex flex-column justify-content-center">-->
-<!--&lt;!&ndash;                                        <p id="userRequestName">Name</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <p id="userRequestMail">Mail</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <p id="userRequestPhn">Phone number</p>&ndash;&gt;-->
+                <div class="container-fluid">
+                    <div class="row">
 
-<!--                                        <p type="button" data-toggle="collapse" data-target="#collapseExample"-->
-<!--                                            aria-expanded="false" aria-controls="collapseExample">-->
-<!--                                            <small>Details <span class="fas fa-chevron-circle-down"></span></small>-->
-<!--                                        </p>-->
-<!--                                        <div class="collapse fade" id="collapseExample">-->
-<!--                                            <div class="mt-3">-->
-<!--                                                <p>Address : <small>city road 12</small></p>-->
-<!--                                                <p>Social Url : <small>hsbhgafk</small></p>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                        <!--Grid column-->
+                        <div class="col-md-3 border-right request-tab-list my-2">
 
+                            <ul class="nav nav-pills text-warning d-flex flex-column">
+                                <li class="nav-item mx-2 mb-2">
+                                    <a class="nav-link active" data-toggle="tab" href="#pane1" role="tab">Tournament create
+                                        </a>
+                                </li>
+                                <li class="nav-item mx-2 mb-2">
+                                    <a class="nav-link" data-toggle="tab" href="#pane2" role="tab">Tournament Requests</a>
+                                </li>
+                            </ul>
 
-<!--                                    <div class="col-5 d-flex flex-column justify-content-end">-->
-<!--                                        <div class="d-flex flex-column justify-content-end">-->
-<!--                                            <button class="btn btn-danger btn-sm px-2 m-1"> Reject </button>-->
-<!--                                            <button class="btn btn-success btn-sm px-2 m-1"> Accept </button>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-                        <!-- user request list end -->
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
-                <div class="p-3">
-                    <div>
-                        <h4 class="text-warning">Wallet Requests</h4>
-                        <div class="custom-control custom-checkbox custom-control-inline ml-3">
-                            <input type="checkbox" class="custom-control-input" id="defaultInline1">
-                            <label class="custom-control-label" for="defaultInline1">Pending</label>
                         </div>
 
-                        <div class="custom-control custom-checkbox custom-control-inline ml-3">
-                            <input type="checkbox" class="custom-control-input" id="defaultInline2">
-                            <label class="custom-control-label" for="defaultInline2">Approved</label>
-                        </div>
-                    </div>
+                        <!--Grid column-->
+                        <div class="col-md-9 px-0 mb-4">
+                            <!-- <div class="tab-content pt-0"> -->
+                            <div class="tab-pane fade in show active" id="pane1" role="tabpanel">
 
-                    <div class="d-flex justify-content-between flex-wrap col-12 p-1 py-3" id="walletRequest">
+                            </div>
+                            <!-- </div> -->
 
-                        <!-- dynamic wallet list -->
-                        <div class=" col-12 col-md-6 my-2 px-1 ">
-                            <div class="bg-dark rounded-lg p-2">
-
-                                <div class="row">
-
-                                    <div class="col-5">
-                                        <p class="mx-auto mb-3" id="walletRequestName">Name</p>
-                                        <p type="button" data-toggle="collapse" data-target="#collapseExample"
-                                            aria-expanded="false" aria-controls="collapseExample">
-                                            <small>Details <span class="fas fa-chevron-circle-down"></span></small>
-                                        </p>
-                                        <div class="collapse fade" id="collapseExample1">
-                                            <div class="mt-3">
-                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-                                                terry
-                                                richardson ad squid. Nihil anim
-                                                keffiyeh helvetica,
-                                                craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                            <div class="tab-pane fade" id="pane2" role="tabpanel">
+                                <div class="">
+                                    <div class="card">
+                                        <div class="card-body  bg-dark rounded-lg m-4">
+                                            <h3 id="tournamentCardsNAMES" class="card-title text-primary text-upper">
+                                                test</h3>
+                                            <div class="row mb-2 border-bottom">
+                                                <div id="tournamentGameName" class="col-2 text-center p-1 border-right">
+                                                    Pubg
+                                                </div>
+                                                <div id="tournamentCardsAMOUNT"
+                                                    class="col-2 text-center p-1 border-right">Amount <br>1
+                                                </div>
+                                                <div id="tournamentCardsTIME"
+                                                    class="col-4 text-center border-right p-1">Oct 07,
+                                                    2020<br>11:32 PM</div>
+                                                <div id="tournamentCardsPLAYERS"
+                                                    class="col-2 text-center border-right p-1">seats <br>2/7
+                                                </div>
+                                                <div id="tournamentCardsNAME" class="col-2 p-1 text-center">prize
+                                                    pool<br>45</div>
+                                            </div>
+                                            <h4><span class="text-warning ml-2 mt-3"> Created by : </span><span
+                                                    class="">yoeswin</span>
+                                            </h4>
+                                            <h3 id="tournamentGameName" class="ml-2">Rules</h3>
+                                            <div class="ml-4 pl-2 border-left">sbfb yqwgdg qw eiqwiuh qiuwe hiq
+                                                wdiqwgdivqjwvhjqwi qiwge iq
+                                                giw
+                                                iqweiqwi gq weiqiwehiuqwh iqq ewiuqwhie iqweiqwi egqweq wiegqw iuqwiueh
+                                                iuqw iegqiweqwiqw
+                                                iqgweiqiwehwheiu qwigiqwehqwiGYDGbbnmabsdhggwegiqwie qwgq
+                                                wdbhdyIGQWqwbewbeuiahdQE
+                                                ASDBBjjjeiegygedbevoajsdgvuedjjehdjh deygwef wefwef wfe u fe we ff
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-2">
-                                        <p><span class="fas fa-rupee-sign p-2"></span>123 </p>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-light btn-sm px-3 mx-2">&lt;&lt;
+                                            prev</button>
+                                        <button type="button" class="btn btn-light btn-sm px-3 mx-2">next
+                                            &gt;&gt;</button>
                                     </div>
-
-                                    <div class="col-5 d-flex justify-content-end">
-                                        <div class="my-auto">
-                                            <button class="btn btn-danger btn-sm px-2 m-1 float-right"> Reject </button>
-                                            <button class="btn btn-success btn-sm px-2 m-1 float-right"> Accept
-                                            </button>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
+                            <!-- panel 2 tab end -->
                         </div>
-                        <!-- dynamic wallet list end -->
                     </div>
+                    <!--Grid column-->
+                </div>
 
+
+
+
+
+
+            </div>
+
+            <div class="tab-pane fade" id="request" role="tabpanel" aria-labelledby="request">
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <!--Grid column-->
+                        <div class="col-md-3 border-right request-tab-list my-2">
+
+                            <ul class="nav nav-pills text-warning d-flex flex-column">
+                                <li class="nav-item mx-2 mb-2">
+                                    <a class="nav-link active" data-toggle="tab" href="#panel11" role="tab">User
+                                        Requests</a>
+                                </li>
+                                <li class="nav-item mx-2 mb-2">
+                                    <a class="nav-link" data-toggle="tab" href="#panel12" role="tab">Wallet Requests</a>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <!--Grid column-->
+
+                        <!--Grid column-->
+                        <div class="col-md-9 px-0 mb-4">
+                            <div class="tab-content pt-0">
+                                <div class="tab-pane fade in show active" id="panel11" role="tabpanel">
+                                    <div class="py-4" id="userReq">
+
+                                        <div class="d-flex justify-content-between flex-wrap col-12"
+                                            id="userRequestTab">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="panel12" role="tabpanel">
+                                    <div class="p-3">
+
+                                        <div class="custom-control custom-checkbox custom-control-inline ml-3">
+                                            <input type="checkbox" class="custom-control-input" id="defaultInline1">
+                                            <label class="custom-control-label" for="defaultInline1">Pending</label>
+                                        </div>
+
+                                        <div class="custom-control custom-checkbox custom-control-inline ml-3">
+                                            <input type="checkbox" class="custom-control-input" id="defaultInline2">
+                                            <label class="custom-control-label" for="defaultInline2">Approved</label>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between flex-wrap col-12 p-1 py-3"
+                                            id="walletRequest">
+
+                                            <!-- dynamic wallet list -->
+                                            <div class=" col-12 col-md-6 my-2 px-1 ">
+                                                <div class="bg-dark rounded-lg p-2">
+
+                                                    <div class="row">
+
+                                                        <div class="col-5">
+                                                            <p class="mx-auto mb-3" id="walletRequestName">Name</p>
+                                                            <p type="button" data-toggle="collapse"
+                                                                data-target="#collapseExample" aria-expanded="false"
+                                                                aria-controls="collapseExample">
+                                                                <small>Details <span
+                                                                        class="fas fa-chevron-circle-down"></span></small>
+                                                            </p>
+                                                            <div class="collapse fade" id="collapseExample1">
+                                                                <div class="mt-3">
+                                                                    Anim pariatur cliche reprehenderit, enim eiusmod
+                                                                    high
+                                                                    life accusamus
+                                                                    terry
+                                                                    richardson ad squid. Nihil anim
+                                                                    keffiyeh helvetica,
+                                                                    craft beer labore wes anderson cred nesciunt
+                                                                    sapiente ea
+                                                                    proident.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-2">
+                                                            <p><span class="fas fa-rupee-sign p-2"></span>123 </p>
+                                                        </div>
+
+                                                        <div class="col-5 d-flex justify-content-end">
+                                                            <div class="my-auto">
+                                                                <button
+                                                                    class="btn btn-danger btn-sm px-2 m-1 float-right">
+                                                                    Reject </button>
+                                                                <button
+                                                                    class="btn btn-success btn-sm px-2 m-1 float-right">
+                                                                    Accept
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- dynamic wallet list end -->
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- panel 2 tab end -->
+                            </div>
+                        </div>
+                        <!--Grid column-->
+                    </div>
                 </div>
             </div>
 

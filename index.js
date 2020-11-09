@@ -989,7 +989,7 @@ app.post('/admin/tournament', (req, res) => {
                     totalSeats :payLoad.totalSeats,
                     vacantSeats :payLoad.vacantSeats,
                     winnerID :payLoad.winnerID,
-                    time :payLoad.timer,
+                    time : new Date(payLoad.timer),
                     rules : payLoad.rules
                 });
             return res.status(200).send("success");
