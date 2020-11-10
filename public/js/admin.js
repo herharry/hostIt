@@ -1,6 +1,7 @@
 let GAMES;
 let TOURNAMENTS;
 let userAuthHolder = [];
+let walletReqHolder = [];
 // $(":reset").click(()=>{$(".img-responsive").each(()=>{$(this).attr("src","")})})
 
 async function loadAdminJS() {
@@ -29,11 +30,14 @@ async function loadAdminJS() {
             firebase.auth().signInWithCustomToken(res.toString()).then(function (user) {
                 setCookie("SU_SY", res.toString(), 1);
                 userAuthRequestListener();
+                walletRequestListener();
             })
         });
     } else {
         firebase.auth().signInWithCustomToken(getCookie("SU_SY")).then(function (user) {
             userAuthRequestListener();
+            walletRequestListener();
+
         }).catch(reason => {
             console.log(reason);
             delete_cookie("SU_SY");
@@ -52,7 +56,7 @@ function userAuthRequestListener() {
                 $("#userReq").append("<div class=\"d-flex justify-content-center\"><p class=\" my-5\" id=\"noData\">No data found</p></div>")
                 // todo hide all the cards and say no data available
             }
-            deleteAllCards();
+            deleteUserAuthReqCards();
             userAuthHolder = [];
             snapshot.forEach(function (doc) {
                 let request = {};
@@ -64,7 +68,7 @@ function userAuthRequestListener() {
             userAuthHolder.forEach(function (auth) {
                 DB.collection("Users").doc(auth.id).get().then(function (res) {
                     let user = res.data();
-                    loadRequestInCard(auth, user.userEmailID, user.mobileNo);
+                    loadUserRequestInCard(auth, user.userEmailID, user.mobileNo);
 
                 });
 
@@ -72,7 +76,29 @@ function userAuthRequestListener() {
         });
 }
 
-function loadRequestInCard(request, email, phone) {
+function walletRequestListener()
+{
+    DB.collection("WalletRequests").orderBy("status")
+        .onSnapshot(function (snapshot) {
+            if (snapshot.empty) {
+                // $("#tournamentLoader").hide()
+                // if ($("#noData").length == 0)
+                $("#userReq").append("<div class=\"d-flex justify-content-center\"><p class=\" my-5\" id=\"noData\">No data found</p></div>")
+                // todo hide all the cards and say no data available
+            }
+            walletReqHolder = [];
+            deleteWalletReqCards();
+            snapshot.forEach(function (doc) {
+                let request = {};
+                request = doc.data();
+                request.id = doc.id;
+                walletReqHolder.push(request)
+                loadWalletRequestInCard(request)
+            });
+        });
+}
+
+function loadUserRequestInCard(request, email, phone) {
     const cardParent = document.getElementById("userRequestTab")
     let card = document.createElement("div");
     card.className = "col-12 col-md-6 my-2 px-1";
@@ -138,9 +164,14 @@ function loadRequestInCard(request, email, phone) {
     let accept = document.createElement("button");
     accept.className = "btn btn-success btn-sm px-2 m-1";
     accept.id = "accept" + request.id;
-    request.status ? accept.innerText = "Accepted": accept.innerText = "Accept";
-
-    if (!request.status) {
+    if(request.status == true)
+    {
+        accept.innerText = "Accepted"
+        accept.disabled = true;
+    }
+    else
+    {
+        accept.innerText = "Accept";
         accept.setAttribute("onclick", "userAccept(this)");
     }
 
@@ -172,6 +203,120 @@ function loadRequestInCard(request, email, phone) {
     resultButton.appendChild(accept);
 }
 
+
+function loadWalletRequestInCard(request, email, phone)
+{
+    console.log(request)
+    let cardParent = document.getElementById("walletRequest")
+    let card = document.createElement("div");
+    card.className = "col-12 col-md-6 my-2 px-1";
+    let cardBody = document.createElement("div");
+    cardBody.className = "bg-dark rounded-lg p-2";
+    let cardParaRowHolder = document.createElement("div");
+    cardParaRowHolder.className = "row";
+    let cardParaRow = document.createElement("div");
+    cardParaRow.className = "col-5";
+
+    let namePara = document.createElement("p");
+    namePara.innerHTML = request.name ;
+
+    let detailToggleButton = document.createElement("p");
+    detailToggleButton.setAttribute("type", "button");
+    detailToggleButton.setAttribute("data-toggle", "collapse");
+    detailToggleButton.setAttribute("data-target", "#collapse" + request.userID);
+    detailToggleButton.setAttribute("aria-expanded", "false");
+    detailToggleButton.setAttribute("aria-controls", "collapse" + request.userID);
+    detailToggleButton.setAttribute("aria-expanded", "false");
+    let detailSmall = document.createElement("small");
+    detailSmall.innerText = "details  ";
+    let detailSpan = document.createElement("span");
+    detailSpan.className = "fas fa-chevron-circle-down";
+    let detailBodyHolder = document.createElement("div");
+    detailBodyHolder.className = "collapse fade";
+    detailBodyHolder.id = "collapse" + request.userID;
+    let detailBody = document.createElement("div");
+    detailBody.className = "mt-3";
+    let accountPara = document.createElement("p");
+    accountPara.innerHTML = "Account";
+
+    if(request.type==2)
+    {
+        let vpa = document.createElement("small");
+        vpa.innerText = "\nvpa:  " + request.details.vpa.vpa;
+        accountPara.appendChild(vpa);
+    }
+    else if(request.type == 1)
+    {
+        let accName = document.createElement("small");
+        accName.innerText = "accName:  " + request.details.accountName;
+        let accNo = document.createElement("small");
+        accNo.innerText = "accNo:  " + request.details.accountNo;
+        let ifsc = document.createElement("small");
+        ifsc.innerText = "ifsc:  " + request.details.ifsc;
+        accountPara.appendChild(accName);
+        accountPara.appendChild(accNo);
+        accountPara.appendChild(ifsc)
+    }
+
+    let cardRupeeRow = document.createElement("div");
+    cardRupeeRow.className = "col-2";
+    let rupeePara = document.createElement("p");
+    rupeePara.innerHTML = request.amount;
+    let rupeeIcon = document.createElement("span");
+    rupeeIcon.className = "fas fa-rupee-sign p-2";
+
+    let resultButtonHolder = document.createElement("div");
+    resultButtonHolder.className = "col-5 d-flex flex-column justify-content-end";
+    let resultButton = document.createElement("div");
+    resultButton.className = "my-auto";
+    let reject = document.createElement("button");
+    reject.id = "reject" + request.id + "reject" + request.userID;
+    reject.className = "btn btn-danger btn-sm px-2 m-1 float-right";
+    reject.setAttribute("onclick", "walletAcceptOrReject(this,'reject')");
+    if(request.status == 0)
+    {
+        reject.innerText = "Rejected";
+        reject.disabled = true;
+    }
+    else
+    {
+        reject.innerText = "Reject";
+    }
+    let accept = document.createElement("button");
+    accept.className = "btn btn-success btn-sm px-2 m-1 float-right";
+    accept.id = "accept" + request.id + "accept" + request.userID;
+    accept.setAttribute("onclick", "walletAcceptOrReject(this,'accept')");
+
+    if(request.status == 2)
+    {
+        accept.innerText = "Accepted"
+        accept.disabled = true;
+    }
+    else
+    {
+        accept.innerText = "Accept";
+    }
+
+    cardParent.appendChild(card);
+    card.appendChild(cardBody);
+    cardBody.appendChild(cardParaRowHolder);
+    cardParaRowHolder.appendChild(cardParaRow);
+    cardParaRow.appendChild(namePara);
+    cardParaRow.appendChild(detailToggleButton);
+    detailToggleButton.appendChild(detailSmall);
+    detailSmall.appendChild(detailSpan);
+    cardParaRow.appendChild(detailBodyHolder);
+    detailBodyHolder.appendChild(detailBody);
+    detailBody.appendChild(accountPara);
+    cardParaRowHolder.appendChild(cardRupeeRow);
+    cardRupeeRow.appendChild(rupeeIcon);
+    cardRupeeRow.appendChild(rupeePara);
+    cardParaRowHolder.appendChild(resultButtonHolder);
+    resultButtonHolder.appendChild(resultButton);
+    resultButton.appendChild(reject);
+    resultButton.appendChild(accept);
+}
+
 flatpickr("#requestTournamentTime", {
     enableTime: true,
     dateFormat: "Y-m-d H:i",
@@ -181,7 +326,7 @@ flatpickr("#requestTournamentTime", {
 let bannerImg = "undefined";
 let gameImg = "undefined"
 
-function deleteAllCards() {
+function deleteUserAuthReqCards() {
     document.getElementById("userRequestTab").remove();
     let newParent = document.createElement("div");
     newParent.className = "d-flex justify-content-between flex-wrap col-12"
@@ -189,23 +334,48 @@ function deleteAllCards() {
     document.getElementById("userReq").appendChild(newParent);
 }
 
+function deleteWalletReqCards() {
+    document.getElementById("walletRequest").remove();
+    let newParent = document.createElement("div");
+    newParent.className = "d-flex justify-content-between flex-wrap col-12 p-1 py-3"
+    newParent.id = "walletRequest";
+    document.getElementById("dynamicWalletReqParent").appendChild(newParent);
+}
+
 function userAccept(input) {
     let id = input.id.split("accept")[1];
-    fetch("/admin/acceptAuthRequest", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            id
-        }),
-    }).then(res => res.text()).then(function (res) {
-        console.log(res)
-        if (res != "success") {
-            console.log("some error please try again later")
-        }
-    });
+    acceptOrRejectRequest("UserAuthRequest",id,true);
+}
+
+function walletAcceptOrReject(input, type) {
+
+    let id = input.id.split(type);
+    let docID = id[1];
+    let userID = id[2];
+    console.log(id)
+    if(type == 'accept')
+    {
+        acceptOrRejectRequest("WalletRequests",docID,2);
+    }
+    else
+    {
+        acceptOrRejectRequest("WalletRequests",docID,0);
+    }
+}
+
+async function acceptOrRejectRequest(dbName,id,statusValue)
+{
+    try
+    {
+        await DB.collection(dbName).doc(id).update(
+            {
+                status : statusValue
+            });
+    }
+    catch (error)
+    {
+        console.log(error)
+    }
 }
 
 function readURL(input) {
