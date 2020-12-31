@@ -12,6 +12,13 @@
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
     <script src="js/GameLoader.js"></script>
+    <style>
+        .header {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("img/heaf.jpeg");
+            object-fit: cover;
+            background-position: center;
+        }
+    </style>
 
 </head>
 
@@ -19,9 +26,8 @@
 
     <section class="header d-flex">
         <div class="container header-content my-auto">
-            <h1> HOST IT</h1>
-            <h3>Enter the world of gamerz <br>compete in tournaments <br>and earn real cash</h3>
-            <form method="GET" action="/register">
+            <h1 class="text-center"> HOST IT</h1>
+            <form class="text-center" method="GET" action="/register">
                 <button class="btn btn-1 mx-0 my-3">
                     <svg>
                         <rect x="0" y="0" fill="none" width="100%" height="100%" />
@@ -29,10 +35,11 @@
                     <p class="header-btn">ENTER</p>
                 </button>
             </form>
+            <h3 class="text-center">Enter the world of gamerz <br>compete in tournaments <br>and earn real cash</h3>
         </div>
     </section>
 
-    <hr />
+    <hr class="mt-0">
     <section class="games">
         <div class="container py-5">
             <h3 class="games-heading mb-5">GAMES</h3>
@@ -126,15 +133,15 @@
     <section class="container">
         <div class="row">
             <div class="col-md-6 py-2 my-auto animated" data-aos="fade-right">
-                <h3>Live Streaming on <a href=""> <small class="text-danger">YOUTUBE <i
+                <h3>Live Streaming on <a href="https://www.youtube.com"> <small class="text-danger">YOUTUBE <i
                                 class="fab fa-youtube"></i></small></a></h2>
             </div>
             <div class="col-md-6 my-5 m-md-0 animated" data-aos="fade-left">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item rounded" <iframe width="560" height="315"
+                    <iframe class="embed-responsive-item rounded" width="560" height="315"
                         src="https://www.youtube.com/embed/tHu-cnrz5-U" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>></iframe>
+                        allowfullscreen></iframe>
                 </div>
             </div>
         </div>
